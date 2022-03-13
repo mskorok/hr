@@ -16,6 +16,7 @@ use App\Resources\CompanySubscriptionResource;
 use App\Resources\CompanyManagerResource;
 use App\Resources\CountriesResource;
 use App\Resources\DealsResource;
+use App\Resources\EducationalInstitutionsResource;
 use App\Resources\EducationResource;
 use App\Resources\ExpertInfoResource;
 use App\Resources\FavoriteResumeResource;
@@ -74,6 +75,7 @@ class CollectionBootstrap implements BootstrapInterface
                 ->resource(new CountriesResource($config->application->adapterPath . '/countries'))
                 ->resource(new DealsResource($config->application->adapterPath . '/deals'))
                 ->resource(new EducationResource($config->application->adapterPath . '/education'))
+                ->resource(new EducationalInstitutionsResource($config->application->adapterPath . '/institutions'))
                 ->resource(new ExpertInfoResource($config->application->adapterPath . '/expert_info'))
                 ->resource(new FavoritesResource($config->application->adapterPath . '/favorites'))
                 ->resource(new FavoriteResumeResource($config->application->adapterPath . '/favorite-resume'))

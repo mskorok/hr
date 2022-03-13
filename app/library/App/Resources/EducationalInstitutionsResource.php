@@ -3,10 +3,8 @@ declare(strict_types=1);
 
 namespace App\Resources;
 
-use App\Controllers\ArticlesController;
 use App\Controllers\EducationalInstitutionsController;
 use App\Model\Articles;
-use App\Transformers\ArticlesTransformer;
 use App\Transformers\EducationalInstitutionsTransformer;
 use PhalconApi\Constants\PostedDataMethods;
 use PhalconRest\Api\ApiResource;
@@ -56,6 +54,11 @@ class EducationalInstitutionsResource extends ApiResource
             ->endpoint(
                 ApiEndpoint::remove()
                     ->allow([AclRoles::ADMIN, AclRoles::SUPERADMIN, AclRoles::APPLICANT])
+            )
+            ->endpoint(
+                ApiEndpoint::get('/list', 'list')
+                    ->allow(AclRoles::UNAUTHORIZED)
+                    ->description('get all institutions')
             )
         ;
     }

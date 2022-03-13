@@ -6,11 +6,9 @@ namespace App\Controllers;
 use App\Constants\Limits;
 use App\Model\Categories;
 use App\Model\Subcategory;
-use Phalcon\Http\ResponseInterface;
 use Phalcon\Mvc\Model\Query\Builder;
 use Phalcon\Mvc\Model\Query\Builder as QueryBuilder;
 use Phalcon\Validation\Message\Group;
-use Phalcon\Paginator\Adapter\Model as Paginator;
 
 /**
  * Class CategoriesController
@@ -143,7 +141,6 @@ class CategoriesController extends ControllerBase
     protected function onDataInvalid($data)
     {
         $mes = [];
-        $mes['Post-data is invalid'];
         foreach ($this->messages as $message) {
             $mes[] = $message->getMessage();
         }
