@@ -44,7 +44,7 @@ class EducationalInstitutionsController extends ControllerBase
             '[' . EducationInstitutionLevel::class . '].[institution_id] = [' . EducationalInstitutions::class . '].[id]'
         );
         $builder->leftJoin(
-            EducationInstitutionLevel::class,
+            EducationLevel::class,
             '[' . EducationInstitutionLevel::class . '].[level_id] = [' . EducationLevel::class . '].[id]'
         );
 
