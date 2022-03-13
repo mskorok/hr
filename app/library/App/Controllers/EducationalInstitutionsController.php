@@ -67,7 +67,6 @@ class EducationalInstitutionsController extends ControllerBase
         foreach ($items as $item) {
             $item->setTitle(html_entity_decode($item->getTitle()));
             $item->setDescription(html_entity_decode($item->getDescription()));
-            $item->setText(html_entity_decode($item->getText()));
             $collection[] = $item;
         }
 
