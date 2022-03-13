@@ -2,6 +2,10 @@
 declare(strict_types=1);
 
 /** @var \Phalcon\Config $config */
+
+use Phalcon\Http\Response;
+use PhalconApi\Constants\Services;
+
 $config = null;
 
 /** @var \PhalconRest\Api $app */
@@ -98,8 +102,8 @@ try {
 } catch (\Exception $e) {
     // Handle exceptions
     $di = $app && $app->di ? $app->di : new PhalconRest\Di\FactoryDefault();
-    /** @var \Phalcon\Http\Response $response */
-    $response = $di->getShared(App\Constants\Services::RESPONSE);
+    /** @var Response $response */
+    $response = $di->getShared(Services::RESPONSE);
     if (!$response || !$response instanceof PhalconApi\Http\Response) {
         $response = new PhalconApi\Http\Response();
     }

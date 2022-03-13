@@ -1,43 +1,50 @@
 {
-    "name": "redound/phalcon-rest-boilerplate",
-    "keywords": ["RESTful", "rest", "api", "phalcon", "boilerplate"],
-    "description": "Phalcon REST Boilerplate to use with Phalcon REST library",
-    "type": "project",
-    "license": "MIT",
-    "homepage": "https://phalcon-rest.redound.org",
-    "require": {
-        "redound/phalcon-rest": "^2.0.0",
-        "league/fractal": "^0.13.0",
-        "firebase/php-jwt": "^3.0",
-        "phalcon/incubator": "^3.4.x-dev",
-        "paypal/merchant-sdk-php": "^3.12",
-        "paypal/rest-api-sdk-php": "^1.13",
-        "braintree/braintree_php": "^3.25",
-        "mikehaertl/phpwkhtmltopdf": "^2.2",
-        "phpoffice/phpexcel": "^1.8",
-        "psr/http-message": "^1.0",
-        "guzzlehttp/guzzle": "^6.3",
-        "phpoffice/phpspreadsheet": "^1.1",
-        "mpdf/mpdf": "^7.0",
-        "dompdf/dompdf": "^0.8.2",
-        "jpgraph/jpgraph": "^4.0",
-        "tecnickcom/tcpdf": "^6.2",
-        "phalcon/ide-stubs": "^3.4.3",
-        "psr/log": "^1.0"
-    },
-    "require-dev": {
-        "codeception/codeception": "^2.1",
-        "phalcon/devtools": "^3.4.x-dev"
-    },
-    "authors": [
-        {
-            "name": "Mikhail Skorokhod",
-            "email": "mskorok@gmail.com"
-        }
-    ],
-    "support": {
-        "source": "https://github.com/redound/phalcon-rest-boilerplate",
-        "issues": "https://github.com/redound/phalcon-rest-boilerplate/issues",
-        "docs": "https://phalcon-rest.redound.org"
+  "name": "redound/phalcon-rest-boilerplate",
+  "keywords": [
+    "RESTful",
+    "rest",
+    "api",
+    "phalcon",
+    "boilerplate"
+  ],
+  "description": "Phalcon REST Boilerplate to use with Phalcon REST library",
+  "type": "project",
+  "license": "MIT",
+  "homepage": "https://phalcon-rest.redound.org",
+  "require": {
+    "redound/phalcon-rest": "^2.0.0",
+    "league/fractal": "^0.13.0",
+    "firebase/php-jwt": "^3.0",
+    "phalcon/incubator": "^3.4.x-dev",
+    "paypal/merchant-sdk-php": "^3.12",
+    "paypal/rest-api-sdk-php": "^1.13",
+    "braintree/braintree_php": "^3.25",
+    "mikehaertl/phpwkhtmltopdf": "^2.2",
+    "phpoffice/phpexcel": "^1.8",
+    "psr/http-message": "^1.0",
+    "guzzlehttp/guzzle": "^6.3",
+    "phpoffice/phpspreadsheet": "^1.1",
+    "mpdf/mpdf": "^7.0",
+    "dompdf/dompdf": "^0.8.2",
+    "jpgraph/jpgraph": "^4.0",
+    "tecnickcom/tcpdf": "^6.2",
+    "phalcon/ide-stubs": "^3.4.3",
+    "psr/log": "^1.0",
+    "ext-json": "*"
+  },
+  "require-dev": {
+    "codeception/codeception": "^2.1",
+    "phalcon/devtools": "^3.4.x-dev"
+  },
+  "authors": [
+    {
+      "name": "Mikhail Skorokhod",
+      "email": "mskorok@gmail.com"
     }
+  ],
+  "support": {
+    "source": "https://github.com/redound/phalcon-rest-boilerplate",
+    "issues": "https://github.com/redound/phalcon-rest-boilerplate/issues",
+    "docs": "https://phalcon-rest.redound.org"
+  }
 }
