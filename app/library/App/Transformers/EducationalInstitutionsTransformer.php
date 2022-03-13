@@ -58,6 +58,6 @@ class EducationalInstitutionsTransformer extends ModelTransformer
      */
     public function includeCompanies(EducationalInstitutions $model): Collection
     {
-        return $this->collection($model->getLevels(), new EducationLevelTransformer());
+        return $this->collection($model->getEducationLevel(), new EducationLevelTransformer());
     }
 }

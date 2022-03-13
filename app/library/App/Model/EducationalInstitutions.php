@@ -17,7 +17,7 @@ use Phalcon\Mvc\Model\ResultsetInterface;
  * @date 2022-03-13, 17:34:11
  * @method Collection getEducationInstitutionLevel
  * @method Countries getCountries
- * @method Collection getLevels
+ * @method Collection getEducationLevel
  */
 class EducationalInstitutions extends Model
 {
@@ -242,7 +242,7 @@ class EducationalInstitutions extends Model
             EducationLevel::class,
             'id',
             [
-                'alias' => 'Levels'
+                'alias' => 'EducationLevel'
             ]
         );
     }
