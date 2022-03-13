@@ -1,0 +1,98 @@
+<?php
+declare(strict_types=1);
+/**
+ * @var \Phalcon\Mvc\View\Engine\Php $this
+ */
+?>
+
+<div class="page-header">
+    <h1>
+        Search education
+    </h1>
+    <p>
+        <?php echo $this->tag::linkTo(['admin/education/new', 'Create education']) ?>
+    </p>
+    <p>
+        <?php echo $this->tag::linkTo(['admin/education/list', 'List']) ?>
+    </p>
+    <p>
+        <?= $this->tag::linkTo(['admin', 'Main ']); ?>
+    </p>
+</div>
+
+<?php if (isset($_GET['notice'])) : ?>
+    <div style="text-align: center;color:coral;"><?php echo urldecode($_GET['notice']); ?></div>
+<?php endif; ?>
+<?php if (isset($_GET['success'])) : ?>
+    <div style="text-align: center;color:darkolivegreen;"><?php echo urldecode($_GET['success']); ?></div>
+<?php endif; ?>
+
+<?php echo $this->getContent() ?>
+
+<?php
+    echo $this->tag::form(
+        [
+            'admin/education/search',
+            'autocomplete' => 'off',
+            'class' => 'form-horizontal'
+        ]
+    );
+?>
+
+<div class="form-group">
+    <label for="fieldId" class="col-sm-2 control-label">Id</label>
+    <div class="col-sm-10">
+        <?php echo $this->tag::textField(['id', 'type' => 'number', 'class' => 'form-control', 'id' => 'fieldId']) ?>
+    </div>
+</div>
+
+<div class="form-group">
+    <label for="fieldUserId" class="col-sm-2 control-label">User</label>
+    <div class="col-sm-10">
+        <?php echo $this->tag::textField(['user_id', 'type' => 'number', 'class' => 'form-control', 'id' => 'fieldUserId']) ?>
+    </div>
+</div>
+
+<div class="form-group">
+    <label for="fieldName" class="col-sm-2 control-label">Name</label>
+    <div class="col-sm-10">
+        <?php echo $this->tag::textField(['name', 'size' => 30, 'class' => 'form-control', 'id' => 'fieldName']) ?>
+    </div>
+</div>
+
+<div class="form-group">
+    <label for="fieldSpecialization" class="col-sm-2 control-label">Specialization</label>
+    <div class="col-sm-10">
+        <?php echo $this->tag::textField(['specialization', 'size' => 30, 'class' => 'form-control', 'id' => 'fieldSpecialization']) ?>
+    </div>
+</div>
+
+<div class="form-group">
+    <label for="fieldLevel" class="col-sm-2 control-label">Level</label>
+    <div class="col-sm-10">
+        <?php echo $this->tag::selectStatic(['level', ['Doctor' => 'Doctor', 'Master' => 'Master', 'Bachelor' => 'Bachelor','High School Diploma' => 'High School Diploma', 'College' => 'College', 'GED' => 'GED', 'Middle School' => 'Middle School', 'No education' => 'No education', 'Other' => 'Other'], 'class' => 'form-control', 'id' => 'fieldLevel']) ?>
+    </div>
+</div>
+
+<div class="form-group">
+    <label for="fieldStart" class="col-sm-2 control-label">Start</label>
+    <div class="col-sm-10">
+        <?php echo $this->tag::textField(['start', 'size' => 30, 'class' => 'form-control', 'id' => 'fieldStart']) ?>
+    </div>
+</div>
+
+<div class="form-group">
+    <label for="fieldFinish" class="col-sm-2 control-label">Finish</label>
+    <div class="col-sm-10">
+        <?php echo $this->tag::textField(['finish', 'size' => 30, 'class' => 'form-control', 'id' => 'fieldFinish']) ?>
+    </div>
+</div>
+
+
+<div class="form-group">
+    <div class="col-sm-offset-2 col-sm-10">
+        <?php echo $this->tag::submitButton(['Search', 'class' => 'btn btn-default']) ?>
+    </div>
+</div>
+
+<?php echo $this->tag::endForm(); ?>

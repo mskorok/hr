@@ -1,0 +1,98 @@
+<?php
+declare(strict_types=1);
+
+use Phalcon\Paginator\Adapter\Model as Paginator;
+
+/** @var $page Paginator */
+/**
+ * @var \Phalcon\Mvc\View\Engine\Php $this
+ */
+?>
+
+<div class="row">
+    <nav>
+        <ul class="pager">
+            <li class="previous"><?php echo $this->tag::linkTo(['admin/professional_experience/index', 'Go Back']); ?></li>
+            <li class="next"><?php echo $this->tag::linkTo(['admin/professional_experience/new', 'Create ']); ?></li>
+            <li class="next"><?= $this->tag::linkTo(['admin', 'Main ']); ?></li>
+        </ul>
+    </nav>
+</div>
+
+
+<div class="page-header">
+    <h1>List Professional experience</h1>
+</div>
+
+
+<?php if (isset($_GET['notice'])) : ?>
+    <div style="color:coral;text-align: center;"><?= urldecode($_GET['notice']); ?></div>
+<?php endif; ?>
+<?php if (isset($_GET['success'])) : ?>
+    <div style="color:darkolivegreen;text-align: center;"><?= urldecode($_GET['success']); ?></div>
+<?php endif; ?>
+
+<?php echo $this->getContent(); ?>
+
+<div class="row">
+    <table class="table table-bordered">
+        <thead>
+            <tr>
+                <th>Id</th>
+            <th>Title</th>
+            <th>Description</th>
+            <th>User</th>
+            <th>Organization</th>
+            <th>Country</th>
+            <th>Site</th>
+            <th>Professional Area</th>
+            <th>Position</th>
+            <th>Start</th>
+            <th>Finish</th>
+
+                <th></th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+        <?php foreach ($page->items as $professional_experience): ?>
+            <tr>
+                <td><?php echo $professional_experience->id ?></td>
+            <td><?php echo $professional_experience->title ?></td>
+            <td><?php echo $professional_experience->description ?></td>
+            <td><?php echo $professional_experience->user_id ?></td>
+            <td><?php echo $professional_experience->organization ?></td>
+            <td><?php echo $professional_experience->country ?></td>
+            <td><?php echo $professional_experience->site ?></td>
+            <td><?php echo $professional_experience->professional_area ?></td>
+            <td><?php echo $professional_experience->position ?></td>
+            <td><?php echo $professional_experience->start ?></td>
+            <td><?php echo $professional_experience->finish ?></td>
+
+                <td><?php echo $this->tag::linkTo(['admin/professional_experience/edit/' . $professional_experience->id, 'Edit']); ?></td>
+                <td><?php echo $this->tag::linkTo(['admin/professional_experience/delete/' . $professional_experience->id, 'Delete']); ?></td>
+            </tr>
+        <?php endforeach; ?>
+        </tbody>
+    </table>
+</div>
+
+<div class="row">
+    <div class="col-sm-1">
+        <p class="pagination" style="line-height: 1.42857;padding: 6px 12px;">
+            <?php echo $page->current, '/', $page->total_pages ?>
+        </p>
+    </div>
+    <div class="col-sm-11">
+        <?php if ($page->total_items > $page->limit) : ?>
+        <nav>
+            <ul class="pagination">
+                <li><?php echo $this->tag::linkTo('admin/professional_experience/list', 'First') ?></li>
+                <li><?php echo $this->tag::linkTo('admin/professional_experience/list?page=' . $page->before, 'Previous') ?></li>
+                <li><?php echo $this->tag::linkTo('admin/professional_experience/list?page=' . $page->next, 'Next') ?></li>
+                <li><?php echo $this->tag::linkTo('admin/professional_experience/list?page=' . $page->last, 'Last') ?></li>
+            </ul>
+        </nav>
+        <?php endif; ?>
+    </div>
+</div>

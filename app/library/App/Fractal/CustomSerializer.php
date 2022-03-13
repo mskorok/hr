@@ -1,0 +1,29 @@
+<?php
+
+namespace App\Fractal;
+
+use League\Fractal\Serializer\ArraySerializer;
+
+class CustomSerializer extends ArraySerializer
+{
+    /**
+     * {@inheritDoc}
+     */
+    public function collection($resourceKey, array $data)
+    {
+        if ($resourceKey == null) {
+            return $data;
+        }
+
+        return [$resourceKey ?: 'data' => $data];
+    }
+
+    public function item($resourceKey, array $data)
+    {
+        if ($resourceKey == null) {
+            return $data;
+        }
+
+        return [$resourceKey ?: 'data' => $data];
+    }
+}

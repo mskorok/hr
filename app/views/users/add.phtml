@@ -1,0 +1,51 @@
+<h3>Create User</h3>
+<?php if (count($messages) > 0) : ?>
+    <div class="messages" style="margin-top: 50px;color: red;">
+        <img src="/img/danger.png" width="30"/>
+        <br>
+        <?php foreach($messages as $message) : ?>
+            <?php echo $message; ?>
+        <?php endforeach; ?>
+    </div>
+<?php endif; ?>
+<?php echo $form->html; ?>
+<div style="margin-bottom: 100px;">
+    <button class="btn btn-success" id="ajax_create">Ajax Create</button>
+</div>
+<div id="response" style="margin-top: 20px; margin-bottom: 100px; background-color: lightgrey; color:darkolivegreen"></div>
+<script>
+    function createModel() {
+        var api_token = '';
+        var url = '/users/';
+        var xhr = new XMLHttpRequest();
+        var form = document.getElementById('user_form');
+        var form_data = new FormData(form);
+        xhr.onload = function() {
+            if (this.readyState === 4) {
+                if (this.status === 200) {
+                    try {
+                        console.log(this.response);
+                        $('#response').text(this.response);
+
+                    } catch (e) {
+                        console.log('error', e.message);
+                    }
+                } else {
+                    console.log('error response', this.response);
+                }
+            }
+        };
+        xhr.open('POST', url, true);
+        xhr.setRequestHeader('X-Requested-With', 'XMLHttpRequest');
+        xhr.send(form_data);
+    }
+    document.addEventListener('DOMContentLoaded', function () {
+        var button = document.getElementById('ajax_create');
+        if (button) {
+            button.addEventListener('click', function (e) {
+                console.log('click');
+                createModel();
+            })
+        }
+    });
+</script>

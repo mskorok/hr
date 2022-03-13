@@ -1,0 +1,56 @@
+<?php
+declare(strict_types=1);
+/**
+ * @var \Phalcon\Mvc\View\Engine\Php $this
+ */
+?>
+
+<div class="row">
+    <nav>
+        <ul class="pager">
+            <li class="previous"><?php echo $this->tag::linkTo(['admin/skills', 'Go Back']) ?></li>
+            <li class="next"><?php echo $this->tag::linkTo(['admin/skills/list', 'List']) ?></li>
+        </ul>
+    </nav>
+</div>
+
+<div class="page-header">
+    <h1>
+        Create skills
+    </h1>
+</div>
+
+<?php if (isset($_GET['notice'])) : ?>
+    <div style="text-align: center;color:coral;"><?php echo urldecode($_GET['notice']); ?></div>
+<?php endif; ?>
+<?php if (isset($_GET['success'])) : ?>
+    <div style="text-align: center;color:darkolivegreen;"><?php echo urldecode($_GET['success']); ?></div>
+<?php endif; ?>
+
+<?php echo $this->getContent(); ?>
+
+<?php
+    echo $this->tag::form(
+        [
+            'admin/skills/create',
+            'autocomplete' => 'off',
+            'class' => 'form-horizontal'
+        ]
+    );
+?>
+
+<div class="form-group">
+    <label for="fieldTitle" class="col-sm-2 control-label">Title</label>
+    <div class="col-sm-10">
+        <?php echo $this->tag::textField(['title', 'size' => 30, 'class' => 'form-control', 'id' => 'fieldTitle']) ?>
+    </div>
+</div>
+
+
+<div class="form-group">
+    <div class="col-sm-offset-2 col-sm-10">
+        <?php echo $this->tag::submitButton(['Save', 'class' => 'btn btn-default']) ?>
+    </div>
+</div>
+
+<?php echo $this->tag::endForm(); ?>

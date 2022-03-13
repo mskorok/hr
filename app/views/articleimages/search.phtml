@@ -1,0 +1,83 @@
+<?php
+declare(strict_types=1);
+
+use Phalcon\Paginator\Adapter\Model as Paginator;
+use App\Model\ArticleImages;
+/**
+ * @var \Phalcon\Mvc\View\Engine\Php $this
+ */
+
+/** @var $page Paginator */
+/** @var $article_image ArticleImages */
+?>
+
+<div class="row">
+    <nav>
+        <ul class="pager">
+            <li class="previous"><?php echo $this->tag::linkTo(['admin/article_images/index', 'Go Back']); ?></li>
+            <li class="next"><?php echo $this->tag::linkTo(['admin/article_images/new', 'Create ']); ?></li>
+            <li class="next"><?= $this->tag::linkTo(['admin/article_images/list', 'List ']); ?></li>
+            <li class="next"><?= $this->tag::linkTo(['admin', 'Main ']); ?></li>
+        </ul>
+    </nav>
+</div>
+
+<div class="page-header">
+    <h1>Search result</h1>
+</div>
+
+<?php if (isset($_GET['notice'])) : ?>
+    <div style="color:coral;text-align: center;"><?= urldecode($_GET['notice']); ?></div>
+<?php endif; ?>
+<?php if (isset($_GET['success'])) : ?>
+    <div style="color:darkolivegreen;text-align: center;"><?= urldecode($_GET['success']); ?></div>
+<?php endif; ?>
+
+<?php echo $this->getContent(); ?>
+
+<div class="row">
+    <table class="table table-bordered">
+        <thead>
+            <tr>
+                <th>Id</th>
+            <th>Article</th>
+            <th>Image</th>
+
+                <th></th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+        <?php foreach ($page->items as $article_image): ?>
+            <tr>
+                <td><?php echo $article_image->getId() ?></td>
+            <td><?php echo $article_image->getArticleId()?></td>
+            <td><?php echo $article_image->getImageId() ?></td>
+
+                <td><?php echo $this->tag::linkTo(['admin/article_images/edit/' . $article_image->getId(), 'Edit']); ?></td>
+                <td><?php echo $this->tag::linkTo(['admin/article_images/delete/' . $article_image->getId(), 'Delete']); ?></td>
+            </tr>
+        <?php endforeach; ?>
+        </tbody>
+    </table>
+</div>
+
+<div class="row">
+    <div class="col-sm-1">
+        <p class="pagination" style="line-height: 1.42857;padding: 6px 12px;">
+            <?php echo $page->current, '/', $page->total_pages ?>
+        </p>
+    </div>
+    <div class="col-sm-11">
+        <?php if ($page->total_items > $page->limit) : ?>
+        <nav>
+            <ul class="pagination">
+                <li><?php echo $this->tag::linkTo('admin/article_images/search', 'First') ?></li>
+                <li><?php echo $this->tag::linkTo('admin/article_images/search?page=' . $page->before, 'Previous') ?></li>
+                <li><?php echo $this->tag::linkTo('admin/article_images/search?page=' . $page->next, 'Next') ?></li>
+                <li><?php echo $this->tag::linkTo('admin/article_images/search?page=' . $page->last, 'Last') ?></li>
+            </ul>
+        </nav>
+        <?php endif; ?>
+    </div>
+</div>

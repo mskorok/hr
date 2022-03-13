@@ -1,0 +1,68 @@
+.icon-bg {
+	display: inline-block;
+	width: 32px;
+	height: 32px;
+}
+
+.icon {
+  width: 1em;
+  height: 1em;
+  vertical-align: -0.15em;
+  overflow: hidden;	
+}
+
+.icon-menu {
+  width: 1em;
+  height: 1em;
+  overflow: hidden;	
+}
+
+.icon-apis {
+	background: url("https://cdn.rawgit.com/jennifer-hiller/resources/master/svg-defs-apis-admins-corrected.svg#shape-apis-view") no-repeat;
+}
+
+.icon-arrow-left-bg {
+	background: url("images/svg_icons/icons.svg#arrow-left") no-repeat;	
+}
+
+.icon-arrow-left {
+	fill: #6b98b5;
+}
+
+.icon-header-row-arrow {
+	fill: #6b98b5;
+}
+
+.icon-menu-row {
+	fill: #fff;
+	margin: 0 auto;
+  	display: block;
+}
+
+.icon-add-person {
+	fill: none;
+	stroke: #6b98b5;
+	stroke-width: 0.3;
+	font-size: 90px;
+}
+
+.icon-footer-social {
+	fill: #004876;
+}
+
+.icon-row-table.red {
+	fill: #ea4222;
+}
+
+.icon-row-table.green {
+	fill: #008c00;
+}
+
+.icon-hover-white {
+	fill: #fff;
+}
+
+.icon-dropdown-menu {
+	fill: #064874;
+}
+

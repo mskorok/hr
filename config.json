@@ -1,0 +1,11 @@
+{
+  "migration" : {
+    "migrations": "app/migrations",
+    "config": "app/config/config.ini"
+  },
+  "controller" : {
+    "namespace": "Phalcon\\Controllers",
+    "directory": "App/Controllers",
+    "base-class": "PhalconRest\\Mvc\\Controllers\\CrudResourceController"
+  }
+}

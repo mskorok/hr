@@ -1,0 +1,70 @@
+<?php
+declare(strict_types=1);
+/**
+ * @var \Phalcon\Mvc\View\Engine\Php $this
+ */
+?>
+
+<div class="row">
+    <nav>
+        <ul class="pager">
+            <li class="previous"><?= $this->tag::linkTo(['admin/expert_info', 'Go Back']) ?></li>
+            <li class="next"><?= $this->tag::linkTo(['admin/expert_info/list', 'List']) ?></li>
+        </ul>
+    </nav>
+</div>
+
+<div class="page-header">
+    <h1>
+        Create expert_info
+    </h1>
+</div>
+
+<?php if (isset($_GET['notice'])) : ?>
+    <div style="text-align: center;color:coral;"><?= urldecode($_GET['notice']) ?></div>
+<?php endif; ?>
+<?php if (isset($_GET['success'])) : ?>
+    <div style="text-align: center;color:darkolivegreen;"><?= urldecode($_GET['success']) ?></div>
+<?php endif; ?>
+
+<?= $this->getContent() ?>
+
+<?php
+    echo $this->tag::form(
+        [
+            'admin/expert_info/create',
+            'autocomplete' => 'off',
+            'class' => 'form-horizontal'
+        ]
+    );
+?>
+
+<div class="form-group">
+    <label for="fieldUserId" class="col-sm-2 control-label">User</label>
+    <div class="col-sm-10">
+        <?= $this->tag::textField(['user_id', 'type' => 'number', 'class' => 'form-control', 'id' => 'fieldUserId']) ?>
+    </div>
+</div>
+
+<div class="form-group">
+    <label for="fieldLevel" class="col-sm-2 control-label">Level</label>
+    <div class="col-sm-10">
+        <?= $this->tag::selectStatic(['level', ['Diamond' => 'Diamond','Gold' => 'Gold','Silver' => 'Silver','Bronze' => 'Bronze'], 'class' => 'form-control', 'id' => 'fieldLevel']) ?>
+    </div>
+</div>
+
+<div class="form-group">
+    <label for="fieldSkills" class="col-sm-2 control-label">Skills</label>
+    <div class="col-sm-10">
+        <?= $this->tag::textField(['skills', 'type' => 'number', 'class' => 'form-control', 'id' => 'fieldSkills']) ?>
+    </div>
+</div>
+
+
+<div class="form-group">
+    <div class="col-sm-offset-2 col-sm-10">
+        <?= $this->tag::submitButton(['Save', 'class' => 'btn btn-default']) ?>
+    </div>
+</div>
+
+<?= $this->tag::endForm() ?>

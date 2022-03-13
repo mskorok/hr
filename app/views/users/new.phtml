@@ -1,0 +1,207 @@
+<?php
+declare(strict_types=1);
+/**
+ * @var \Phalcon\Mvc\View\Engine\Php $this
+ */
+?>
+
+<div class="row">
+    <nav>
+        <ul class="pager">
+            <li class="previous"><?php echo $this->tag::linkTo(['admin/users', 'Go Back']) ?></li>
+            <li class="next"><?php echo $this->tag::linkTo(['admin/users/list', 'List']) ?></li>
+        </ul>
+    </nav>
+</div>
+
+<div class="page-header">
+    <h1>
+        Create users
+    </h1>
+</div>
+
+<?php if (isset($_GET['notice'])) : ?>
+    <div style="text-align: center;color:coral;"><?php echo urldecode($_GET['notice']); ?></div>
+<?php endif; ?>
+<?php if (isset($_GET['success'])) : ?>
+    <div style="text-align: center;color:darkolivegreen;"><?php echo urldecode($_GET['success']); ?></div>
+<?php endif; ?>
+
+<?php echo $this->getContent(); ?>
+
+<?php
+    echo $this->tag::form(
+        [
+            'admin/users/create',
+            'autocomplete' => 'off',
+            'class' => 'form-horizontal'
+        ]
+    );
+?>
+
+<div class="form-group">
+    <label for="fieldId" class="col-sm-2 control-label">Id</label>
+    <div class="col-sm-10">
+        <?php echo $this->tag::textField(['id', 'type' => 'number', 'class' => 'form-control', 'id' => 'fieldId']) ?>
+    </div>
+</div>
+
+<div class="form-group">
+    <label for="fieldName" class="col-sm-2 control-label">Name</label>
+    <div class="col-sm-10">
+        <?php echo $this->tag::textField(['name', 'size' => 30, 'class' => 'form-control', 'id' => 'fieldName']) ?>
+    </div>
+</div>
+
+<div class="form-group">
+    <label for="fieldSurname" class="col-sm-2 control-label">Surname</label>
+    <div class="col-sm-10">
+        <?php echo $this->tag::textField(['surname', 'size' => 30, 'class' => 'form-control', 'id' => 'fieldSurname']) ?>
+    </div>
+</div>
+
+<div class="form-group">
+    <label for="fieldUsername" class="col-sm-2 control-label">Username</label>
+    <div class="col-sm-10">
+        <?php echo $this->tag::textField(['username', 'size' => 30, 'class' => 'form-control', 'id' => 'fieldUsername']) ?>
+    </div>
+</div>
+
+<div class="form-group">
+    <label for="fieldPassword" class="col-sm-2 control-label">Password</label>
+    <div class="col-sm-10">
+        <?php echo $this->tag::textField(['password', 'size' => 30, 'class' => 'form-control', 'id' => 'fieldPassword']) ?>
+    </div>
+</div>
+
+<div class="form-group">
+    <label for="fieldBirthday" class="col-sm-2 control-label">Birthday</label>
+    <div class="col-sm-10">
+        <?php echo $this->tag::textField(['birthday', 'size' => 30, 'class' => 'form-control', 'id' => 'fieldBirthday']) ?>
+    </div>
+</div>
+
+<div class="form-group">
+    <label for="fieldGithub" class="col-sm-2 control-label">Github</label>
+    <div class="col-sm-10">
+        <?php echo $this->tag::textField(['github', 'size' => 30, 'class' => 'form-control', 'id' => 'fieldGithub']) ?>
+    </div>
+</div>
+
+<div class="form-group">
+    <label for="fieldLinkedin" class="col-sm-2 control-label">LinkedIn</label>
+    <div class="col-sm-10">
+        <?php echo $this->tag::textField(['linkedIn', 'size' => 30, 'class' => 'form-control', 'id' => 'fieldLinkedin']) ?>
+    </div>
+</div>
+
+<div class="form-group">
+    <label for="fieldFb" class="col-sm-2 control-label">Fb</label>
+    <div class="col-sm-10">
+        <?php echo $this->tag::textField(['fb', 'size' => 30, 'class' => 'form-control', 'id' => 'fieldFb']) ?>
+    </div>
+</div>
+
+<div class="form-group">
+    <label for="fieldHh" class="col-sm-2 control-label">Hh</label>
+    <div class="col-sm-10">
+        <?php echo $this->tag::textField(['hh', 'size' => 30, 'class' => 'form-control', 'id' => 'fieldHh']) ?>
+    </div>
+</div>
+
+<div class="form-group">
+    <label for="fieldPhone" class="col-sm-2 control-label">Phone</label>
+    <div class="col-sm-10">
+        <?php echo $this->tag::textField(['phone', 'size' => 30, 'class' => 'form-control', 'id' => 'fieldPhone']) ?>
+    </div>
+</div>
+
+<div class="form-group">
+    <label for="fieldEmail" class="col-sm-2 control-label">Email</label>
+    <div class="col-sm-10">
+        <?php echo $this->tag::textField(['email', 'size' => 30, 'class' => 'form-control', 'id' => 'fieldEmail']) ?>
+    </div>
+</div>
+
+<div class="form-group">
+    <label for="fieldSkype" class="col-sm-2 control-label">Skype</label>
+    <div class="col-sm-10">
+        <?php echo $this->tag::textField(['skype', 'size' => 30, 'class' => 'form-control', 'id' => 'fieldSkype']) ?>
+    </div>
+</div>
+
+<div class="form-group">
+    <label for="fieldCountry" class="col-sm-2 control-label">Country</label>
+    <div class="col-sm-10">
+        <?php echo $this->tag::textField(['country', 'size' => 30, 'class' => 'form-control', 'id' => 'fieldCountry']) ?>
+    </div>
+</div>
+
+<div class="form-group">
+    <label for="fieldCity" class="col-sm-2 control-label">City</label>
+    <div class="col-sm-10">
+        <?php echo $this->tag::textField(['city', 'size' => 30, 'class' => 'form-control', 'id' => 'fieldCity']) ?>
+    </div>
+</div>
+
+<div class="form-group">
+    <label for="fieldAvatar" class="col-sm-2 control-label">Avatar</label>
+    <div class="col-sm-10">
+        <?php echo $this->tag::textField(['avatar', 'size' => 30, 'class' => 'form-control', 'id' => 'fieldAvatar']) ?>
+    </div>
+</div>
+
+<div class="form-group">
+    <label for="fieldAddress" class="col-sm-2 control-label">Address</label>
+    <div class="col-sm-10">
+        <?php echo $this->tag::textField(['address', 'size' => 30, 'class' => 'form-control', 'id' => 'fieldAddress']) ?>
+    </div>
+</div>
+
+<div class="form-group">
+    <label for="fieldToken" class="col-sm-2 control-label">Token</label>
+    <div class="col-sm-10">
+        <?php echo $this->tag::textField(['token', 'size' => 30, 'class' => 'form-control', 'id' => 'fieldToken']) ?>
+    </div>
+</div>
+
+<div class="form-group">
+    <label for="fieldLanguage" class="col-sm-2 control-label">Language</label>
+    <div class="col-sm-10">
+        <?php echo $this->tag::textField(['language', 'size' => 30, 'class' => 'form-control', 'id' => 'fieldLanguage']) ?>
+    </div>
+</div>
+
+<div class="form-group">
+    <label for="fieldStatus" class="col-sm-2 control-label">Status</label>
+    <div class="col-sm-10">
+        <?php echo $this->tag::selectStatic(
+            [
+                'status',
+                [
+                    'pending' => 'pending',
+                    'canceled' => 'canceled',
+                    'rejected' => 'rejected',
+                    'confirmed' => 'confirmed'
+                ],
+                'class' => 'form-control',
+                'id' => 'fieldStatus'
+            ]) ?>
+    </div>
+</div>
+
+<div class="form-group">
+    <label for="fieldRole" class="col-sm-2 control-label">Role</label>
+    <div class="col-sm-10">
+        <?php echo $this->tag::selectStatic(['role', ['manager' => 'manager', 'programmer' => 'programmer', 'admin' => 'admin', 'user' => 'user', 'author' => 'author'], 'class' => 'form-control', 'id' => 'fieldRole']) ?>
+    </div>
+</div>
+
+
+<div class="form-group">
+    <div class="col-sm-offset-2 col-sm-10">
+        <?php echo $this->tag::submitButton(['Save', 'class' => 'btn btn-default']) ?>
+    </div>
+</div>
+
+<?php echo $this->tag::endForm(); ?>

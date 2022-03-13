@@ -1,0 +1,109 @@
+<?php
+declare(strict_types=1);
+
+use Phalcon\Paginator\Adapter\Model as Paginator;
+
+/** @var $page Paginator */
+/**
+ * @var \Phalcon\Mvc\View\Engine\Php $this
+ */
+?>
+
+<div class="row">
+    <nav>
+        <ul class="pager">
+            <li class="previous"><?php echo $this->tag::linkTo(['admin/vacancies/index', 'Go Back']); ?></li>
+            <li class="next"><?php echo $this->tag::linkTo(['admin/vacancies/new', 'Create ']); ?></li>
+            <li class="next"><?= $this->tag::linkTo(['admin/vacancies/list', 'List ']); ?></li>
+            <li class="next"><?= $this->tag::linkTo(['admin', 'Main ']); ?></li>
+        </ul>
+    </nav>
+</div>
+
+
+<div class="page-header">
+    <h1>Search result</h1>
+</div>
+
+
+<?php if (isset($_GET['notice'])) : ?>
+    <div style="text-align: center;color:coral;"><?= urldecode($_GET['notice']); ?></div>
+<?php endif; ?>
+<?php if (isset($_GET['success'])) : ?>
+    <div style="text-align: center;color:darkolivegreen;"><?= urldecode($_GET['success']); ?></div>
+<?php endif; ?>
+
+<?php echo $this->getContent(); ?>
+
+<div class="row">
+    <table class="table table-bordered">
+        <thead>
+            <tr>
+                <th>Id</th>
+            <th>Name</th>
+            <th>Salary</th>
+            <th>Company</th>
+            <th>Professional Experience</th>
+            <th>Work Place</th>
+            <th>Description</th>
+            <th>Responsibilities</th>
+            <th>Main Requirements</th>
+            <th>Additional Requirements</th>
+            <th>Work Conditions</th>
+            <th>Key Skills</th>
+            <th>Start</th>
+            <th>Finish</th>
+            <th>CreationDate</th>
+            <th>ModifiedDate</th>
+
+                <th></th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+        <?php foreach ($page->items as $vacancie): ?>
+            <tr>
+                <td><?php echo $vacancie->id ?></td>
+            <td><?php echo $vacancie->name ?></td>
+            <td><?php echo $vacancie->salary ?></td>
+            <td><?php echo $vacancie->company_id ?></td>
+            <td><?php echo $vacancie->professional_experience ?></td>
+            <td><?php echo $vacancie->work_place ?></td>
+            <td><?php echo $vacancie->description ?></td>
+            <td><?php echo $vacancie->responsibilities ?></td>
+            <td><?php echo $vacancie->main_requirements ?></td>
+            <td><?php echo $vacancie->additional_requirements ?></td>
+            <td><?php echo $vacancie->work_conditions ?></td>
+            <td><?php echo $vacancie->key_skills ?></td>
+            <td><?php echo $vacancie->start ?></td>
+            <td><?php echo $vacancie->finish ?></td>
+            <td><?php echo $vacancie->creationDate ?></td>
+            <td><?php echo $vacancie->modifiedDate ?></td>
+
+                <td><?php echo $this->tag::linkTo(['admin/vacancies/edit/' . $vacancie->id, 'Edit']); ?></td>
+                <td><?php echo $this->tag::linkTo(['admin/vacancies/delete/' . $vacancie->id, 'Delete']); ?></td>
+            </tr>
+        <?php endforeach; ?>
+        </tbody>
+    </table>
+</div>
+
+<div class="row">
+    <div class="col-sm-1">
+        <p class="pagination" style="line-height: 1.42857;padding: 6px 12px;">
+            <?php echo $page->current, '/', $page->total_pages ?>
+        </p>
+    </div>
+    <div class="col-sm-11">
+        <?php if ($page->total_items > $page->limit) : ?>
+        <nav>
+            <ul class="pagination">
+                <li><?php echo $this->tag::linkTo('admin/vacancies/search', 'First') ?></li>
+                <li><?php echo $this->tag::linkTo('admin/vacancies/search?page=' . $page->before, 'Previous') ?></li>
+                <li><?php echo $this->tag::linkTo('admin/vacancies/search?page=' . $page->next, 'Next') ?></li>
+                <li><?php echo $this->tag::linkTo('admin/vacancies/search?page=' . $page->last, 'Last') ?></li>
+            </ul>
+        </nav>
+    </div>
+    <?php endif; ?>
+</div>

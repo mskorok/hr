@@ -1,0 +1,122 @@
+<?php
+declare(strict_types=1);
+
+use Phalcon\Paginator\Adapter\Model as Paginator;
+
+/** @var $page Paginator */
+/**
+ * @var \Phalcon\Mvc\View\Engine\Php $this
+ */
+?>
+
+<div class="row">
+    <nav>
+        <ul class="pager">
+            <li class="previous"><?php echo $this->tag::linkTo(['admin/users/index', 'Go Back']); ?></li>
+            <li class="next"><?php echo $this->tag::linkTo(['admin/users/new', 'Create ']); ?></li>
+            <li class="next"><?= $this->tag::linkTo(['admin', 'Main ']); ?></li>
+        </ul>
+    </nav>
+</div>
+
+
+<div class="page-header">
+    <h1>List Users</h1>
+</div>
+
+
+<?php if (isset($_GET['notice'])) : ?>
+    <div style="text-align: center;color:coral;"><?= urldecode($_GET['notice']); ?></div>
+<?php endif; ?>
+<?php if (isset($_GET['success'])) : ?>
+    <div style="text-align: center;color:darkolivegreen;"><?= urldecode($_GET['success']); ?></div>
+<?php endif; ?>
+
+<?php echo $this->getContent(); ?>
+
+<div class="row">
+    <table class="table table-bordered">
+        <thead>
+            <tr>
+                <th>Id</th>
+            <th>Name</th>
+            <th>Surname</th>
+            <th>Username</th>
+            <th>Password</th>
+            <th>Birthday</th>
+            <th>Github</th>
+            <th>LinkedIn</th>
+            <th>Fb</th>
+            <th>Hh</th>
+            <th>Phone</th>
+            <th>Email</th>
+            <th>Skype</th>
+            <th>Country</th>
+            <th>City</th>
+            <th>Avatar</th>
+            <th>Address</th>
+            <th>Token</th>
+            <th>Language</th>
+            <th>Status</th>
+            <th>Role</th>
+            <th>CreationDate</th>
+            <th>ModifiedDate</th>
+
+                <th></th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+        <?php foreach ($page->items as $user): ?>
+            <tr>
+                <td><?php echo $user->id ?></td>
+            <td><?php echo $user->name ?></td>
+            <td><?php echo $user->surname ?></td>
+            <td><?php echo $user->username ?></td>
+            <td><?php echo $user->password ?></td>
+            <td><?php echo $user->birthday ?></td>
+            <td><?php echo $user->github ?></td>
+            <td><?php echo $user->linkedIn ?></td>
+            <td><?php echo $user->fb ?></td>
+            <td><?php echo $user->hh ?></td>
+            <td><?php echo $user->phone ?></td>
+            <td><?php echo $user->email ?></td>
+            <td><?php echo $user->skype ?></td>
+            <td><?php echo $user->country ?></td>
+            <td><?php echo $user->city ?></td>
+            <td><?php echo $user->avatar ?></td>
+            <td><?php echo $user->address ?></td>
+            <td><?php echo $user->token ?></td>
+            <td><?php echo $user->language ?></td>
+            <td><?php echo $user->status ?></td>
+            <td><?php echo $user->role ?></td>
+            <td><?php echo $user->creationDate ?></td>
+            <td><?php echo $user->modifiedDate ?></td>
+
+                <td><?php echo $this->tag::linkTo(['admin/users/edit/' . $user->id, 'Edit']); ?></td>
+                <td><?php echo $this->tag::linkTo(['admin/users/delete/' . $user->id, 'Delete']); ?></td>
+            </tr>
+        <?php endforeach; ?>
+        </tbody>
+    </table>
+</div>
+
+<div class="row">
+    <div class="col-sm-1">
+        <p class="pagination" style="line-height: 1.42857;padding: 6px 12px;">
+            <?php echo $page->current, '/', $page->total_pages ?>
+        </p>
+    </div>
+    <div class="col-sm-11">
+        <?php if ($page->total_items > $page->limit) : ?>
+        <nav>
+            <ul class="pagination">
+                <li><?php echo $this->tag::linkTo('admin/users/list', 'First') ?></li>
+                <li><?php echo $this->tag::linkTo('admin/users/list?page=' . $page->before, 'Previous') ?></li>
+                <li><?php echo $this->tag::linkTo('admin/users/list?page=' . $page->next, 'Next') ?></li>
+                <li><?php echo $this->tag::linkTo('admin/users/list?page=' . $page->last, 'Last') ?></li>
+            </ul>
+        </nav>
+        <?php endif; ?>
+    </div>
+</div>

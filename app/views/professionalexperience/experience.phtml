@@ -1,0 +1,15 @@
+<?php if (count($messages) > 0) : ?>
+    <div class="messages" style="margin-top: 50px;color: red;">
+        <img src="/assets/images/danger.png" width="30"/>
+        <br>
+        <?php foreach($messages as $message) : ?>
+            <?php echo $message; ?>
+        <?php endforeach; ?>
+    </div>
+<?php endif; ?>
+<?php if (isset($image) &&!empty($image)) : ?>
+<div style="margin-top: 50px; margin-bottom: 30px;">
+    <?php echo $image; ?>
+</div>
+<?php endif; ?>
+<?php echo $form->html; ?>

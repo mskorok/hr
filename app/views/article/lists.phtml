@@ -1,0 +1,91 @@
+<?php
+declare(strict_types=1);
+
+use Phalcon\Paginator\Adapter\Model as Paginator;
+use App\Model\Articles;
+use Phalcon\Tag;
+
+/**
+ * @var \Phalcon\Mvc\View\Engine\Php $this
+ */
+/** @var $page Paginator */
+/** @var $article Articles */
+
+/** @var array $items */
+$items = $page->items;
+?>
+
+
+<div class="row">
+    <nav>
+        <ul class="pager">
+            <li class="previous"><?= $this->tag::linkTo(['admin/articles/index', 'Go Back']); ?></li>
+            <li class="next"><?= $this->tag::linkTo(['admin/articles/new', 'Create ']); ?></li>
+            <li class="next"><?= $this->tag::linkTo(['admin', 'Main ']); ?></li>
+        </ul>
+    </nav>
+</div>
+
+<div class="page-header">
+    <h1>List Articles</h1>
+</div>
+<?php if (isset($_GET['notice'])) : ?>
+    <div style="color:coral;text-align: center;"><?= urldecode($_GET['notice']); ?></div>
+<?php endif; ?>
+<?php if (isset($_GET['success'])) : ?>
+    <div style="color:darkolivegreen;text-align: center;"><?= urldecode($_GET['success']); ?></div>
+<?php endif; ?>
+<?= $this->getContent(); ?>
+
+<div class="row">
+    <table class="table table-bordered">
+        <thead>
+        <tr>
+            <th>Id</th>
+            <th>Title</th>
+            <th>Description</th>
+            <th>Text</th>
+            <th>CreationDate</th>
+            <th>ModifiedDate</th>
+
+            <th></th>
+            <th></th>
+        </tr>
+        </thead>
+                <tbody>
+        <?php foreach ($items as $article): ?>
+            <tr>
+                <td><?= $article->getId(); ?></td>
+                <td><?= $article->getTitle() ?></td>
+                <td><?= $article->getDescription() ?></td>
+                <td><?= $article->getText() ?></td>
+                <td><?= $article->getCreationDate(); ?></td>
+                <td><?= $article->getModifiedDate() ?></td>
+
+                <td><?= $this->tag::linkTo(['admin/articles/edit/' . $article->getId(), 'Edit']); ?></td>
+                <td><?= $this->tag::linkTo(['admin/articles/delete/' . $article->getId(), 'Delete']); ?></td>
+            </tr>
+        <?php endforeach; ?>
+                </tbody>
+    </table>
+</div>
+
+<div class="row">
+    <div class="col-sm-1">
+        <p class="pagination" style="line-height: 1.42857;padding: 6px 12px;">
+            <?= $page->current, '/', $page->total_pages ?>
+        </p>
+    </div>
+    <div class="col-sm-11">
+        <?php if ($page->total_items > $page->limit) : ?>
+        <nav>
+            <ul class="pagination">
+                <li><?= $this->tag::linkTo('admin/articles/list', 'First') ?></li>
+                <li><?= $this->tag::linkTo('admin/articles/list?page=' . $page->before, 'Previous') ?></li>
+                <li><?= $this->tag::linkTo('admin/articles/list?page=' . $page->next, 'Next') ?></li>
+                <li><?= $this->tag::linkTo('admin/articles/list?page=' . $page->last, 'Last') ?></li>
+            </ul>
+        </nav>
+        <?php endif; ?>
+    </div>
+</div>

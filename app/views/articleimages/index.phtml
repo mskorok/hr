@@ -1,0 +1,71 @@
+<?php
+declare(strict_types=1);
+/**
+ * @var \Phalcon\Mvc\View\Engine\Php $this
+ */
+?>
+
+<div class="page-header">
+    <h1>
+        Search article_images
+    </h1>
+    <p>
+        <?php echo $this->tag::linkTo(['admin/article_images/new', 'Create article_images']) ?>
+    </p>
+    <p>
+        <?php echo $this->tag::linkTo(['admin/article_images/list', 'List']) ?>
+    </p>
+    <p>
+        <?= $this->tag::linkTo(['admin', 'Main ']); ?>
+    </p>
+</div>
+
+<?php if (isset($_GET['notice'])) : ?>
+    <div style="color:coral;"><?php echo urldecode($_GET['notice']); ?></div>
+<?php endif; ?>
+<?php if (isset($_GET['success'])) : ?>
+    <div style="color:darkolivegreen;"><?php echo urldecode($_GET['success']); ?></div>
+<?php endif; ?>
+
+<?php echo $this->getContent() ?>
+
+<?php
+$ee=99;
+    echo $this->tag::form(
+        [
+            'admin/article_images/search',
+            'autocomplete' => 'off',
+            'class' => 'form-horizontal'
+        ]
+    );
+?>
+
+<div class="form-group">
+    <label for="fieldId" class="col-sm-2 control-label">Id</label>
+    <div class="col-sm-10">
+        <?php echo $this->tag::textField(['id', 'type' => 'number', 'class' => 'form-control', 'id' => 'fieldId']) ?>
+    </div>
+</div>
+
+<div class="form-group">
+    <label for="fieldArticleId" class="col-sm-2 control-label">Article</label>
+    <div class="col-sm-10">
+        <?php echo $this->tag::textField(['article_id', 'type' => 'number', 'class' => 'form-control', 'id' => 'fieldArticleId']) ?>
+    </div>
+</div>
+
+<div class="form-group">
+    <label for="fieldImageId" class="col-sm-2 control-label">Image</label>
+    <div class="col-sm-10">
+        <?php echo $this->tag::textField(['image_id', 'type' => 'number', 'class' => 'form-control', 'id' => 'fieldImageId']) ?>
+    </div>
+</div>
+
+
+<div class="form-group">
+    <div class="col-sm-offset-2 col-sm-10">
+        <?php echo $this->tag::submitButton(['Search', 'class' => 'btn btn-default']) ?>
+    </div>
+</div>
+
+<?php echo $this->tag::endForm(); ?>

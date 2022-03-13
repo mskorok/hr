@@ -1,0 +1,101 @@
+<?php
+declare(strict_types=1);
+/**
+ * @var \Phalcon\Mvc\View\Engine\Php $this
+ */
+?>
+
+<div class="row">
+    <nav>
+        <ul class="pager">
+            <li class="previous"><?php echo $this->tag::linkTo(['admin/payments', 'Back']) ?></li>
+            <br>
+            <li class="previous"><?php echo $this->tag::linkTo(['admin/payments/list', 'List']) ?></li>
+        </ul>
+    </nav>
+</div>
+
+<div class="page-header">
+    <h1>
+        Edit payments
+    </h1>
+</div>
+
+<?php if (isset($_GET['notice'])) : ?>
+    <div style="text-align: center;color:coral;"><?php echo urldecode($_GET['notice']); ?></div>
+<?php endif; ?>
+<?php if (isset($_GET['success'])) : ?>
+    <div style="text-align: center;color:darkolivegreen;"><?php echo urldecode($_GET['success']); ?></div>
+<?php endif; ?>
+
+<?php echo $this->getContent(); ?>
+
+<?php
+    echo $this->tag::form(
+        [
+            'admin/payments/save',
+            'autocomplete' => 'off',
+            'class' => 'form-horizontal'
+        ]
+    );
+?>
+
+<div class="form-group">
+    <label for="fieldTitle" class="col-sm-2 control-label">Title</label>
+    <div class="col-sm-10">
+        <?php echo $this->tag::textField(['title', 'size' => 30, 'class' => 'form-control', 'id' => 'fieldTitle']) ?>
+    </div>
+</div>
+
+<div class="form-group">
+    <label for="fieldAmount" class="col-sm-2 control-label">Amount</label>
+    <div class="col-sm-10">
+        <?php echo $this->tag::textField(['amount', 'size' => 30, 'class' => 'form-control', 'id' => 'fieldAmount']) ?>
+    </div>
+</div>
+
+<div class="form-group">
+    <label for="fieldBank" class="col-sm-2 control-label">Bank</label>
+    <div class="col-sm-10">
+        <?php echo $this->tag::textField(['bank', 'size' => 30, 'class' => 'form-control', 'id' => 'fieldBank']) ?>
+    </div>
+</div>
+
+<div class="form-group">
+    <label for="fieldDate" class="col-sm-2 control-label">Date</label>
+    <div class="col-sm-10">
+        <?php echo $this->tag::textField(['date', 'size' => 30, 'class' => 'form-control', 'id' => 'fieldDate']) ?>
+    </div>
+</div>
+
+<div class="form-group">
+    <label for="fieldPartnerId" class="col-sm-2 control-label">Partner</label>
+    <div class="col-sm-10">
+        <?php echo $this->tag::textField(['partner_id', 'type' => 'number', 'class' => 'form-control', 'id' => 'fieldPartnerId']) ?>
+    </div>
+</div>
+
+<div class="form-group">
+    <label for="fieldUserSubscription" class="col-sm-2 control-label">User Of Subscription</label>
+    <div class="col-sm-10">
+        <?php echo $this->tag::textField(['user_subscription', 'type' => 'number', 'class' => 'form-control', 'id' => 'fieldUserSubscription']) ?>
+    </div>
+</div>
+
+<div class="form-group">
+    <label for="fieldCurrency" class="col-sm-2 control-label">Currency</label>
+    <div class="col-sm-10">
+        <?php echo $this->tag::selectStatic(['currency', ['usd' => '$', 'euro' => '€', 'rupee' => 'Rupee', 'rubl' => 'Rubl', 'peso' => 'PHP'], 'class' => 'form-control', 'id' => 'fieldCurrency']) ?>
+    </div>
+</div>
+
+
+<?php echo $this->tag::hiddenField(['id']) ?>
+
+<div class="form-group">
+    <div class="col-sm-offset-2 col-sm-10">
+        <?php echo $this->tag::submitButton(['Save', 'class' => 'btn btn-default']) ?>
+    </div>
+</div>
+
+<?php echo $this->tag::endForm(); ?>

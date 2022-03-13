@@ -1,0 +1,126 @@
+<?php
+declare(strict_types=1);
+/**
+ * @var \Phalcon\Mvc\View\Engine\Php $this
+ */
+?>
+
+<div class="row">
+    <nav>
+        <ul class="pager">
+            <li class="previous"><?php echo $this->tag::linkTo(['admin/partners', 'Go Back']) ?></li>
+            <li class="next"><?php echo $this->tag::linkTo(['admin/partners/list', 'List']) ?></li>
+        </ul>
+    </nav>
+</div>
+
+<div class="page-header">
+    <h1>
+        Create partners
+    </h1>
+</div>
+
+<?php if (isset($_GET['notice'])) : ?>
+    <div style="text-align: center;color:coral;"><?php echo urldecode($_GET['notice']); ?></div>
+<?php endif; ?>
+<?php if (isset($_GET['success'])) : ?>
+    <div style="text-align: center;color:darkolivegreen;"><?php echo urldecode($_GET['success']); ?></div>
+<?php endif; ?>
+
+<?php echo $this->getContent(); ?>
+
+<?php
+    echo $this->tag::form(
+        [
+            'admin/partners/create',
+            'autocomplete' => 'off',
+            'class' => 'form-horizontal'
+        ]
+    );
+?>
+
+<div class="form-group">
+    <label for="fieldName" class="col-sm-2 control-label">Name</label>
+    <div class="col-sm-10">
+        <?php echo $this->tag::textField(['name', 'size' => 30, 'class' => 'form-control', 'id' => 'fieldName']) ?>
+    </div>
+</div>
+
+<div class="form-group">
+    <label for="fieldCompany" class="col-sm-2 control-label">Company</label>
+    <div class="col-sm-10">
+        <?php echo $this->tag::textField(['company', 'size' => 30, 'class' => 'form-control', 'id' => 'fieldCompany']) ?>
+    </div>
+</div>
+
+<div class="form-group">
+    <label for="fieldApproved" class="col-sm-2 control-label">Approved</label>
+    <div class="col-sm-10">
+        <?php echo $this->tag::textField(['approved', 'type' => 'number', 'class' => 'form-control', 'id' => 'fieldApproved']) ?>
+    </div>
+</div>
+
+<div class="form-group">
+    <label for="fieldLevel" class="col-sm-2 control-label">Level</label>
+    <div class="col-sm-10">
+        <?php echo $this->tag::selectStatic(['level', ['high' => 'High', 'middle' => 'Middle', 'low' => 'Low'], 'class' => 'form-control', 'id' => 'fieldLevel']) ?>
+    </div>
+</div>
+
+<div class="form-group">
+    <label for="fieldDescription" class="col-sm-2 control-label">Description</label>
+    <div class="col-sm-10">
+        <?php echo $this->tag::textArea(['description', 'cols' => 30, 'rows' => 4, 'class' => 'form-control', 'id' => 'fieldDescription']) ?>
+    </div>
+</div>
+
+<div class="form-group">
+    <label for="fieldCity" class="col-sm-2 control-label">City</label>
+    <div class="col-sm-10">
+        <?php echo $this->tag::textField(['city', 'size' => 30, 'class' => 'form-control', 'id' => 'fieldCity']) ?>
+    </div>
+</div>
+
+<div class="form-group">
+    <label for="fieldCountryId" class="col-sm-2 control-label">Country</label>
+    <div class="col-sm-10">
+        <?php echo $this->tag::textField(['country_id', 'type' => 'number', 'class' => 'form-control', 'id' => 'fieldCountryId']) ?>
+    </div>
+</div>
+
+<div class="form-group">
+    <label for="fieldAddress" class="col-sm-2 control-label">Address</label>
+    <div class="col-sm-10">
+        <?php echo $this->tag::textArea(['address', 'cols' => 30, 'rows' => 4, 'class' => 'form-control', 'id' => 'fieldAddress']) ?>
+    </div>
+</div>
+
+<div class="form-group">
+    <label for="fieldPhone" class="col-sm-2 control-label">Phone</label>
+    <div class="col-sm-10">
+        <?php echo $this->tag::textField(['phone', 'size' => 30, 'class' => 'form-control', 'id' => 'fieldPhone']) ?>
+    </div>
+</div>
+
+<div class="form-group">
+    <label for="fieldEmail" class="col-sm-2 control-label">Email</label>
+    <div class="col-sm-10">
+        <?php echo $this->tag::textField(['email', 'size' => 30, 'class' => 'form-control', 'id' => 'fieldEmail']) ?>
+    </div>
+</div>
+
+<div class="form-group">
+    <label for="fieldRequisites" class="col-sm-2 control-label">Requisites</label>
+    <div class="col-sm-10">
+        <?php echo $this->tag::textArea(['requisites', 'cols' => 30, 'rows' => 4, 'class' => 'form-control', 'id' => 'fieldRequisites']) ?>
+    </div>
+</div>
+
+
+<div class="form-group">
+    <div class="col-sm-offset-2 col-sm-10">
+        <?php echo $this->tag::submitButton(['Save', 'class' => 'btn btn-default']) ?>
+    </div>
+</div>
+
+<?php echo $this->tag::endForm(); ?>

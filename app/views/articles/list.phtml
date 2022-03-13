@@ -1,0 +1,76 @@
+<h3>Resumes</h3>
+<div style="width: 100%;margin-top: 50px;"><a href="/admin/articles/add" target="_blank" style="float: right"><button class="btn btn-success">Add new</button></a></div>
+<table id="table_users" class="display compact" cellspacing="0" width="100%" style="margin-bottom: 100px;">
+    <thead>
+    <tr>
+        <th style="text-transform: uppercase; text-align: center;">ID</th>
+        <th style="text-transform: uppercase; text-align: center;">Title</th>
+        <th style="text-transform: uppercase; text-align: center;">Description</th>
+        <th style="text-transform: uppercase; text-align: center;">Link</th>
+    </tr>
+    </thead>
+    <tbody id="table_body">
+    <tr>
+        <td>1</td>
+        <td>2</td>
+        <td>3</td>
+    </tr>
+    </tbody>
+</table>
+<div style="margin-top: 50px;"></div>
+<h4>Articles Linked</h4>
+<div id="response" style="margin-top: 50px; background-color: lightgrey; color:darkolivegreen"></div>
+
+
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        var api_token = '';
+        var url = '/articles_linked';
+        var xhr = new XMLHttpRequest();
+        xhr.onload = function() {
+            if (this.readyState === 4) {
+                if (this.status === 200) {
+                    try {
+                        console.log(this.response);
+                        var response = JSON.parse(this.response);
+                        var articles = response.articles_linked;
+                        $('#response').text(this.response);
+                        if (resumes) {
+                            var html = '';
+                            [].forEach.call(articles, function (article) {
+                                html += '<tr>' +
+                                    '<td class="id">' + article.id + '</td>' +
+                                    '<td class="title"><a href="/admin/article_linked/edit/' + article.id + '" target="_blank"> ' + article.title + '</a></td>' +
+                                    '<td class="description"><a href="/admin/article_linked/edit/' + article.id + '" target="_blank"> ' + article.description + '</a></td>' +
+                                    '<td class="link"><a href="/admin/article_linked/edit/' + article.id + '" target="_blank"> ' + article.link + '</a></td>' +
+                                '</tr>'
+                            });
+                            $('#table_body').html(html);
+                            $('#table_users').DataTable({
+                                'info': false,
+                                'searching': false,
+                                'lengthChange': false,
+                                'pageLength': 3,
+                                'order': [[0, "asc"]],
+                                oLanguage: {
+                                    oPaginate: {
+                                        sNext: '<i class="fa fa-chevron-right" ></i>',
+                                        sPrevious: '<i class="fa fa-chevron-left" ></i>'
+                                    }
+                                }
+                            });
+//                            console.log(html);
+                        }
+                    } catch (e) {
+                        console.log('error', e.message);
+                    }
+                } else {
+                    console.log('error response', this.response);
+                }
+            }
+        };
+        xhr.open('GET', url, true);
+        xhr.setRequestHeader('X-Requested-With', 'XMLHttpRequest');
+        xhr.send();
+    });
+</script>

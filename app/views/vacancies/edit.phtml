@@ -1,0 +1,143 @@
+<?php
+declare(strict_types=1);
+/**
+ * @var \Phalcon\Mvc\View\Engine\Php $this
+ */
+?>
+
+<div class="row">
+    <nav>
+        <ul class="pager">
+            <li class="previous"><?php echo $this->tag::linkTo(['admin/vacancies', 'Back']) ?></li>
+            <br>
+            <li class="previous"><?php echo $this->tag::linkTo(['admin/vacancies/list', 'List']) ?></li>
+        </ul>
+    </nav>
+</div>
+
+<div class="page-header">
+    <h1>
+        Edit vacancies
+    </h1>
+</div>
+
+<?php if (isset($_GET['notice'])) : ?>
+    <div style="text-align: center;color:coral;"><?php echo urldecode($_GET['notice']); ?></div>
+<?php endif; ?>
+<?php if (isset($_GET['success'])) : ?>
+    <div style="text-align: center;color:darkolivegreen;"><?php echo urldecode($_GET['success']); ?></div>
+<?php endif; ?>
+
+<?php echo $this->getContent(); ?>
+
+<?php
+    echo $this->tag::form(
+        [
+            'admin/vacancies/save',
+            'autocomplete' => 'off',
+            'class' => 'form-horizontal'
+        ]
+    );
+?>
+
+<div class="form-group">
+    <label for="fieldName" class="col-sm-2 control-label">Name</label>
+    <div class="col-sm-10">
+        <?php echo $this->tag::textField(['name', 'size' => 30, 'class' => 'form-control', 'id' => 'fieldName']) ?>
+    </div>
+</div>
+
+<div class="form-group">
+    <label for="fieldSalary" class="col-sm-2 control-label">Salary</label>
+    <div class="col-sm-10">
+        <?php echo $this->tag::textField(['salary', 'size' => 30, 'class' => 'form-control', 'id' => 'fieldSalary']) ?>
+    </div>
+</div>
+
+<div class="form-group">
+    <label for="fieldCompanyId" class="col-sm-2 control-label">Company</label>
+    <div class="col-sm-10">
+        <?php echo $this->tag::textField(['company_id', 'type' => 'number', 'class' => 'form-control', 'id' => 'fieldCompanyId']) ?>
+    </div>
+</div>
+
+<div class="form-group">
+    <label for="fieldProfessionalExperience" class="col-sm-2 control-label">Professional Of Experience</label>
+    <div class="col-sm-10">
+        <?php echo $this->tag::textField(['professional_experience', 'size' => 30, 'class' => 'form-control', 'id' => 'fieldProfessionalExperience']) ?>
+    </div>
+</div>
+
+<div class="form-group">
+    <label for="fieldWorkPlace" class="col-sm-2 control-label">Work Place</label>
+    <div class="col-sm-10">
+        <?php echo $this->tag::selectStatic(['work_place', ['insite' => 'insite', 'remote' => 'remote', 'remote-partially' => 'remote-partially', 'no matter' => 'no matter'], 'class' => 'form-control', 'id' => 'fieldWorkPlace']) ?>
+    </div>
+</div>
+
+<div class="form-group">
+    <label for="fieldDescription" class="col-sm-2 control-label">Description</label>
+    <div class="col-sm-10">
+        <?php echo $this->tag::textArea(['description', 'cols' => 30, 'rows' => 4, 'class' => 'form-control', 'id' => 'fieldDescription']) ?>
+    </div>
+</div>
+
+<div class="form-group">
+    <label for="fieldResponsibilities" class="col-sm-2 control-label">Responsibilities</label>
+    <div class="col-sm-10">
+        <?php echo $this->tag::textArea(['responsibilities', 'cols' => 30, 'rows' => 4, 'class' => 'form-control', 'id' => 'fieldResponsibilities']) ?>
+    </div>
+</div>
+
+<div class="form-group">
+    <label for="fieldMainRequirements" class="col-sm-2 control-label">Main Of Requirements</label>
+    <div class="col-sm-10">
+        <?php echo $this->tag::textArea(['main_requirements', 'cols' => 30, 'rows' => 4, 'class' => 'form-control', 'id' => 'fieldMainRequirements']) ?>
+    </div>
+</div>
+
+<div class="form-group">
+    <label for="fieldAdditionalRequirements" class="col-sm-2 control-label">Additional Of Requirements</label>
+    <div class="col-sm-10">
+        <?php echo $this->tag::textArea(['additional_requirements', 'cols' => 30, 'rows' => 4, 'class' => 'form-control', 'id' => 'fieldAdditionalRequirements']) ?>
+    </div>
+</div>
+
+<div class="form-group">
+    <label for="fieldWorkConditions" class="col-sm-2 control-label">Work Of Conditions</label>
+    <div class="col-sm-10">
+        <?php echo $this->tag::textArea(['work_conditions', 'cols' => 30, 'rows' => 4, 'class' => 'form-control', 'id' => 'fieldWorkConditions']) ?>
+    </div>
+</div>
+
+<div class="form-group">
+    <label for="fieldKeySkills" class="col-sm-2 control-label">Key Of Skills</label>
+    <div class="col-sm-10">
+        <?php echo $this->tag::textArea(['key_skills', 'cols' => 30, 'rows' => 4, 'class' => 'form-control', 'id' => 'fieldKeySkills']) ?>
+    </div>
+</div>
+
+<div class="form-group">
+    <label for="fieldStart" class="col-sm-2 control-label">Start</label>
+    <div class="col-sm-10">
+        <?php echo $this->tag::textField(['start', 'size' => 30, 'class' => 'form-control', 'id' => 'fieldStart']) ?>
+    </div>
+</div>
+
+<div class="form-group">
+    <label for="fieldFinish" class="col-sm-2 control-label">Finish</label>
+    <div class="col-sm-10">
+        <?php echo $this->tag::textField(['finish', 'size' => 30, 'class' => 'form-control', 'id' => 'fieldFinish']) ?>
+    </div>
+</div>
+
+
+<?php echo $this->tag::hiddenField(['id']) ?>
+
+<div class="form-group">
+    <div class="col-sm-offset-2 col-sm-10">
+        <?php echo $this->tag::submitButton(['Save', 'class' => 'btn btn-default']) ?>
+    </div>
+</div>
+
+<?php echo $this->tag::endForm(); ?>
