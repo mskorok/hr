@@ -114,7 +114,7 @@ class Messages extends Model
      * @param integer $id
      * @return $this
      */
-    public function setId($id): self
+    public function setId(int $id): self
     {
         $this->id = $id;
 
@@ -127,7 +127,7 @@ class Messages extends Model
      * @param integer $parent
      * @return $this
      */
-    public function setParent($parent): self
+    public function setParent(int $parent): self
     {
         $this->parent = $parent;
 
@@ -140,7 +140,7 @@ class Messages extends Model
      * @param integer $sender
      * @return $this
      */
-    public function setSender($sender): self
+    public function setSender(int $sender): self
     {
         $this->sender = $sender;
 
@@ -153,7 +153,7 @@ class Messages extends Model
      * @param integer $recipient
      * @return $this
      */
-    public function setRecipient($recipient): self
+    public function setRecipient(int $recipient): self
     {
         $this->recipient = $recipient;
 
@@ -166,7 +166,7 @@ class Messages extends Model
      * @param string $title
      * @return $this
      */
-    public function setTitle($title): self
+    public function setTitle(string $title): self
     {
         $this->title = $title;
 
@@ -179,7 +179,7 @@ class Messages extends Model
      * @param string $content
      * @return $this
      */
-    public function setContent($content): self
+    public function setContent(string $content): self
     {
         $this->content = $content;
 
@@ -192,7 +192,7 @@ class Messages extends Model
      * @param integer $category
      * @return $this
      */
-    public function setCategory($category): self
+    public function setCategory(int $category): self
     {
         $this->category = $category;
 
@@ -205,7 +205,7 @@ class Messages extends Model
      * @param string $sendMethod
      * @return $this
      */
-    public function setSendMethod($sendMethod): self
+    public function setSendMethod(string $sendMethod): self
     {
         $this->sendMethod = $sendMethod;
 
@@ -218,7 +218,7 @@ class Messages extends Model
      * @param string $status
      * @return $this
      */
-    public function setStatus($status): self
+    public function setStatus(string $status): self
     {
         $this->status = $status;
 
@@ -231,7 +231,7 @@ class Messages extends Model
      * @param string $supportStatus
      * @return $this
      */
-    public function setSupportStatus($supportStatus): self
+    public function setSupportStatus(string $supportStatus): self
     {
         $this->supportStatus = $supportStatus;
 
@@ -244,7 +244,7 @@ class Messages extends Model
      * @param string $sentDate
      * @return $this
      */
-    public function setSentDate($sentDate): self
+    public function setSentDate(string $sentDate): self
     {
         $this->sentDate = $sentDate;
 
@@ -257,7 +257,7 @@ class Messages extends Model
      * @param string $readDate
      * @return $this
      */
-    public function setReadDate($readDate): self
+    public function setReadDate(string $readDate): self
     {
         $this->readDate = $readDate;
 

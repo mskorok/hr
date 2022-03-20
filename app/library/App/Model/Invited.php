@@ -55,7 +55,7 @@ class Invited extends Model
      * @param integer $id
      * @return $this
      */
-    public function setId($id): self
+    public function setId(int $id): self
     {
         $this->id = $id;
 
@@ -68,7 +68,7 @@ class Invited extends Model
      * @param integer $user_id
      * @return $this
      */
-    public function setUserId($user_id): self
+    public function setUserId(int $user_id): self
     {
         $this->user_id = $user_id;
 
@@ -81,7 +81,7 @@ class Invited extends Model
      * @param integer $company_id
      * @return $this
      */
-    public function setCompanyId($company_id): self
+    public function setCompanyId(int $company_id): self
     {
         $this->company_id = $company_id;
 

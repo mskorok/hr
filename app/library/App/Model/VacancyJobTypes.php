@@ -45,7 +45,7 @@ class VacancyJobTypes extends Model
      * @param integer $id
      * @return $this
      */
-    public function setId($id): self
+    public function setId(int $id): self
     {
         $this->id = $id;
 
@@ -58,7 +58,7 @@ class VacancyJobTypes extends Model
      * @param integer $vacancy_id
      * @return $this
      */
-    public function setVacancyId($vacancy_id): self
+    public function setVacancyId(int $vacancy_id): self
     {
         $this->vacancy_id = $vacancy_id;
 
@@ -71,7 +71,7 @@ class VacancyJobTypes extends Model
      * @param integer $type_id
      * @return $this
      */
-    public function setTypeId($type_id): self
+    public function setTypeId(int $type_id): self
     {
         $this->type_id = $type_id;
 

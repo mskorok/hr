@@ -162,7 +162,7 @@ class EducationalInstitutions extends Model
      */
     public function getId(): ?int
     {
-        return $this->id;
+        return (int)$this->id;
     }
 
     /**
@@ -202,7 +202,7 @@ class EducationalInstitutions extends Model
      */
     public function getCountryId(): ?int
     {
-        return $this->country_id;
+        return (int)$this->country_id;
     }
 
     /**

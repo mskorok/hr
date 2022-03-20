@@ -55,7 +55,7 @@ class Languages extends Model
      * @param integer $id
      * @return $this
      */
-    public function setId($id): self
+    public function setId(int $id): self
     {
         $this->id = $id;
 
@@ -68,7 +68,7 @@ class Languages extends Model
      * @param string $name
      * @return $this
      */
-    public function setName($name): self
+    public function setName(string $name): self
     {
         $this->name = $name;
 
@@ -81,7 +81,7 @@ class Languages extends Model
      * @param string $code
      * @return $this
      */
-    public function setCode($code): self
+    public function setCode(string $code): self
     {
         $this->code = $code;
 
@@ -94,7 +94,7 @@ class Languages extends Model
      * @param string $shortCode
      * @return $this
      */
-    public function setShortCode($shortCode): self
+    public function setShortCode(string $shortCode): self
     {
         $this->shortCode = $shortCode;
 
@@ -108,7 +108,7 @@ class Languages extends Model
      */
     public function getId(): ?int
     {
-        return $this->id;
+        return (int)$this->id;
     }
 
     /**

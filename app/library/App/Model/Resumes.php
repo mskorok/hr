@@ -287,7 +287,7 @@ class Resumes extends DateTrackingModel
      */
     public function getUserId(): ?int
     {
-        return $this->user_id;
+        return (int)$this->user_id;
     }
 
     /**
@@ -327,7 +327,7 @@ class Resumes extends DateTrackingModel
      */
     public function getHour(): ?int
     {
-        return $this->hour;
+        return (int)$this->hour;
     }
 
     /**

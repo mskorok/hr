@@ -48,7 +48,7 @@ class TeacherSchedule extends Model
      * @param integer $id
      * @return $this
      */
-    public function setId($id): self
+    public function setId(int $id): self
     {
         $this->id = $id;
 
@@ -61,7 +61,7 @@ class TeacherSchedule extends Model
      * @param integer $teacher_id
      * @return $this
      */
-    public function setTeacherId($teacher_id): self
+    public function setTeacherId(int $teacher_id): self
     {
         $this->teacher_id = $teacher_id;
 
@@ -74,7 +74,7 @@ class TeacherSchedule extends Model
      * @param integer $schedule_id
      * @return $this
      */
-    public function setScheduleId($schedule_id): self
+    public function setScheduleId(int $schedule_id): self
     {
         $this->schedule_id = $schedule_id;
 

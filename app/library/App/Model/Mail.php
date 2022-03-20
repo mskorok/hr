@@ -66,7 +66,7 @@ class Mail extends Model
      * @param integer $id
      * @return $this
      */
-    public function setId($id): self
+    public function setId(int $id): self
     {
         $this->id = $id;
 
@@ -79,7 +79,7 @@ class Mail extends Model
      * @param string $name
      * @return $this
      */
-    public function setName($name): self
+    public function setName(string $name): self
     {
         $this->name = $name;
 
@@ -92,7 +92,7 @@ class Mail extends Model
      * @param string $mailFrom
      * @return $this
      */
-    public function setMailFrom($mailFrom): self
+    public function setMailFrom(string $mailFrom): self
     {
         $this->mailFrom = $mailFrom;
 
@@ -105,7 +105,7 @@ class Mail extends Model
      * @param string $mailTo
      * @return $this
      */
-    public function setMailTo($mailTo): self
+    public function setMailTo(string $mailTo): self
     {
         $this->mailTo = $mailTo;
 
@@ -118,7 +118,7 @@ class Mail extends Model
      * @param string $subject
      * @return $this
      */
-    public function setSubject($subject): self
+    public function setSubject(string $subject): self
     {
         $this->subject = $subject;
 
@@ -131,7 +131,7 @@ class Mail extends Model
      * @param string $text
      * @return $this
      */
-    public function setText($text): self
+    public function setText(string $text): self
     {
         $this->text = $text;
 

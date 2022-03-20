@@ -78,7 +78,7 @@ class Comments extends Model
      * @param integer $id
      * @return $this
      */
-    public function setId($id): self
+    public function setId(int $id): self
     {
         $this->id = $id;
 
@@ -91,7 +91,7 @@ class Comments extends Model
      * @param integer $user_id
      * @return $this
      */
-    public function setUserId($user_id): self
+    public function setUserId(int $user_id): self
     {
         $this->user_id = $user_id;
 
@@ -104,7 +104,7 @@ class Comments extends Model
      * @param integer $article_id
      * @return $this
      */
-    public function setArticleId($article_id): self
+    public function setArticleId(int $article_id): self
     {
         $this->article_id = $article_id;
 
@@ -117,7 +117,7 @@ class Comments extends Model
      * @param integer $parent_id
      * @return $this
      */
-    public function setParentId($parent_id): self
+    public function setParentId(int $parent_id): self
     {
         $this->parent_id = $parent_id;
 
@@ -130,7 +130,7 @@ class Comments extends Model
      * @param string $title
      * @return $this
      */
-    public function setTitle($title): self
+    public function setTitle(string $title): self
     {
         $this->title = $title;
 
@@ -143,7 +143,7 @@ class Comments extends Model
      * @param string $text
      * @return $this
      */
-    public function setText($text): self
+    public function setText(string $text): self
     {
         $this->text = $text;
 
@@ -156,7 +156,7 @@ class Comments extends Model
      * @param string $created
      * @return $this
      */
-    public function setCreated($created): self
+    public function setCreated(string $created): self
     {
         $this->created = $created;
 

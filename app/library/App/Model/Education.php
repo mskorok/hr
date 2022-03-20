@@ -81,7 +81,7 @@ class Education extends Model
      * @param integer $id
      * @return $this
      */
-    public function setId($id): self
+    public function setId(int $id): self
     {
         $this->id = $id;
 
@@ -94,7 +94,7 @@ class Education extends Model
      * @param integer $user_id
      * @return $this
      */
-    public function setUserId($user_id): self
+    public function setUserId(int $user_id): self
     {
         $this->user_id = $user_id;
 
@@ -107,7 +107,7 @@ class Education extends Model
      * @param string $name
      * @return $this
      */
-    public function setName($name): self
+    public function setName(string $name): self
     {
         $this->name = $name;
 
@@ -120,7 +120,7 @@ class Education extends Model
      * @param string $specialization
      * @return $this
      */
-    public function setSpecialization($specialization): self
+    public function setSpecialization(string $specialization): self
     {
         $this->specialization = $specialization;
 
@@ -133,7 +133,7 @@ class Education extends Model
      * @param string $level
      * @return $this
      */
-    public function setLevel($level): self
+    public function setLevel(string $level): self
     {
         $this->level = $level;
 
@@ -146,7 +146,7 @@ class Education extends Model
      * @param string $start
      * @return $this
      */
-    public function setStart($start): self
+    public function setStart(string $start): self
     {
         $this->start = $start;
 
@@ -159,7 +159,7 @@ class Education extends Model
      * @param string $finish
      * @return $this
      */
-    public function setFinish($finish): self
+    public function setFinish(string $finish): self
     {
         $this->finish = $finish;
 

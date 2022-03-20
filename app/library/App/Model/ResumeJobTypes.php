@@ -45,7 +45,7 @@ class ResumeJobTypes extends Model
      * @param integer $id
      * @return $this
      */
-    public function setId($id): self
+    public function setId(int $id): self
     {
         $this->id = $id;
 
@@ -58,7 +58,7 @@ class ResumeJobTypes extends Model
      * @param integer $resume_id
      * @return $this
      */
-    public function setResumeId($resume_id): self
+    public function setResumeId(int $resume_id): self
     {
         $this->resume_id = $resume_id;
 
@@ -71,7 +71,7 @@ class ResumeJobTypes extends Model
      * @param integer $type_id
      * @return $this
      */
-    public function setTypeId($type_id): self
+    public function setTypeId(int $type_id): self
     {
         $this->type_id = $type_id;
 

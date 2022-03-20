@@ -67,7 +67,7 @@ class ArticlesTranslated extends Model
      * @param integer $id
      * @return $this
      */
-    public function setId($id): self
+    public function setId(int $id): self
     {
         $this->id = $id;
 
@@ -80,7 +80,7 @@ class ArticlesTranslated extends Model
      * @param string $title
      * @return $this
      */
-    public function setTitle($title): self
+    public function setTitle(string $title): self
     {
         $this->title = $title;
 
@@ -93,7 +93,7 @@ class ArticlesTranslated extends Model
      * @param string $description
      * @return $this
      */
-    public function setDescription($description): self
+    public function setDescription(string $description): self
     {
         $this->description = $description;
 
@@ -106,7 +106,7 @@ class ArticlesTranslated extends Model
      * @param string $text
      * @return $this
      */
-    public function setText($text): self
+    public function setText(string $text): self
     {
         $this->text = $text;
 
@@ -119,7 +119,7 @@ class ArticlesTranslated extends Model
      * @param integer $language_id
      * @return $this
      */
-    public function setLanguageId($language_id): self
+    public function setLanguageId(int $language_id): self
     {
         $this->language_id = $language_id;
 

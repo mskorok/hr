@@ -47,7 +47,7 @@ class ArticleImages extends Model
      * @param integer $id
      * @return $this
      */
-    public function setId($id): self
+    public function setId(int $id): self
     {
         $this->id = $id;
 
@@ -60,7 +60,7 @@ class ArticleImages extends Model
      * @param integer $article_id
      * @return $this
      */
-    public function setArticleId($article_id): self
+    public function setArticleId(int $article_id): self
     {
         $this->article_id = $article_id;
 
@@ -73,7 +73,7 @@ class ArticleImages extends Model
      * @param integer $image_id
      * @return $this
      */
-    public function setImageId($image_id): self
+    public function setImageId(int $image_id): self
     {
         $this->image_id = $image_id;
 

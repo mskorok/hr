@@ -5,6 +5,8 @@ namespace App\Model;
 
 use App\Constants\Services;
 use Phalcon\Mvc\Model;
+use Phalcon\Mvc\Model\ResultInterface;
+use Phalcon\Mvc\Model\ResultsetInterface;
 
 /**
  * Applied
@@ -47,7 +49,7 @@ class Applied extends Model
      * @param integer $id
      * @return $this
      */
-    public function setId($id): self
+    public function setId(int $id): self
     {
         $this->id = $id;
 
@@ -60,7 +62,7 @@ class Applied extends Model
      * @param integer $user_id
      * @return $this
      */
-    public function setUserId($user_id): self
+    public function setUserId(int $user_id): self
     {
         $this->user_id = $user_id;
 
@@ -73,7 +75,7 @@ class Applied extends Model
      * @param integer $vacancy_id
      * @return $this
      */
-    public function setVacancyId($vacancy_id): self
+    public function setVacancyId(int $vacancy_id): self
     {
         $this->vacancy_id = $vacancy_id;
 
@@ -135,7 +137,7 @@ class Applied extends Model
      * Allows to query a set of records that match the specified conditions
      *
      * @param mixed $parameters
-     * @return Applied[]|Applied|\Phalcon\Mvc\Model\ResultSetInterface
+     * @return Applied[]|Applied|ResultSetInterface
      */
     public static function find($parameters = null)
     {
@@ -146,7 +148,7 @@ class Applied extends Model
      * Allows to query the first record that match the specified conditions
      *
      * @param mixed $parameters
-     * @return Applied|\Phalcon\Mvc\Model\ResultInterface
+     * @return Applied|ResultInterface
      */
     public static function findFirst($parameters = null)
     {

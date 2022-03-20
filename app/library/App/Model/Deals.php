@@ -83,7 +83,7 @@ class Deals extends Model
      * @param integer $id
      * @return $this
      */
-    public function setId($id): self
+    public function setId(int $id): self
     {
         $this->id = $id;
 
@@ -96,7 +96,7 @@ class Deals extends Model
      * @param integer $company_id
      * @return $this
      */
-    public function setCompanyId($company_id): self
+    public function setCompanyId(int $company_id): self
     {
         $this->company_id = $company_id;
 
@@ -109,7 +109,7 @@ class Deals extends Model
      * @param integer $candidate_id
      * @return $this
      */
-    public function setCandidateId($candidate_id): self
+    public function setCandidateId(int $candidate_id): self
     {
         $this->candidate_id = $candidate_id;
 
@@ -122,7 +122,7 @@ class Deals extends Model
      * @param integer $resume_id
      * @return $this
      */
-    public function setResumeId($resume_id): self
+    public function setResumeId(int $resume_id): self
     {
         $this->resume_id = $resume_id;
 
@@ -135,7 +135,7 @@ class Deals extends Model
      * @param integer $vacancy_id
      * @return $this
      */
-    public function setVacancyId($vacancy_id): self
+    public function setVacancyId(int $vacancy_id): self
     {
         $this->vacancy_id = $vacancy_id;
 
@@ -148,7 +148,7 @@ class Deals extends Model
      * @param string $created
      * @return $this
      */
-    public function setCreated($created): self
+    public function setCreated(string $created): self
     {
         $this->created = $created;
 
@@ -161,7 +161,7 @@ class Deals extends Model
      * @param integer $success
      * @return $this
      */
-    public function setSuccess($success): self
+    public function setSuccess(int $success): self
     {
         $this->success = $success;
 
@@ -174,7 +174,7 @@ class Deals extends Model
      * @param string $description
      * @return $this
      */
-    public function setDescription($description): self
+    public function setDescription(string $description): self
     {
         $this->description = $description;
 

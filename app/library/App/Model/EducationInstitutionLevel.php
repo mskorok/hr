@@ -84,7 +84,7 @@ class EducationInstitutionLevel extends Model
      */
     public function getId(): ?int
     {
-        return $this->id;
+        return (int)$this->id;
     }
 
     /**
@@ -94,7 +94,7 @@ class EducationInstitutionLevel extends Model
      */
     public function getInstitutionId(): ?int
     {
-        return $this->institution_id;
+        return (int)$this->institution_id;
     }
 
     /**
@@ -104,7 +104,7 @@ class EducationInstitutionLevel extends Model
      */
     public function getLevelId(): ?int
     {
-        return $this->level_id;
+        return (int)$this->level_id;
     }
 
     /**

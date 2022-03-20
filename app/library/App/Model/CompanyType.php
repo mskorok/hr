@@ -64,7 +64,7 @@ class CompanyType extends \Phalcon\Mvc\Model
      */
     public function getId(): ?int
     {
-        return $this->id;
+        return (int)$this->id;
     }
 
     /**

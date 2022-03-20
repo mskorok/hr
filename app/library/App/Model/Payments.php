@@ -120,7 +120,7 @@ class Payments extends Model
      * @param integer $id
      * @return $this
      */
-    public function setId($id): self
+    public function setId(int $id): self
     {
         $this->id = $id;
 
@@ -133,7 +133,7 @@ class Payments extends Model
      * @param string $title
      * @return $this
      */
-    public function setTitle($title): self
+    public function setTitle(string $title): self
     {
         $this->title = $title;
 
@@ -146,7 +146,7 @@ class Payments extends Model
      * @param string $description
      * @return $this
      */
-    public function setDescription($description): self
+    public function setDescription(string $description): self
     {
         $this->description = $description;
 
@@ -159,7 +159,7 @@ class Payments extends Model
      * @param double $amount
      * @return $this
      */
-    public function setAmount($amount): self
+    public function setAmount(float $amount): self
     {
         $this->amount = $amount;
 
@@ -172,7 +172,7 @@ class Payments extends Model
      * @param string $account
      * @return $this
      */
-    public function setAccount($account): self
+    public function setAccount(string $account): self
     {
         $this->account = $account;
 
@@ -185,7 +185,7 @@ class Payments extends Model
      * @param string $swift
      * @return $this
      */
-    public function setSwift($swift): self
+    public function setSwift(string $swift): self
     {
         $this->swift = $swift;
 
@@ -198,7 +198,7 @@ class Payments extends Model
      * @param string $bank
      * @return $this
      */
-    public function setBank($bank): self
+    public function setBank(string $bank): self
     {
         $this->bank = $bank;
 
@@ -211,7 +211,7 @@ class Payments extends Model
      * @param string $date
      * @return $this
      */
-    public function setDate($date): self
+    public function setDate(string $date): self
     {
         $this->date = $date;
 
@@ -224,7 +224,7 @@ class Payments extends Model
      * @param integer $user_subscription
      * @return $this
      */
-    public function setUserSubscription($user_subscription): self
+    public function setUserSubscription(int $user_subscription): self
     {
         $this->user_subscription = $user_subscription;
 
@@ -237,7 +237,7 @@ class Payments extends Model
      * @param integer $company_subscription
      * @return $this
      */
-    public function setCompanySubscription($company_subscription): self
+    public function setCompanySubscription(int $company_subscription): self
     {
         $this->company_subscription = $company_subscription;
 
@@ -250,7 +250,7 @@ class Payments extends Model
      * @param integer $user_id
      * @return $this
      */
-    public function setUserId($user_id): self
+    public function setUserId(int $user_id): self
     {
         $this->user_id = $user_id;
 
@@ -263,7 +263,7 @@ class Payments extends Model
      * @param integer $company_id
      * @return $this
      */
-    public function setCompanyId($company_id): self
+    public function setCompanyId(int $company_id): self
     {
         $this->company_id = $company_id;
 
@@ -276,7 +276,7 @@ class Payments extends Model
      * @param string $currency
      * @return $this
      */
-    public function setCurrency($currency): self
+    public function setCurrency(string $currency): self
     {
         $this->currency = $currency;
 
@@ -370,7 +370,7 @@ class Payments extends Model
      */
     public function getUserSubscription(): ?int
     {
-        return $this->user_subscription;
+        return (int)$this->user_subscription;
     }
 
     /**

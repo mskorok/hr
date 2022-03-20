@@ -321,7 +321,7 @@ class Companies extends DateTrackingModel
      */
     public function getId(): ?int
     {
-        return $this->id;
+        return (int)$this->id;
     }
 
     /**
@@ -351,7 +351,7 @@ class Companies extends DateTrackingModel
      */
     public function getType(): ?int
     {
-        return $this->type;
+        return (int)$this->type;
     }
 
     /**

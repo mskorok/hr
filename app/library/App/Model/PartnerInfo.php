@@ -60,7 +60,7 @@ class PartnerInfo extends Model
      * @param integer $id
      * @return $this
      */
-    public function setId($id): self
+    public function setId(int $id): self
     {
         $this->id = $id;
 
@@ -73,7 +73,7 @@ class PartnerInfo extends Model
      * @param integer $company_id
      * @return $this
      */
-    public function setCompanyId($company_id): self
+    public function setCompanyId(int $company_id): self
     {
         $this->company_id = $company_id;
 
@@ -86,7 +86,7 @@ class PartnerInfo extends Model
      * @param string $info
      * @return $this
      */
-    public function setInfo($info): self
+    public function setInfo(string $info): self
     {
         $this->info = $info;
 
@@ -99,7 +99,7 @@ class PartnerInfo extends Model
      * @param string $level
      * @return $this
      */
-    public function setLevel($level): self
+    public function setLevel(string $level): self
     {
         $this->level = $level;
 
@@ -112,7 +112,7 @@ class PartnerInfo extends Model
      * @param integer $approved
      * @return $this
      */
-    public function setApproved($approved): self
+    public function setApproved(int $approved): self
     {
         $this->approved = $approved;
 

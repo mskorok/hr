@@ -79,7 +79,7 @@ class Teachers extends Model
      * @param integer $id
      * @return $this
      */
-    public function setId($id): self
+    public function setId(int $id): self
     {
         $this->id = $id;
 
@@ -92,7 +92,7 @@ class Teachers extends Model
      * @param integer $user_id
      * @return $this
      */
-    public function setUserId($user_id): self
+    public function setUserId(int $user_id): self
     {
         $this->user_id = $user_id;
 
@@ -105,7 +105,7 @@ class Teachers extends Model
      * @param integer $rate
      * @return $this
      */
-    public function setRate($rate): self
+    public function setRate(int $rate): self
     {
         $this->rate = $rate;
 
@@ -118,7 +118,7 @@ class Teachers extends Model
      * @param string $skills
      * @return $this
      */
-    public function setSkills($skills): self
+    public function setSkills(string $skills): self
     {
         $this->skills = $skills;
 
@@ -131,7 +131,7 @@ class Teachers extends Model
      * @param string $title
      * @return $this
      */
-    public function setTitle($title): self
+    public function setTitle(string $title): self
     {
         $this->title = $title;
 
@@ -144,7 +144,7 @@ class Teachers extends Model
      * @param string $description
      * @return $this
      */
-    public function setDescription($description): self
+    public function setDescription(string $description): self
     {
         $this->description = $description;
 
@@ -157,7 +157,7 @@ class Teachers extends Model
      * @param string $text
      * @return $this
      */
-    public function setText($text): self
+    public function setText(string $text): self
     {
         $this->text = $text;
 

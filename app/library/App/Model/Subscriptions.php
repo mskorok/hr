@@ -98,7 +98,7 @@ class Subscriptions extends Model
      * @param integer $id
      * @return $this
      */
-    public function setId($id): self
+    public function setId(int $id): self
     {
         $this->id = $id;
 
@@ -111,7 +111,7 @@ class Subscriptions extends Model
      * @param string $title
      * @return $this
      */
-    public function setTitle($title): self
+    public function setTitle(string $title): self
     {
         $this->title = $title;
 
@@ -124,7 +124,7 @@ class Subscriptions extends Model
      * @param string $description
      * @return $this
      */
-    public function setDescription($description): self
+    public function setDescription(string $description): self
     {
         $this->description = $description;
 
@@ -137,7 +137,7 @@ class Subscriptions extends Model
      * @param integer $amount_candidate
      * @return $this
      */
-    public function setAmountCandidate($amount_candidate): self
+    public function setAmountCandidate(int $amount_candidate): self
     {
         $this->amount_candidate = $amount_candidate;
 
@@ -150,7 +150,7 @@ class Subscriptions extends Model
      * @param integer $percentage_candidate
      * @return $this
      */
-    public function setPercentageCandidate($percentage_candidate): self
+    public function setPercentageCandidate(int $percentage_candidate): self
     {
         $this->percentage_candidate = $percentage_candidate;
 
@@ -163,7 +163,7 @@ class Subscriptions extends Model
      * @param integer $amount_resume
      * @return $this
      */
-    public function setAmountResume($amount_resume): self
+    public function setAmountResume(int $amount_resume): self
     {
         $this->amount_resume = $amount_resume;
 
@@ -176,7 +176,7 @@ class Subscriptions extends Model
      * @param integer $percentage_resume
      * @return $this
      */
-    public function setPercentageResume($percentage_resume): self
+    public function setPercentageResume(int $percentage_resume): self
     {
         $this->percentage_resume = $percentage_resume;
 
@@ -189,7 +189,7 @@ class Subscriptions extends Model
      * @param integer $amount_vacancy
      * @return $this
      */
-    public function setAmountVacancy($amount_vacancy): self
+    public function setAmountVacancy(int $amount_vacancy): self
     {
         $this->amount_vacancy = $amount_vacancy;
 
@@ -202,7 +202,7 @@ class Subscriptions extends Model
      * @param integer $percentage_vacancy
      * @return $this
      */
-    public function setPercentageVacancy($percentage_vacancy): self
+    public function setPercentageVacancy(int $percentage_vacancy): self
     {
         $this->percentage_vacancy = $percentage_vacancy;
 
@@ -215,7 +215,7 @@ class Subscriptions extends Model
      * @param string $type
      * @return $this
      */
-    public function setType($type): self
+    public function setType(string $type): self
     {
         $this->type = $type;
 

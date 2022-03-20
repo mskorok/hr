@@ -223,7 +223,7 @@ class Users extends DateTrackingModel
      * @param integer $id
      * @return $this
      */
-    public function setId($id): self
+    public function setId(int $id): self
     {
         $this->id = $id;
 
@@ -236,7 +236,7 @@ class Users extends DateTrackingModel
      * @param string $name
      * @return $this
      */
-    public function setName($name): self
+    public function setName(string $name): self
     {
         $this->name = $name;
 
@@ -249,7 +249,7 @@ class Users extends DateTrackingModel
      * @param string $surname
      * @return $this
      */
-    public function setSurname($surname): self
+    public function setSurname(string $surname): self
     {
         $this->surname = $surname;
 
@@ -262,7 +262,7 @@ class Users extends DateTrackingModel
      * @param string $username
      * @return $this
      */
-    public function setUsername($username): self
+    public function setUsername(string $username): self
     {
         $this->username = $username;
 
@@ -275,7 +275,7 @@ class Users extends DateTrackingModel
      * @param string $password
      * @return $this
      */
-    public function setPassword($password): self
+    public function setPassword(string $password): self
     {
         $this->password = $password;
 
@@ -288,7 +288,7 @@ class Users extends DateTrackingModel
      * @param string $birthday
      * @return $this
      */
-    public function setBirthday($birthday): self
+    public function setBirthday(string $birthday): self
     {
         $this->birthday = $birthday;
 
@@ -301,7 +301,7 @@ class Users extends DateTrackingModel
      * @param string $gender
      * @return $this
      */
-    public function setGender($gender): self
+    public function setGender(string $gender): self
     {
         $this->gender = $gender;
 
@@ -314,7 +314,7 @@ class Users extends DateTrackingModel
      * @param string $github
      * @return $this
      */
-    public function setGithub($github): self
+    public function setGithub(string $github): self
     {
         $this->github = $github;
 
@@ -327,7 +327,7 @@ class Users extends DateTrackingModel
      * @param string $linkedIn
      * @return $this
      */
-    public function setLinkedIn($linkedIn): self
+    public function setLinkedIn(string $linkedIn): self
     {
         $this->linkedIn = $linkedIn;
 
@@ -340,7 +340,7 @@ class Users extends DateTrackingModel
      * @param string $fb
      * @return $this
      */
-    public function setFb($fb): self
+    public function setFb(string $fb): self
     {
         $this->fb = $fb;
 
@@ -353,7 +353,7 @@ class Users extends DateTrackingModel
      * @param string $hh
      * @return $this
      */
-    public function setHh($hh): self
+    public function setHh(string $hh): self
     {
         $this->hh = $hh;
 
@@ -366,7 +366,7 @@ class Users extends DateTrackingModel
      * @param string $phone
      * @return $this
      */
-    public function setPhone($phone): self
+    public function setPhone(string $phone): self
     {
         $this->phone = $phone;
 
@@ -379,7 +379,7 @@ class Users extends DateTrackingModel
      * @param string $email
      * @return $this
      */
-    public function setEmail($email): self
+    public function setEmail(string $email): self
     {
         $this->email = $email;
 
@@ -392,7 +392,7 @@ class Users extends DateTrackingModel
      * @param integer $emailConfirmed
      * @return $this
      */
-    public function setEmailConfirmed($emailConfirmed): self
+    public function setEmailConfirmed(int $emailConfirmed): self
     {
         $this->emailConfirmed = $emailConfirmed;
 
@@ -405,7 +405,7 @@ class Users extends DateTrackingModel
      * @param string $skype
      * @return $this
      */
-    public function setSkype($skype): self
+    public function setSkype(string $skype): self
     {
         $this->skype = $skype;
 
@@ -418,7 +418,7 @@ class Users extends DateTrackingModel
      * @param string $country
      * @return $this
      */
-    public function setCountry($country): self
+    public function setCountry(string $country): self
     {
         $this->country = $country;
 
@@ -431,7 +431,7 @@ class Users extends DateTrackingModel
      * @param string $city
      * @return $this
      */
-    public function setCity($city): self
+    public function setCity(string $city): self
     {
         $this->city = $city;
 
@@ -444,7 +444,7 @@ class Users extends DateTrackingModel
      * @param integer $avatar
      * @return $this
      */
-    public function setAvatar($avatar): self
+    public function setAvatar(int $avatar): self
     {
         $this->avatar = $avatar;
 
@@ -457,7 +457,7 @@ class Users extends DateTrackingModel
      * @param string $address
      * @return $this
      */
-    public function setAddress($address): self
+    public function setAddress(string $address): self
     {
         $this->address = $address;
 
@@ -470,7 +470,7 @@ class Users extends DateTrackingModel
      * @param string $token
      * @return $this
      */
-    public function setToken($token): self
+    public function setToken(string $token): self
     {
         $this->token = $token;
 
@@ -483,7 +483,7 @@ class Users extends DateTrackingModel
      * @param string $language
      * @return $this
      */
-    public function setLanguage($language): self
+    public function setLanguage(string $language): self
     {
         $this->language = $language;
 
@@ -496,7 +496,7 @@ class Users extends DateTrackingModel
      * @param string $status
      * @return $this
      */
-    public function setStatus($status): self
+    public function setStatus(string $status): self
     {
         $this->status = $status;
 
@@ -509,7 +509,7 @@ class Users extends DateTrackingModel
      * @param string $role
      * @return $this
      */
-    public function setRole($role): self
+    public function setRole(string $role): self
     {
         $this->role = $role;
 
@@ -522,7 +522,7 @@ class Users extends DateTrackingModel
      * @param string $lastLoginDate
      * @return $this
      */
-    public function setLastLoginDate($lastLoginDate): self
+    public function setLastLoginDate(string $lastLoginDate): self
     {
         $this->lastLoginDate = $lastLoginDate;
 

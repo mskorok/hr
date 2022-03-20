@@ -49,7 +49,7 @@ class UserSubscription extends Model
      * @param integer $id
      * @return $this
      */
-    public function setId($id): self
+    public function setId(int $id): self
     {
         $this->id = $id;
 
@@ -62,7 +62,7 @@ class UserSubscription extends Model
      * @param integer $user_id
      * @return $this
      */
-    public function setUserId($user_id): self
+    public function setUserId(int $user_id): self
     {
         $this->user_id = $user_id;
 
@@ -75,7 +75,7 @@ class UserSubscription extends Model
      * @param integer $subscription_id
      * @return $this
      */
-    public function setSubscriptionId($subscription_id): self
+    public function setSubscriptionId(int $subscription_id): self
     {
         $this->subscription_id = $subscription_id;
 

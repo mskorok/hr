@@ -147,7 +147,7 @@ class Subcategory extends DateTrackingModel
      * @param integer $category_id
      * @return $this
      */
-    public function setCategoryId($category_id): Subcategory
+    public function setCategoryId(int $category_id): Subcategory
     {
         $this->category_id = $category_id;
 

@@ -5,6 +5,8 @@ namespace App\Model;
 
 use App\Constants\Services;
 use Phalcon\Assets\Collection;
+use Phalcon\Mvc\Model\ResultInterface;
+use Phalcon\Mvc\Model\ResultsetInterface;
 
 /**
  * Vacancies
@@ -160,7 +162,7 @@ class Vacancies extends DateTrackingModel
      * @param integer $id
      * @return $this
      */
-    public function setId($id): self
+    public function setId(int $id): self
     {
         $this->id = $id;
 
@@ -173,7 +175,7 @@ class Vacancies extends DateTrackingModel
      * @param string $name
      * @return $this
      */
-    public function setName($name): self
+    public function setName(string $name): self
     {
         $this->name = $name;
 
@@ -186,7 +188,7 @@ class Vacancies extends DateTrackingModel
      * @param double $salary
      * @return $this
      */
-    public function setSalary($salary): self
+    public function setSalary(float $salary): self
     {
         $this->salary = $salary;
 
@@ -199,7 +201,7 @@ class Vacancies extends DateTrackingModel
      * @param string $currency
      * @return $this
      */
-    public function setCurrency($currency): self
+    public function setCurrency(string $currency): self
     {
         $this->currency = $currency;
 
@@ -212,7 +214,7 @@ class Vacancies extends DateTrackingModel
      * @param integer $company_id
      * @return $this
      */
-    public function setCompanyId($company_id): self
+    public function setCompanyId(int $company_id): self
     {
         $this->company_id = $company_id;
 
@@ -225,7 +227,7 @@ class Vacancies extends DateTrackingModel
      * @param integer $country_id
      * @return $this
      */
-    public function setCountryId($country_id): self
+    public function setCountryId(int $country_id): self
     {
         $this->country_id = $country_id;
 
@@ -238,7 +240,7 @@ class Vacancies extends DateTrackingModel
      * @param string $city
      * @return $this
      */
-    public function setCity($city): self
+    public function setCity(string $city): self
     {
         $this->city = $city;
 
@@ -251,7 +253,7 @@ class Vacancies extends DateTrackingModel
      * @param string $professional_experience
      * @return $this
      */
-    public function setProfessionalExperience($professional_experience): self
+    public function setProfessionalExperience(string $professional_experience): self
     {
         $this->professional_experience = $professional_experience;
 
@@ -264,7 +266,7 @@ class Vacancies extends DateTrackingModel
      * @param string $description
      * @return $this
      */
-    public function setDescription($description): self
+    public function setDescription(string $description): self
     {
         $this->description = $description;
 
@@ -277,7 +279,7 @@ class Vacancies extends DateTrackingModel
      * @param string $responsibilities
      * @return $this
      */
-    public function setResponsibilities($responsibilities): self
+    public function setResponsibilities(string $responsibilities): self
     {
         $this->responsibilities = $responsibilities;
 
@@ -290,7 +292,7 @@ class Vacancies extends DateTrackingModel
      * @param string $main_requirements
      * @return $this
      */
-    public function setMainRequirements($main_requirements): self
+    public function setMainRequirements(string $main_requirements): self
     {
         $this->main_requirements = $main_requirements;
 
@@ -303,7 +305,7 @@ class Vacancies extends DateTrackingModel
      * @param string $additional_requirements
      * @return $this
      */
-    public function setAdditionalRequirements($additional_requirements): self
+    public function setAdditionalRequirements(string $additional_requirements): self
     {
         $this->additional_requirements = $additional_requirements;
 
@@ -316,7 +318,7 @@ class Vacancies extends DateTrackingModel
      * @param string $work_conditions
      * @return $this
      */
-    public function setWorkConditions($work_conditions): self
+    public function setWorkConditions(string $work_conditions): self
     {
         $this->work_conditions = $work_conditions;
 
@@ -329,7 +331,7 @@ class Vacancies extends DateTrackingModel
      * @param string $key_skills
      * @return $this
      */
-    public function setKeySkills($key_skills): self
+    public function setKeySkills(string $key_skills): self
     {
         $this->key_skills = $key_skills;
 
@@ -342,7 +344,7 @@ class Vacancies extends DateTrackingModel
      * @param string $start
      * @return $this
      */
-    public function setStart($start): self
+    public function setStart(string $start): self
     {
         $this->start = $start;
 
@@ -355,7 +357,7 @@ class Vacancies extends DateTrackingModel
      * @param string $finish
      * @return $this
      */
-    public function setFinish($finish): self
+    public function setFinish(string $finish): self
     {
         $this->finish = $finish;
 
@@ -590,6 +592,17 @@ class Vacancies extends DateTrackingModel
                 'alias' => 'CompanyAvatar'
             ]
         );
+        $this->hasManyToMany(
+            'id',
+            Applied::class,
+            'vacancy_id',
+            'user_id',
+            Users::class,
+            'id',
+            [
+                'alias' => 'Applicants'
+            ]
+        );
     }
 
     /**
@@ -606,7 +619,7 @@ class Vacancies extends DateTrackingModel
      * Allows to query a set of records that match the specified conditions
      *
      * @param mixed $parameters
-     * @return Vacancies[]|Vacancies|\Phalcon\Mvc\Model\ResultSetInterface
+     * @return Vacancies[]|Vacancies|ResultSetInterface
      */
     public static function find($parameters = null)
     {
@@ -617,7 +630,7 @@ class Vacancies extends DateTrackingModel
      * Allows to query the first record that match the specified conditions
      *
      * @param mixed $parameters
-     * @return Vacancies|\Phalcon\Mvc\Model\ResultInterface
+     * @return Vacancies|ResultInterface
      */
     public static function findFirst($parameters = null)
     {

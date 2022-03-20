@@ -102,7 +102,7 @@ class ProfessionalExperience extends Model
      * @param integer $id
      * @return $this
      */
-    public function setId($id): self
+    public function setId(int $id): self
     {
         $this->id = $id;
 
@@ -115,7 +115,7 @@ class ProfessionalExperience extends Model
      * @param string $title
      * @return $this
      */
-    public function setTitle($title): self
+    public function setTitle(string $title): self
     {
         $this->title = $title;
 
@@ -128,7 +128,7 @@ class ProfessionalExperience extends Model
      * @param string $description
      * @return $this
      */
-    public function setDescription($description): self
+    public function setDescription(string $description): self
     {
         $this->description = $description;
 
@@ -141,7 +141,7 @@ class ProfessionalExperience extends Model
      * @param integer $user_id
      * @return $this
      */
-    public function setUserId($user_id): self
+    public function setUserId(int $user_id): self
     {
         $this->user_id = $user_id;
 
@@ -154,7 +154,7 @@ class ProfessionalExperience extends Model
      * @param string $organization
      * @return $this
      */
-    public function setOrganization($organization): self
+    public function setOrganization(string $organization): self
     {
         $this->organization = $organization;
 
@@ -167,7 +167,7 @@ class ProfessionalExperience extends Model
      * @param string $location
      * @return $this
      */
-    public function setCountry($location): self
+    public function setCountry(string $location): self
     {
         $this->location = $location;
 
@@ -180,7 +180,7 @@ class ProfessionalExperience extends Model
      * @param string $site
      * @return $this
      */
-    public function setSite($site): self
+    public function setSite(string $site): self
     {
         $this->site = $site;
 
@@ -193,7 +193,7 @@ class ProfessionalExperience extends Model
      * @param string $professional_area
      * @return $this
      */
-    public function setProfessionalArea($professional_area): self
+    public function setProfessionalArea(string $professional_area): self
     {
         $this->professional_area = $professional_area;
 
@@ -206,7 +206,7 @@ class ProfessionalExperience extends Model
      * @param string $position
      * @return $this
      */
-    public function setPosition($position): self
+    public function setPosition(string $position): self
     {
         $this->position = $position;
 
@@ -219,7 +219,7 @@ class ProfessionalExperience extends Model
      * @param string $start
      * @return $this
      */
-    public function setStart($start): self
+    public function setStart(string $start): self
     {
         $this->start = $start;
 
@@ -232,7 +232,7 @@ class ProfessionalExperience extends Model
      * @param string $finish
      * @return $this
      */
-    public function setFinish($finish): self
+    public function setFinish(string $finish): self
     {
         $this->finish = $finish;
 

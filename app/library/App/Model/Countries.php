@@ -50,7 +50,7 @@ class Countries extends Model
      * @param integer $id
      * @return $this
      */
-    public function setId($id): self
+    public function setId(int $id): self
     {
         $this->id = $id;
 
@@ -63,7 +63,7 @@ class Countries extends Model
      * @param string $name
      * @return $this
      */
-    public function setName($name): self
+    public function setName(string $name): self
     {
         $this->name = $name;
 
@@ -76,7 +76,7 @@ class Countries extends Model
      * @param string $short_name
      * @return $this
      */
-    public function setShortName($short_name): self
+    public function setShortName(string $short_name): self
     {
         $this->short_name = $short_name;
 

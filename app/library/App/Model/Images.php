@@ -50,7 +50,7 @@ class Images extends DateTrackingModel
      * @param integer $id
      * @return $this
      */
-    public function setId($id): self
+    public function setId(int $id): self
     {
         $this->id = $id;
 
@@ -63,7 +63,7 @@ class Images extends DateTrackingModel
      * @param string $path
      * @return $this
      */
-    public function setPath($path): self
+    public function setPath(string $path): self
     {
         $this->path = $path;
 
@@ -76,7 +76,7 @@ class Images extends DateTrackingModel
      * @param string $fileName
      * @return $this
      */
-    public function setFileName($fileName): self
+    public function setFileName(string $fileName): self
     {
         $this->fileName = $fileName;
 

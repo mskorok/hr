@@ -125,7 +125,7 @@ class Candidates extends Model
      * @param integer $id
      * @return $this
      */
-    public function setId($id): self
+    public function setId(int $id): self
     {
         $this->id = $id;
 
@@ -138,7 +138,7 @@ class Candidates extends Model
      * @param integer $company_id
      * @return $this
      */
-    public function setCompanyId($company_id): self
+    public function setCompanyId(int $company_id): self
     {
         $this->company_id = $company_id;
 
@@ -151,7 +151,7 @@ class Candidates extends Model
      * @param string $position
      * @return $this
      */
-    public function setPosition($position): self
+    public function setPosition(string $position): self
     {
         $this->position = $position;
 
@@ -164,7 +164,7 @@ class Candidates extends Model
      * @param string $professional_area
      * @return $this
      */
-    public function setProfessionalArea($professional_area): self
+    public function setProfessionalArea(string $professional_area): self
     {
         $this->professional_area = $professional_area;
 
@@ -177,7 +177,7 @@ class Candidates extends Model
      * @param double $salary
      * @return $this
      */
-    public function setSalary($salary): self
+    public function setSalary(float $salary): self
     {
         $this->salary = $salary;
 
@@ -190,7 +190,7 @@ class Candidates extends Model
      * @param string $currency
      * @return $this
      */
-    public function setCurrency($currency): self
+    public function setCurrency(string $currency): self
     {
         $this->currency = $currency;
 
@@ -203,7 +203,7 @@ class Candidates extends Model
      * @param string $work_place
      * @return $this
      */
-    public function setWorkPlace($work_place): self
+    public function setWorkPlace(string $work_place): self
     {
         $this->work_place = $work_place;
 
@@ -216,7 +216,7 @@ class Candidates extends Model
      * @param string $key_skills
      * @return $this
      */
-    public function setKeySkills($key_skills): self
+    public function setKeySkills(string $key_skills): self
     {
         $this->key_skills = $key_skills;
 
@@ -229,7 +229,7 @@ class Candidates extends Model
      * @param string $language
      * @return $this
      */
-    public function setLanguage($language): self
+    public function setLanguage(string $language): self
     {
         $this->language = $language;
 
@@ -242,7 +242,7 @@ class Candidates extends Model
      * @param string $description
      * @return $this
      */
-    public function setDescription($description): self
+    public function setDescription(string $description): self
     {
         $this->description = $description;
 
@@ -255,7 +255,7 @@ class Candidates extends Model
      * @param string $location
      * @return $this
      */
-    public function setLocation($location): self
+    public function setLocation(string $location): self
     {
         $this->location = $location;
 
@@ -268,7 +268,7 @@ class Candidates extends Model
      * @param string $certification
      * @return $this
      */
-    public function setCertification($certification): self
+    public function setCertification(string $certification): self
     {
         $this->certification = $certification;
 
@@ -281,7 +281,7 @@ class Candidates extends Model
      * @param string $creationDate
      * @return $this
      */
-    public function setCreationDate($creationDate): self
+    public function setCreationDate(string $creationDate): self
     {
         $this->creationDate = $creationDate;
 
@@ -294,7 +294,7 @@ class Candidates extends Model
      * @param string $modifiedDate
      * @return $this
      */
-    public function setModifiedDate($modifiedDate): self
+    public function setModifiedDate(string $modifiedDate): self
     {
         $this->modifiedDate = $modifiedDate;
 

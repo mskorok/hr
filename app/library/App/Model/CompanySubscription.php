@@ -48,7 +48,7 @@ class CompanySubscription extends Model
      * @param integer $id
      * @return $this
      */
-    public function setId($id): self
+    public function setId(int $id): self
     {
         $this->id = $id;
 
@@ -61,7 +61,7 @@ class CompanySubscription extends Model
      * @param integer $company_id
      * @return $this
      */
-    public function setCompanyId($company_id): self
+    public function setCompanyId(int $company_id): self
     {
         $this->company_id = $company_id;
 
@@ -74,7 +74,7 @@ class CompanySubscription extends Model
      * @param integer $subscription_id
      * @return $this
      */
-    public function setSubscriptionId($subscription_id): self
+    public function setSubscriptionId(int $subscription_id): self
     {
         $this->subscription_id = $subscription_id;
 

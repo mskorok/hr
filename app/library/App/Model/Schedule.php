@@ -48,7 +48,7 @@ class Schedule extends Model
      * @param integer $id
      * @return $this
      */
-    public function setId($id): self
+    public function setId(int $id): self
     {
         $this->id = $id;
 
@@ -61,7 +61,7 @@ class Schedule extends Model
      * @param string $date
      * @return $this
      */
-    public function setDate($date): self
+    public function setDate(string $date): self
     {
         $this->date = $date;
 
@@ -74,7 +74,7 @@ class Schedule extends Model
      * @param string $description
      * @return $this
      */
-    public function setDescription($description): self
+    public function setDescription(string $description): self
     {
         $this->description = $description;
 

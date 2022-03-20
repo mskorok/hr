@@ -59,7 +59,7 @@ class Settings extends Model
      * @param integer $id
      * @return $this
      */
-    public function setId($id): self
+    public function setId(int $id): self
     {
         $this->id = $id;
 
@@ -72,7 +72,7 @@ class Settings extends Model
      * @param integer $name
      * @return $this
      */
-    public function setName($name): self
+    public function setName(int $name): self
     {
         $this->name = $name;
 
@@ -85,7 +85,7 @@ class Settings extends Model
      * @param string $stringData
      * @return $this
      */
-    public function setStringData($stringData): self
+    public function setStringData(string $stringData): self
     {
         $this->stringData = $stringData;
 
@@ -98,7 +98,7 @@ class Settings extends Model
      * @param integer $integerData
      * @return $this
      */
-    public function setIntegerData($integerData): self
+    public function setIntegerData(int $integerData): self
     {
         $this->integerData = $integerData;
 
@@ -111,7 +111,7 @@ class Settings extends Model
      * @param integer $boolData
      * @return $this
      */
-    public function setBoolData($boolData): self
+    public function setBoolData(int $boolData): self
     {
         $this->boolData = $boolData;
 

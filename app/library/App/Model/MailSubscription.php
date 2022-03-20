@@ -56,7 +56,7 @@ class MailSubscription extends Model
      * @param integer $id
      * @return $this
      */
-    public function setId($id): self
+    public function setId(int $id): self
     {
         $this->id = $id;
 
@@ -69,7 +69,7 @@ class MailSubscription extends Model
      * @param string $email
      * @return $this
      */
-    public function setEmail($email): self
+    public function setEmail(string $email): self
     {
         $this->email = $email;
 
@@ -82,7 +82,7 @@ class MailSubscription extends Model
      * @param integer $category_id
      * @return $this
      */
-    public function setCategoryId($category_id): self
+    public function setCategoryId(int $category_id): self
     {
         $this->category_id = $category_id;
 
@@ -95,7 +95,7 @@ class MailSubscription extends Model
      * @param string $date
      * @return $this
      */
-    public function setDate($date): self
+    public function setDate(string $date): self
     {
         $this->date = $date;
 

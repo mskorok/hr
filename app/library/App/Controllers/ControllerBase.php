@@ -86,7 +86,7 @@ class ControllerBase extends CrudResourceController
         $phqlBuilder
             ->andWhere(
                 '[' . $this->getResource()->getModel() . '].[id] = :id:',
-                ['id' => (int) $id]
+                ['id' => (int)$id]
             )->limit(1);
 
         $this->modifyReadQuery($phqlBuilder);
@@ -152,7 +152,7 @@ class ControllerBase extends CrudResourceController
     protected function isAdminUser(): bool
     {
         /** @var Service $service */
-        $service =  $this->userService;
+        $service = $this->userService;
         $role = $service->getRole();
         return \in_array($role, ['Superadmin', 'Admin'], true);
     }
@@ -172,7 +172,6 @@ class ControllerBase extends CrudResourceController
             $setMethod = 'set' . ucwords($field);
             if (method_exists($item, $method) && method_exists($item, $setMethod)) {
                 $item->$setMethod(html_entity_decode($item->$method()));
-
             }
         }
         return true;
@@ -257,7 +256,7 @@ class ControllerBase extends CrudResourceController
     {
         return Settings::findFirst([
             'conditions' => 'name = :name:',
-            'bind'       => [
+            'bind' => [
                 'name' => SettingsConst::ADMIN_USER
             ]
         ])->getIntegerData();
@@ -280,7 +279,9 @@ class ControllerBase extends CrudResourceController
 
             foreach (static::$availableIncludes as $include) {
                 $method = 'get' . $include;
-                $result[$include] = $item->$method();
+                if (method_exists($item, $method)) {
+                    $result[$include] = $item->$method();
+                }
             }
             $results[] = $result;
         }
