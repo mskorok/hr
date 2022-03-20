@@ -170,7 +170,7 @@ class ControllerBase extends CrudResourceController
         foreach (static::$encodedFields as $field) {
             $method = 'get' . ucwords($field);
             $setMethod = 'set' . ucwords($field);
-            if (method_exists($item, $method) && method_exists($item, $setMethod)) {
+            if (method_exists($item, $method) && method_exists($item, $setMethod) && is_string($item->$method())) {
                 $item->$setMethod(html_entity_decode($item->$method()));
             }
         }
@@ -231,7 +231,7 @@ class ControllerBase extends CrudResourceController
         foreach (static::$encodedFields as $field) {
             $method = 'get' . ucwords($field);
             $setMethod = 'set' . ucwords($field);
-            if (method_exists($model, $method) && method_exists($model, $setMethod)) {
+            if (method_exists($model, $method) && method_exists($model, $setMethod)  && is_string($item->$method())) {
                 $model->$setMethod(htmlspecialchars($model->$method()));
 
             }

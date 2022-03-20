@@ -379,9 +379,9 @@ class Resumes extends DateTrackingModel
     }
 
     /**
-     * @param int $cv
+     * @param mixed $cv
      */
-    public function setCv(int $cv): void
+    public function setCv($cv): void
     {
         $this->cv = $cv;
     }
