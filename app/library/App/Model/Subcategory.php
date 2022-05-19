@@ -55,6 +55,12 @@ class Subcategory extends DateTrackingModel
 
     /**
      *
+     * @var boolean
+     */
+    protected $has_article;
+
+    /**
+     *
      * @var integer
      */
     protected $category_id;
@@ -149,6 +155,19 @@ class Subcategory extends DateTrackingModel
     }
 
     /**
+     * Method to set the value of field has_article
+     *
+     * @param boolean $has_article
+     * @return $this
+     */
+    public function setHasArticle(bool $has_article): Subcategory
+    {
+        $this->has_article = $has_article;
+
+        return $this;
+    }
+
+    /**
      * Method to set the value of field category_id
      *
      * @param integer $category_id
@@ -235,6 +254,16 @@ class Subcategory extends DateTrackingModel
     public function getLink(): ?string
     {
         return $this->link;
+    }
+
+    /**
+     * Returns the value of field has_article
+     *
+     * @return boolean
+     */
+    public function isHasArticle(): bool
+    {
+        return (bool) $this->has_article;
     }
 
     /**
@@ -326,6 +355,7 @@ class Subcategory extends DateTrackingModel
                 'description' => 'description',
                 'text' => 'text',
                 'link' => 'link',
+                'has_article' => 'has_article',
                 'category_id' => 'category_id',
                 'image_id' => 'image_id',
                 'country_id' => 'country_id',
