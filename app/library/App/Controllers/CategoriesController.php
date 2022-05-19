@@ -32,11 +32,12 @@ class CategoriesController extends ControllerBase
     public function getSubcategories($name)
     {
         $numberPage = $this->request->getQuery('page', 'int', 1);
+        $country = $this->request->getQuery('country', 'int', 2);
+        $query = $this->request->getQuery('q', 'string', '');
 
         if (empty($numberPage)) {
             $numberPage = 0;
         }
-
 
 
         if (empty($name) || strlen($name) < 3) {
@@ -63,11 +64,22 @@ class CategoriesController extends ControllerBase
 
         $builder = new Builder();
         $builder->addFrom(Subcategory::class);
+        if ($country) {
+            $builder->where("country_id = :country:",
+                [
+                    'country' => $category
+                ]);
+        }
+
+        if ($query) {
+            $builder->andWhere('title LIKE "%' . $query . '%" OR description LIKE "%' . $query . '%" OR text LIKE "%' . $query . '%"');
+        }
+
         $builder->inWhere('id', $ids);
 
         $paginator = new \Phalcon\Paginator\Adapter\QueryBuilder([
             'builder' => $builder,
-            'limit'=> Limits::SEARCH_LIMIT,
+            'limit' => Limits::SEARCH_LIMIT,
             'page' => $numberPage
         ]);
         $page = $paginator->getPaginate();
@@ -93,19 +105,19 @@ class CategoriesController extends ControllerBase
         $items = $this->getComplexArray($collection);
 
         $data = [
-            'subcategory'   => $items,
-            'totalItems'    => $page->total_items,
-            'totalPages'    => $page->total_pages,
-            'limit'         => $page->limit,
-            'current'       => $page->current,
-            'before'        => $page->before,
-            'next'          => $page->next,
-            'last'          => $page->last,
-            'first'         => $this->firstPage,
-            'pagesRange'    => $pagesInRange,
+            'subcategory' => $items,
+            'totalItems' => $page->total_items,
+            'totalPages' => $page->total_pages,
+            'limit' => $page->limit,
+            'current' => $page->current,
+            'before' => $page->before,
+            'next' => $page->next,
+            'last' => $page->last,
+            'first' => $this->firstPage,
+            'pagesRange' => $pagesInRange,
             'bottomInRange' => $this->bottomInRange,
-            'topInRange'    => $this->topInRange,
-            'test'          => $test
+            'topInRange' => $this->topInRange,
+            'test' => $test
         ];
 
         return $this->createArrayResponse($data, 'data');
