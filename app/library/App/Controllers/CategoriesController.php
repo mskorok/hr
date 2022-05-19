@@ -32,8 +32,9 @@ class CategoriesController extends ControllerBase
     public function getSubcategories($name)
     {
         $numberPage = $this->request->getQuery('page', 'int', 1);
-        $country = $this->request->getQuery('country', 'int', 2);
+        $country = $this->request->getQuery('country', 'int', 0);
         $query = $this->request->getQuery('q', 'string', '');
+        $query =  htmlspecialchars($query);
 
         if (empty($numberPage)) {
             $numberPage = 0;
@@ -45,7 +46,7 @@ class CategoriesController extends ControllerBase
             return $this->response->redirect('/');
         }
 
-        $category = Categories::findFirst(['name' => $name]);
+        $category = Categories::findFirst('name = "' . $name . '"');
 
         if (!$category) {
             $this->flashSession->warning('Category not found');
@@ -64,10 +65,11 @@ class CategoriesController extends ControllerBase
 
         $builder = new Builder();
         $builder->addFrom(Subcategory::class);
+
         if ($country) {
             $builder->where("country_id = :country:",
                 [
-                    'country' => $category
+                    'country' => $country
                 ]);
         }
 
@@ -117,7 +119,7 @@ class CategoriesController extends ControllerBase
             'pagesRange' => $pagesInRange,
             'bottomInRange' => $this->bottomInRange,
             'topInRange' => $this->topInRange,
-            'test' => $test
+            'test' => $test,
         ];
 
         return $this->createArrayResponse($data, 'data');
