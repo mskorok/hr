@@ -28,7 +28,8 @@ class SubcategoryTransformer extends ModelTransformer
         $this->availableIncludes = [
             'Category',
             'images',
-            'Articles'
+            'Articles',
+            'Countries'
         ];
     }
 
@@ -57,5 +58,14 @@ class SubcategoryTransformer extends ModelTransformer
     public function includeImages(Subcategory $model): Item
     {
         return $this->item($model->getImages(), new ImagesTransformer());
+    }
+
+    /**
+     * @param Subcategory $model
+     * @return Item
+     */
+    public function includeCountries(Subcategory $model): Item
+    {
+        return $this->item($model->getCountries(), new CountriesTransformer());
     }
 }

@@ -18,6 +18,7 @@ use Phalcon\Mvc\Model\ResultsetInterface;
  * @method Categories getCategories
  * @method Images getImages
  * @method Collection getArticles
+ * @method Countries getCountries
  */
 class Subcategory extends DateTrackingModel
 {
@@ -63,6 +64,12 @@ class Subcategory extends DateTrackingModel
      * @var integer
      */
     protected $image_id;
+
+    /**
+     *
+     * @var integer
+     */
+    protected $country_id;
 
     /**
      *
@@ -168,6 +175,19 @@ class Subcategory extends DateTrackingModel
     }
 
     /**
+     * Method to set the value of field country_id
+     *
+     * @param integer $country_id
+     * @return $this
+     */
+    public function setCountryId(int $country_id): Subcategory
+    {
+        $this->country_id = $country_id;
+
+        return $this;
+    }
+
+    /**
      * Returns the value of field id
      *
      * @return integer | null
@@ -238,6 +258,16 @@ class Subcategory extends DateTrackingModel
     }
 
     /**
+     * Returns the value of field country_id
+     *
+     * @return integer | null
+     */
+    public function getCountryId(): ?int
+    {
+        return $this->country_id;
+    }
+
+    /**
      * Initialize method for model.
      */
     public function initialize(): void
@@ -247,6 +277,7 @@ class Subcategory extends DateTrackingModel
         $this->hasMany('id', Articles::class, 'category_id', ['alias' => 'Articles']);
         $this->belongsTo('category_id', Categories::class, 'id', ['alias' => 'Categories']);
         $this->belongsTo('image_id', Images::class, 'id', ['alias' => 'Images']);
+        $this->belongsTo('country_id', Countries::class, 'id', ['alias' => 'Countries']);
     }
 
     /**
@@ -297,6 +328,7 @@ class Subcategory extends DateTrackingModel
                 'link' => 'link',
                 'category_id' => 'category_id',
                 'image_id' => 'image_id',
+                'country_id' => 'country_id',
             ];
     }
 
