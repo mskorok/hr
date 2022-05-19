@@ -75,6 +75,8 @@ class EducationalInstitutionsController extends ControllerBase
 
         $items = $this->getComplexArray($collection);
 
+
+
         $data = [
             'institutions'   => $items,
             'totalItems'    => $page->total_items,
