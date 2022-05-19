@@ -32,6 +32,9 @@ class EducationalInstitutionsController extends ControllerBase
     public function list()
     {
         $numberPage = $this->request->getQuery('page', 'int', 1);
+        $country = $this->request->getQuery('country', 'int', 0);
+        $query = $this->request->getQuery('q', 'string', '');
+        $query =  htmlspecialchars($query);
 
         if (empty($numberPage)) {
             $numberPage = 0;
@@ -39,6 +42,16 @@ class EducationalInstitutionsController extends ControllerBase
 
         $builder = new Builder();
         $builder->addFrom(EducationalInstitutions::class);
+        if ($country) {
+            $builder->where("country_id = :country:",
+                [
+                    'country' => $country
+                ]);
+        }
+
+        if ($query) {
+            $builder->andWhere('title LIKE "%' . $query . '%" OR description LIKE "%' . $query . '%" OR specialization LIKE "%' . $query . '%"');
+        }
         $builder->leftJoin(
             EducationInstitutionLevel::class,
             '[' . EducationInstitutionLevel::class . '].[institution_id] = [' . EducationalInstitutions::class . '].[id]'
