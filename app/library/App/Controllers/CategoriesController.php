@@ -7,8 +7,8 @@ use App\Constants\Limits;
 use App\Model\Categories;
 use App\Model\Subcategory;
 use Phalcon\Mvc\Model\Query\Builder;
-use Phalcon\Mvc\Model\Query\Builder as QueryBuilder;
 use Phalcon\Validation\Message\Group;
+use RuntimeException;
 
 /**
  * Class CategoriesController
@@ -18,7 +18,8 @@ class CategoriesController extends ControllerBase
 {
 
     public static $availableIncludes = [
-        'Articles'
+        'Articles',
+        'Images'
     ];
 
     public static $encodedFields = [
@@ -64,7 +65,7 @@ class CategoriesController extends ControllerBase
 
 
         $builder = new Builder();
-        $builder->addFrom(Subcategory::class);
+        $builder->from(Subcategory::class);
 
         if ($country) {
             $builder->where("country_id = :country:",
@@ -129,20 +130,9 @@ class CategoriesController extends ControllerBase
     /*************** PROTECTED   *********************/
 
     /**
-     * @param QueryBuilder $query
-     */
-    protected function modifyAllQuery(QueryBuilder $query): void
-    {
-        $limit = $this->request->getQuery('limit');
-        if (!$limit || $limit > $this->limit) {
-            $query->limit($this->limit);
-        }
-    }
-
-    /**
      *
      */
-    protected function beforeHandle()
+    protected function beforeHandle(): void
     {
         $this->messages = new Group();
     }
@@ -150,7 +140,7 @@ class CategoriesController extends ControllerBase
     /**
      * @param $data
      * @return mixed
-     * @throws \RuntimeException
+     * @throws RuntimeException
      */
     protected function onDataInvalid($data)
     {
