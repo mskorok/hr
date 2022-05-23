@@ -126,6 +126,14 @@ class CategoriesController extends ControllerBase
         return $this->createArrayResponse($data, 'data');
     }
 
+    /**
+     * @return mixed
+     */
+    public function getAll() {
+        $categories = Categories::find();
+        return $this->createArrayResponse($categories, 'categories');
+    }
+
 
     /*************** PROTECTED   *********************/
 

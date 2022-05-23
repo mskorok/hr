@@ -34,7 +34,7 @@ class CategoriesResource extends ApiResource
 
             ->endpoint(
                 ApiEndpoint::all()
-                    ->allow([AclRoles::ADMIN, AclRoles::SUPERADMIN, AclRoles::EMPLOYER, AclRoles::MANAGER])
+//                    ->allow([AclRoles::ADMIN, AclRoles::SUPERADMIN, AclRoles::EMPLOYER, AclRoles::MANAGER])
                     ->description('Returns all articles')
             )
             ->endpoint(
@@ -59,6 +59,11 @@ class CategoriesResource extends ApiResource
                 ApiEndpoint::get('/sub/{name}', 'getSubcategories')
                     ->allow(AclRoles::UNAUTHORIZED)
                     ->description('get all subcategories of category')
+            )
+            ->endpoint(
+                ApiEndpoint::get('/all', 'getAll')
+                    ->allow(AclRoles::UNAUTHORIZED)
+                    ->description('get all')
             )
         ;
     }
