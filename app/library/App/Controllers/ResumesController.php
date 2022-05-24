@@ -890,7 +890,7 @@ class ResumesController extends ControllerBase
         $order = $params['order'] ?? null;
         $offset = (int) ($params['page'] ?? 1);
 
-        if (!empty($what) && strlen($what) > 3) {
+        if (!empty($what) && strlen($what) > 4) {
             $sql = "SELECT id,
                 MATCH (position, professional_area, about_me, certification) AGAINST ('{$what}' IN BOOLEAN MODE) as REL
                 FROM `resumes`
@@ -909,7 +909,7 @@ class ResumesController extends ControllerBase
         }
 
 
-        if (!empty($where) && strlen($where) > 3) {
+        if (!empty($where) && strlen($where) > 4) {
             $sql = "SELECT id,
                 MATCH (location) AGAINST ('{$where}' IN BOOLEAN MODE) as REL
                 FROM `resumes`
