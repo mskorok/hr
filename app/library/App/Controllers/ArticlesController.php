@@ -323,42 +323,47 @@ class ArticlesController extends ControllerBase
     public function searchArticle()
     {
         $numberPage = $this->request->getQuery('page', 'int', 1);
-        $category = $this->request->getQuery('category', 'int');
-        $tag = $this->request->getQuery('tag', 'int');
+        $category = (int) $this->request->getQuery('category', 'int');
+        $tag = (string) $this->request->getQuery('tag');
         $q = $this->request->getQuery('q', null, '');
 
         if (empty($numberPage)) {
             $numberPage = 0;
         }
 
-        if (empty($q) || strlen($q) < 3) {
-            return $this->createErrorResponse('Empty query!');
-        }
+        $ids = [];
 
-        $question = $this->sanitize($q);
-        $sql = "SELECT id,
+        if (!empty($q) && strlen($q) < 3) {
+            $question = $this->sanitize($q);
+            $sql = "SELECT id,
                 MATCH (title, description, `text`) AGAINST ('{$question}' IN BOOLEAN MODE) as REL
                 FROM `articles`
                 WHERE MATCH (title, description, `text`) AGAINST ('{$question}' IN BOOLEAN MODE)
                 ORDER BY REL;";
 
-        $connection = $this->db;
-        $res = $connection->query($sql);
+            $connection = $this->db;
+            $res = $connection->query($sql);
 
-        $ids = [];
 
-        do {
-            $row = $res->fetchArray();
-            if ($row) {
-                $ids[] = (int)$row['id'];
-            }
-        } while($row);
+
+            do {
+                $row = $res->fetchArray();
+                if ($row) {
+                    $ids[] = (int)$row['id'];
+                }
+            } while($row);
+        }
+
+
 
 
 
         $builder = new Builder();
         $builder->addFrom(Articles::class);
-        $builder->inWhere('id', $ids);
+
+        if (count($ids) > 0) {
+            $builder->inWhere('id', $ids);
+        }
 
         if (!empty($category)) {
             $builder->andWhere('category_id = ' . $category);
