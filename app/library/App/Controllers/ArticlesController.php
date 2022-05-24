@@ -333,7 +333,7 @@ class ArticlesController extends ControllerBase
 
         $ids = [];
 
-        if (!empty($q) && strlen($q) < 3) {
+        if (!empty($q) && strlen($q) > 4) {
             $question = $this->sanitize($q);
             $sql = "SELECT id,
                 MATCH (title, description, `text`) AGAINST ('{$question}' IN BOOLEAN MODE) as REL

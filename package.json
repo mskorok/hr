@@ -20,7 +20,8 @@
   },
   "homepage": "https://github.com/Jourdayltd/backendv2#readme",
   "dependencies": {
-    "braintree-web": "^3.26.0"
+    "braintree-web": "^3.26.0",
+    "uglify-js-es6": "^2.8.9"
   },
   "devDependencies": {
     "css-loader": "^3.2.0",

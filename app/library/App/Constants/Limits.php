@@ -15,7 +15,7 @@ namespace App\Constants;
  */
 class Limits
 {
-    public const SEARCH_LIMIT = 2;
+    public const SEARCH_LIMIT = 10;
 
     public const PAGE_RANGE = 1;
 
