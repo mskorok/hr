@@ -892,9 +892,9 @@ class ResumesController extends ControllerBase
 
         if (!empty($what) && strlen($what) > 4) {
             $sql = "SELECT id,
-                MATCH (position, professional_area, about_me, certification) AGAINST ('{$what}' IN BOOLEAN MODE) as REL
+                MATCH (`position`, `professional_area`, `about_me`, `certification`) AGAINST ('{$what}' IN BOOLEAN MODE) as REL
                 FROM `resumes`
-                WHERE MATCH (position, professional_area, about_me, certification) AGAINST ('{$what}' IN BOOLEAN MODE)
+                WHERE MATCH (`position`, `professional_area`, `about_me`, `certification`) AGAINST ('{$what}' IN BOOLEAN MODE)
                 ORDER BY REL;";
 
             $connection = $this->db;
@@ -929,25 +929,27 @@ class ResumesController extends ControllerBase
 
         $ids = array_intersect($results, $results1);
 
-        if (empty($ids)) {
-            return $this->createErrorResponse('Empty query!');
-        }
-
-
         $builder = new Builder();
         $builder->addFrom(Resumes::class);
-        $builder->inWhere('id', $ids);
-        if (!empty($salary)) {
-            $builder->andWhere('[' . Resumes::class . '].[salary] > :salary:', ['salary' => $salary]);
-        }
 
-        if (!empty($type) && in_array($type, ['insite', 'remote', 'remote-partially', 'no-matter'])) {
-            $builder->andWhere('[' . Resumes::class . '].[work_place] = :type:', ['type' => $type]);
+        if (!empty($ids)) {
+
+            $builder->inWhere('id', $ids);
+            if (!empty($salary)) {
+                $builder->andWhere('[' . Resumes::class . '].[salary] > :salary:', ['salary' => $salary]);
+            }
+
+            if (!empty($type) && in_array($type, ['insite', 'remote', 'remote-partially', 'no-matter'])) {
+                $builder->andWhere('[' . Resumes::class . '].[work_place] = :type:', ['type' => $type]);
+            }
         }
 
         if (!empty($order)) {
             $builder->orderBy($order);
         }
+
+
+
 
 
         $options = [
