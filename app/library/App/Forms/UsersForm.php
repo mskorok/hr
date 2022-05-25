@@ -93,7 +93,7 @@ class UsersForm extends BaseForm
 
         $username = new Text('username', [
             'class'   => 'form-control',
-            'placeholder' => 'username',
+            'placeholder' => 'Username',
             'id' => 'username_model_Users_counter_' . $this->cnt
         ]);
 
@@ -124,7 +124,7 @@ class UsersForm extends BaseForm
 
         $aboutMe = new Text('about_me', [
             'class'   => 'form-control',
-            'placeholder' => 'about me',
+            'placeholder' => 'About me',
             'id' => 'about_me_model_Users_counter_' . $this->cnt
         ]);
 
@@ -209,7 +209,7 @@ class UsersForm extends BaseForm
 
             $confirmPassword = new Password('confirmPassword', [
                 'class'   => 'form-control',
-                'placeholder' => 'confirmPassword'
+                'placeholder' => 'Confirm Password'
             ]);
             $confirmPassword->setLabel('Confirm Password&nbsp;<span style="color:red">*</span>');
 

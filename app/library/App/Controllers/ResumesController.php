@@ -703,11 +703,15 @@ class ResumesController extends ControllerBase
     {
         $numberPage = (int)($page ?? 1);
 
-        /** @var Resultset $resumes */
-        $resumes = Resumes::find();
-        if ($resumes->count() === 0) {
+
+        $count = Resumes::count();
+        if ($count() === 0) {
             return $this->createErrorResponse('Not found');
         }
+
+        /** @var Resultset $resumes */
+        $resumes = Resumes::find();
+
 
         $paginator = new Paginator([
             'data' => $resumes,
@@ -866,6 +870,7 @@ class ResumesController extends ControllerBase
 
     /**
      * @return mixed
+     * @throws \Exception
      */
     public function searchResume()
     {
@@ -886,15 +891,33 @@ class ResumesController extends ControllerBase
         $where = $this->sanitize($params['where']);
         $what = $this->sanitize($params['what']);
         $salary = (int) ($params['salary'] ?? 0);
+        $currency = $params['currency'] ?? '';
         $type = $params['type'] ?? null;
-        $order = $params['order'] ?? null;
+        $_order = (int) ($params['order'] ?? 0);
         $offset = (int) ($params['page'] ?? 1);
+
+        switch ($_order) {
+            case 1:
+                $order = 'creationDate';
+                break;
+            case 2:
+                $order = 'creationDate DESC';
+                break;
+            case 3:
+                $order = 'salary ASC';
+                break;
+            case 4:
+                $order = 'salary DESC';
+                break;
+            default:
+                $order = null;
+        }
 
         if (!empty($what) && strlen($what) > 4) {
             $sql = "SELECT id,
-                MATCH (`position`, `professional_area`, `about_me`, `certification`) AGAINST ('{$what}' IN BOOLEAN MODE) as REL
+                MATCH (`position`, `professional_area`, `about_me`, `certification`, `key_skills`, `location`) AGAINST ('{$what}' IN BOOLEAN MODE) as REL
                 FROM `resumes`
-                WHERE MATCH (`position`, `professional_area`, `about_me`, `certification`) AGAINST ('{$what}' IN BOOLEAN MODE)
+                WHERE MATCH (`position`, `professional_area`, `about_me`, `certification`, `key_skills`, `location`) AGAINST ('{$what}' IN BOOLEAN MODE)
                 ORDER BY REL;";
 
             $connection = $this->db;
@@ -910,14 +933,14 @@ class ResumesController extends ControllerBase
 
 
         if (!empty($where) && strlen($where) > 4) {
-            $sql = "SELECT id,
+            $sql1 = "SELECT id,
                 MATCH (location) AGAINST ('{$where}' IN BOOLEAN MODE) as REL
                 FROM `resumes`
                 WHERE MATCH (location) AGAINST ('{$where}' IN BOOLEAN MODE)
                 ORDER BY REL;";
 
             $connection = $this->db;
-            $res = $connection->query($sql);
+            $res = $connection->query($sql1);
 
             do {
                 $row = $res->fetchArray();
@@ -927,26 +950,41 @@ class ResumesController extends ControllerBase
             } while($row);
         }
 
-        $ids = array_intersect($results, $results1);
+        if ($what && $where) {
+            $ids = array_intersect($results, $results1);
+        } elseif ($what) {
+            $ids = $results;
+        } elseif ($where) {
+            $ids = $results1;
+        }
+
 
         $builder = new Builder();
         $builder->addFrom(Resumes::class);
 
         if (!empty($ids)) {
-
             $builder->inWhere('id', $ids);
-            if (!empty($salary)) {
-                $builder->andWhere('[' . Resumes::class . '].[salary] > :salary:', ['salary' => $salary]);
-            }
+        }
 
-            if (!empty($type) && in_array($type, ['insite', 'remote', 'remote-partially', 'no-matter'])) {
-                $builder->andWhere('[' . Resumes::class . '].[work_place] = :type:', ['type' => $type]);
-            }
+        if (!empty($salary)) {
+            $builder->andWhere('[' . Resumes::class . '].[salary] >= :salary:', ['salary' => $salary]);
+        }
+
+        if (!empty($type) && in_array($type, ['insite', 'remote', 'part-time', 'full-time', 'project', 'volunteer'])) {
+            $builder->andWhere('[' . Resumes::class . '].[work_place] = :type:', ['type' => '"' . $type . '"']);
+        }
+
+        if (!empty($currency) && in_array($currency, ['USD', 'EURO', 'GBP', 'BRL', 'TRY', 'PLN', 'SEK', 'JPY', 'CAD', 'AUD'])) {
+            $builder->andWhere('[' . Resumes::class . '].[currency] = :currency:', ['currency' => '"' . $currency. '"']);
         }
 
         if (!empty($order)) {
             $builder->orderBy($order);
         }
+
+        $query = $builder->getQuery()->getSql();
+
+//        return $this->createArrayResponse($query, 'sql');
 
 
 
@@ -1010,7 +1048,11 @@ class ResumesController extends ControllerBase
             'first'         => $this->firstPage,
             'pagesRange'    => $pagesInRange,
             'bottomInRange' => $this->bottomInRange,
-            'topInRange'    => $this->topInRange
+            'topInRange'    => $this->topInRange,
+            'query'         => $query,
+            'params'        => $params,
+            'currency'      => $currency,
+            'salary'        => $salary,
         ];
 
         return $this->createArrayResponse($data, 'data');
