@@ -26,6 +26,7 @@ use App\Validators\UsersUpdateValidator;
 use App\Validators\UsersValidator;
 use Phalcon\DiInterface;
 use Phalcon\Http\Response;
+use Phalcon\Http\ResponseInterface;
 use Phalcon\Mvc\Model;
 use Phalcon\Mvc\Model\Criteria;
 use Phalcon\Mvc\Model\Resultset;
@@ -38,6 +39,8 @@ use PhalconApi\Constants\PostedDataMethods;
 use PhalconApi\Exception;
 use Phalcon\Mvc\Model\Query\Builder as QueryBuilder;
 use Phalcon\Validation\Message\Group;
+use ReflectionException;
+use RuntimeException;
 
 /**
  * Class UsersController
@@ -107,7 +110,7 @@ class UsersController extends ControllerBase
 
     /**
      * @return mixed
-     * @throws \RuntimeException
+     * @throws RuntimeException
      */
     public function authenticate()
     {
@@ -118,7 +121,7 @@ class UsersController extends ControllerBase
             $session = $this->authManager
                 ->loginWithUsernamePassword(UsernameAccountType::NAME, $username, $password);
         } catch (Exception $exception) {
-            throw new \RuntimeException($exception->getMessage());
+            throw new RuntimeException($exception->getMessage());
         }
 
         $transformer = new UsersTransformer();
@@ -174,8 +177,8 @@ class UsersController extends ControllerBase
 
     /**
      *
-     * @throws \RuntimeException
-     * @throws \ReflectionException
+     * @throws RuntimeException
+     * @throws ReflectionException
      */
     public function newPassword()
     {
@@ -199,7 +202,7 @@ class UsersController extends ControllerBase
                     $user->save();
                     return $this->createResponse(['result' => 'Password successfully changed']);
                 }
-                throw new \RuntimeException('User not found');
+                throw new RuntimeException('User not found');
             }
             $messages = $validator->getMessages();
             return $this->createArrayResponse($messages->toArray, 'messages');
@@ -220,7 +223,7 @@ class UsersController extends ControllerBase
 
     /**
      * @return mixed
-     * @throws \RuntimeException
+     * @throws RuntimeException
      */
     public function confirm()
     {
@@ -276,15 +279,15 @@ class UsersController extends ControllerBase
 
                 return $this->createArrayResponse($response, 'data');
             }
-            throw new \RuntimeException('User not saved');
+            throw new RuntimeException('User not saved');
         }
-        throw new \RuntimeException('User not found');
+        throw new RuntimeException('User not found');
     }
 
 
     /**
      * Index action
-     * @throws \ReflectionException
+     * @throws ReflectionException
      */
     public function indexAction()
     {
@@ -293,7 +296,7 @@ class UsersController extends ControllerBase
 
     /**
      * Searches for users
-     * @throws \ReflectionException
+     * @throws ReflectionException
      */
     public function searchAction()
     {
@@ -334,7 +337,7 @@ class UsersController extends ControllerBase
 
     /**
      * Searches for users
-     * @throws \ReflectionException
+     * @throws ReflectionException
      */
     public function listAction()
     {
@@ -365,7 +368,7 @@ class UsersController extends ControllerBase
 
     /**
      * Displays the creation form
-     * @throws \ReflectionException
+     * @throws ReflectionException
      */
     public function newAction()
     {
@@ -375,7 +378,7 @@ class UsersController extends ControllerBase
     /**
      * @param $id
      * @return null
-     * @throws \ReflectionException
+     * @throws ReflectionException
      */
     public function editAction($id)
     {
@@ -523,9 +526,9 @@ class UsersController extends ControllerBase
 
     /**
      * @param $id
-     * @return Response
+     * @return ResponseInterface
      */
-    public function deleteAction($id): Response
+    public function deleteAction($id): ResponseInterface
     {
         $user = Users::findFirst((int)$id);
         if (!$user) {
@@ -533,10 +536,7 @@ class UsersController extends ControllerBase
         }
 
         if (!$user->delete()) {
-            $mes = '';
-            foreach ($user->getMessages() as $message) {
-                $mes .= $message;
-            }
+            $mes = implode('', $user->getMessages());
 
             return $this->response->redirect('/admin/users/index?notice=' . urlencode($mes));
         }
@@ -551,7 +551,7 @@ class UsersController extends ControllerBase
     /**
      * @param $data
      * @return array
-     * @throws \RuntimeException
+     * @throws RuntimeException
      */
     protected function transformPostData($data)
     {
@@ -566,7 +566,7 @@ class UsersController extends ControllerBase
             $uploadDir = $config->application->uploadDir;
 
             if (!is_dir($uploadDir) && !mkdir($uploadDir, 0755) && !is_dir($uploadDir)) {
-                throw new \RuntimeException(sprintf('Directory "%s" was not created', $uploadDir));
+                throw new RuntimeException(sprintf('Directory "%s" was not created', $uploadDir));
             }
             /** @var \Phalcon\Http\Request\File $file */
             foreach ($this->request->getUploadedFiles(true) as $file) {
@@ -586,7 +586,7 @@ class UsersController extends ControllerBase
                         } else {
                             $this->messages = $imageValidator->getMessages();
                         }
-                    } catch (\RuntimeException $exception) {
+                    } catch (RuntimeException $exception) {
                         $message = new Message($exception->getMessage());
                         if (!($this->messages instanceof Group)) {
                             $this->messages = new Group;
@@ -607,7 +607,7 @@ class UsersController extends ControllerBase
             foreach ($this->messages as $message) {
                 $messages .= $message->getMessage() . PHP_EOL;
             }
-            throw new \RuntimeException($messages);
+            throw new RuntimeException($messages);
         }
 
         return parent::transformPostData($data);
@@ -712,14 +712,14 @@ class UsersController extends ControllerBase
 
     /**
      * @param $id
-     * @throws \RuntimeException
+     * @throws RuntimeException
      * @throws Exception
      */
     protected function beforeHandleRemove($id)
     {
         $admin = $this->isAdminUser();
         if (!$admin) {
-            throw new \RuntimeException('Only admin has permission to remove User');
+            throw new RuntimeException('Only admin has permission to remove User');
         }
     }
 
@@ -752,7 +752,6 @@ class UsersController extends ControllerBase
 
     /**
      *
-     * @throws \ReflectionException
      */
     public function listUsers()
     {
@@ -761,12 +760,12 @@ class UsersController extends ControllerBase
 
     /**
      *
-     * @throws \RuntimeException
-     * @throws \ReflectionException
+     * @return ResponseInterface
+     *@throws ReflectionException
      * @throws Exception
-     * @return Response | null
+     * @throws RuntimeException
      */
-    public function add(): ?Response
+    public function add(): ResponseInterface
     {
         $user = new Users();
         $messages = [];
@@ -780,7 +779,7 @@ class UsersController extends ControllerBase
                 $uploadDir = $config->application->uploadDir;
 
                 if (!is_dir($uploadDir) && !mkdir($uploadDir, 0755) && !is_dir($uploadDir)) {
-                    throw new \RuntimeException(sprintf('Directory "%s" was not created', $uploadDir));
+                    throw new RuntimeException(sprintf('Directory "%s" was not created', $uploadDir));
                 }
                 /** @var \Phalcon\Http\Request\File $file */
                 foreach ($this->request->getUploadedFiles(true) as $file) {
@@ -800,7 +799,7 @@ class UsersController extends ControllerBase
                             } else {
                                 $messages = $imageValidator->getMessages();
                             }
-                        } catch (\RuntimeException $exception) {
+                        } catch (RuntimeException $exception) {
                             $messages['image_not_created'] = $exception->getMessage();
                         }
                     }
@@ -809,6 +808,8 @@ class UsersController extends ControllerBase
             unset($params['fileName']);
             if ($image instanceof Images) {
                 $params['avatar'] = $image->getId();
+            } else {
+                $params['avatar'] = 18;
             }
 
             $validator = new UsersValidator();
@@ -837,15 +838,14 @@ class UsersController extends ControllerBase
         $form = new UsersForm($user, $options);
         $form->renderForm();
         $this->returnView('add', compact('form', 'messages'));
-        return null;
     }
 
 
     /**
      * @param $id
      * @return \Phalcon\Http\Response | null
-     * @throws \RuntimeException
-     * @throws \ReflectionException
+     * @throws RuntimeException
+     * @throws ReflectionException
      * @throws Exception
      */
     public function updates($id): ?Response
@@ -880,7 +880,7 @@ class UsersController extends ControllerBase
                 $uploadDir = $config->application->uploadDir;
 
                 if (!is_dir($uploadDir) && !mkdir($uploadDir, 0755) && !is_dir($uploadDir)) {
-                    throw new \RuntimeException(sprintf('Directory "%s" was not created', $uploadDir));
+                    throw new RuntimeException(sprintf('Directory "%s" was not created', $uploadDir));
                 }
                 /** @var \Phalcon\Http\Request\File $file */
                 foreach ($this->request->getUploadedFiles(true) as $file) {
@@ -900,7 +900,7 @@ class UsersController extends ControllerBase
                             } else {
                                 $messages = $imageValidator->getMessages();
                             }
-                        } catch (\RuntimeException $exception) {
+                        } catch (RuntimeException $exception) {
                             $messages['image_not_created'] = $exception->getMessage();
                         }
                     }
@@ -965,8 +965,8 @@ class UsersController extends ControllerBase
     /**
      * @param $id
      * @return mixed
-     * @throws \RuntimeException
-     * @throws \ReflectionException
+     * @throws RuntimeException
+     * @throws ReflectionException
      * @throws \Exception
      */
     public function showProfile($id)
@@ -1022,8 +1022,8 @@ class UsersController extends ControllerBase
 
     /**
      *
-     * @throws \RuntimeException
-     * @throws \ReflectionException
+     * @throws RuntimeException
+     * @throws ReflectionException
      * @throws \Exception
      * @return Response|null|array
      */
@@ -1053,7 +1053,7 @@ class UsersController extends ControllerBase
                 $uploadDir = $config->application->uploadDir;
 
                 if (!is_dir($uploadDir) && !mkdir($uploadDir, 0755) && !is_dir($uploadDir)) {
-                    throw new \RuntimeException(sprintf('Directory "%s" was not created', $uploadDir));
+                    throw new RuntimeException(sprintf('Directory "%s" was not created', $uploadDir));
                 }
                 /** @var \Phalcon\Http\Request\File $file */
                 foreach ($this->request->getUploadedFiles(true) as $file) {
@@ -1073,7 +1073,7 @@ class UsersController extends ControllerBase
                             } else {
                                 $messages = $imageValidator->getMessages();
                             }
-                        } catch (\RuntimeException $exception) {
+                        } catch (RuntimeException $exception) {
                             $messages['image_not_created'] = $exception->getMessage();
                         }
                     }
@@ -1082,6 +1082,8 @@ class UsersController extends ControllerBase
             unset($params['fileName']);
             if ($image instanceof Images) {
                 $params['avatar'] = $image->getId();
+            } else {
+                $params['avatar'] = 18;
             }
 
             $validator = new UsersValidator();
@@ -1130,8 +1132,8 @@ class UsersController extends ControllerBase
     /**
      * @param $id
      * @return \Phalcon\Http\Response|null|array
-     * @throws \RuntimeException
-     * @throws \ReflectionException
+     * @throws RuntimeException
+     * @throws ReflectionException
      * @throws \Exception
      */
     public function updateProfile($id)
@@ -1171,7 +1173,7 @@ class UsersController extends ControllerBase
                 $uploadDir = $config->application->uploadDir;
 
                 if (!is_dir($uploadDir) && !mkdir($uploadDir, 0755) && !is_dir($uploadDir)) {
-                    throw new \RuntimeException(sprintf('Directory "%s" was not created', $uploadDir));
+                    throw new RuntimeException(sprintf('Directory "%s" was not created', $uploadDir));
                 }
                 /** @var \Phalcon\Http\Request\File $file */
                 foreach ($this->request->getUploadedFiles(true) as $file) {
@@ -1191,7 +1193,7 @@ class UsersController extends ControllerBase
                             } else {
                                 $messages = $imageValidator->getMessages();
                             }
-                        } catch (\RuntimeException $exception) {
+                        } catch (RuntimeException $exception) {
                             $messages['image_not_created'] = $exception->getMessage();
                         }
                     }
@@ -1306,7 +1308,7 @@ class UsersController extends ControllerBase
 
     /**
      * @return mixed
-     * @throws \ReflectionException
+     * @throws ReflectionException
      */
     public function profileLogin()
     {
@@ -1318,7 +1320,7 @@ class UsersController extends ControllerBase
                 $session = $this->authManager
                     ->loginWithUsernamePassword(UsernameAccountType::NAME, $username, $password);
             } catch (Exception $e) {
-                throw new \RuntimeException($e->getMessage());
+                throw new RuntimeException($e->getMessage());
             }
 
             $transformer = new UsersTransformer();
@@ -1366,7 +1368,7 @@ class UsersController extends ControllerBase
 
     /**
      * @return mixed
-     * @throws \ReflectionException
+     * @throws ReflectionException
      */
     public function profileLoginRecovery()
     {
@@ -1396,7 +1398,7 @@ class UsersController extends ControllerBase
 
     /**
      * @return mixed
-     * @throws \ReflectionException
+     * @throws ReflectionException
      */
     public function profileNewPassword()
     {
@@ -1441,7 +1443,7 @@ class UsersController extends ControllerBase
             try {
                 $sub->save();
                 return $this->createOkResponse();
-            } catch (\RuntimeException $exception) {
+            } catch (RuntimeException $exception) {
                 return $this->createErrorResponse($exception->getMessage());
             }
         }
@@ -1475,7 +1477,7 @@ class UsersController extends ControllerBase
                 try {
                     $sub->delete();
                     return $this->createOkResponse();
-                } catch (\RuntimeException $exception) {
+                } catch (RuntimeException $exception) {
                     return $this->createErrorResponse($exception->getMessage());
                 }
             } else {

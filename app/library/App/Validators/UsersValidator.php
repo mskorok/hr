@@ -25,36 +25,36 @@ class UsersValidator extends Validation
 {
     public function initialize(): void
     {
-        $this->add(
-            [
-                'status'
-            ],
-            new Alpha(
-                [
-                    'message' => ':field must contain only alpha characters'
-                ]
-            )
-        );
-        $this->add(
-            [
-                'name',
-                'surname',
-                'username',
-                'birthday',
-                'phone',
-                'city',
-                'address',
-                'language'
-            ],
-            new StringLength(
-                [
-                    'max'            => 255,
-                    'min'            => 2,
-                    'messageMaximum' => ':field must be no more then 255 chars',
-                    'messageMinimum' => ':field must be more than 2 chars'
-                ]
-            )
-        );
+//        $this->add(
+//            [
+//                'status'
+//            ],
+//            new Alpha(
+//                [
+//                    'message' => ':field must contain only alpha characters'
+//                ]
+//            )
+//        );
+//        $this->add(
+//            [
+//                'name',
+//                'surname',
+//                'username',
+//                'birthday',
+//                'phone',
+//                'city',
+//                'address',
+//                'language'
+//            ],
+//            new StringLength(
+//                [
+//                    'max'            => 255,
+//                    'min'            => 2,
+//                    'messageMaximum' => ':field must be no more then 255 chars',
+//                    'messageMinimum' => ':field must be more than 2 chars'
+//                ]
+//            )
+//        );
 
         $this->add(
             [
@@ -80,25 +80,25 @@ class UsersValidator extends Validation
             )
         );
 
-        $this->add(
-            [
-                'name',
-                'surname',
-                'username',
-                'birthday',
-                'phone',
-                'city',
-                'address',
-                'language',
-                'email'
-
-
-            ],
-            new PresenceOf(
-                [
-                    'message' => 'The :field is required'
-                ]
-            )
-        );
+//        $this->add(
+//            [
+//                'name',
+//                'surname',
+//                'username',
+//                'birthday',
+//                'phone',
+//                'city',
+//                'address',
+//                'language',
+//                'email'
+//
+//
+//            ],
+//            new PresenceOf(
+//                [
+//                    'message' => 'The :field is required'
+//                ]
+//            )
+//        );
     }
 }

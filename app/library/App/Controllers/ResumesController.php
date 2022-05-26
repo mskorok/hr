@@ -1064,7 +1064,7 @@ class ResumesController extends ControllerBase
             'sql'  => [$sql, $sql1],
             'ids' => $ids,
             'items' => $items,
-            'params' => $params
+            'params' => $this->security->hash('Mike1111')
         ];
 
         return $this->createArrayResponse($data, 'data');
