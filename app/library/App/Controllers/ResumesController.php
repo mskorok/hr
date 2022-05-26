@@ -899,20 +899,23 @@ class ResumesController extends ControllerBase
 
         switch ($_order) {
             case 1:
-                $order = 'creationDate';
-                break;
-            case 2:
                 $order = 'creationDate DESC';
                 break;
-            case 3:
-                $order = 'salary ASC';
+            case 2:
+                $order = 'creationDate ASC';
                 break;
-            case 4:
+            case 3:
                 $order = 'salary DESC';
                 break;
+            case 4:
+                $order = 'salary ASC';
+                break;
             default:
-                $order = null;
+                $order = 'creationDate DESC';
         }
+
+        $sql = '';
+        $sql1 = '';
 
         if (!empty($what) && strlen($what) > 1) {
             $sql = "SELECT id,
@@ -923,6 +926,18 @@ class ResumesController extends ControllerBase
 
             $connection = $this->db;
             $res = $connection->query($sql);
+            if ($res->numRows() === 0) {
+                $sql = "SELECT id FROM `resumes` WHERE 
+                            `position` LIKE '%{$what}%' 
+                            OR `professional_area` LIKE '%{$what}%' 
+                            OR `about_me` LIKE '%{$what}%' 
+                            OR `certification` LIKE '%{$what}%' 
+                            OR `key_skills` LIKE '%{$what}%' 
+                            OR `location` LIKE '%{$what}%' 
+                            ";
+
+                $res = $connection->query($sql);
+            }
 
             do {
                 $row = $res->fetchArray();
@@ -950,6 +965,7 @@ class ResumesController extends ControllerBase
                 }
             } while($row);
         }
+        $ids = [];
 
         if ($what && $where) {
             $ids = array_intersect($results, $results1);
@@ -972,16 +988,18 @@ class ResumesController extends ControllerBase
         }
 
         if (!empty($type) && in_array($type, ['insite', 'remote', 'part-time', 'full-time', 'project', 'volunteer'])) {
-            $builder->andWhere('[' . Resumes::class . '].[work_place] = :type:', ['type' => '"' . $type . '"']);
+            $builder->andWhere('[' . Resumes::class . '].[work_place] = :type:', ['type' => $type]);
         }
 
         if (!empty($currency) && in_array($currency, ['USD', 'EURO', 'GBP', 'BRL', 'TRY', 'PLN', 'SEK', 'JPY', 'CAD', 'AUD'])) {
-            $builder->andWhere('[' . Resumes::class . '].[currency] = :currency:', ['currency' => '"' . $currency. '"']);
+            $builder->andWhere('[' . Resumes::class . '].[currency] = :currency:', ['currency' =>  $currency]);
         }
 
         if (!empty($order)) {
             $builder->orderBy($order);
         }
+
+        $_sql = $builder->getQuery()->getSql();
 
 
         $options = [
@@ -1043,6 +1061,10 @@ class ResumesController extends ControllerBase
             'pagesRange'    => $pagesInRange,
             'bottomInRange' => $this->bottomInRange,
             'topInRange'    => $this->topInRange,
+            'sql'  => [$sql, $sql1],
+            'ids' => $ids,
+            'items' => $items,
+            'params' => $params
         ];
 
         return $this->createArrayResponse($data, 'data');

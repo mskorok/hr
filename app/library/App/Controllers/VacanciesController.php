@@ -783,16 +783,16 @@ class VacanciesController extends ControllerBase
 
         switch ($_order) {
             case 1:
-                $order = 'creationDate';
-                break;
-            case 2:
                 $order = 'creationDate DESC';
                 break;
+            case 2:
+                $order = 'creationDate ASC';
+                break;
             case 3:
-                $order = 'salary ASC';
+                $order = 'salary DESC';
                 break;
             case 4:
-                $order = 'salary DESC';
+                $order = 'salary ASC';
                 break;
             default:
                 $order = null;
@@ -807,6 +807,21 @@ class VacanciesController extends ControllerBase
 
             $connection = $this->db;
             $res = $connection->query($sql);
+
+            if ($res->numRows() === 0) {
+                $sql = "SELECT id FROM `vacancies` WHERE  `name` LIKE '%{$what}%' 
+                            OR `professional_experience` LIKE '%{$what}%' 
+                            OR `description` LIKE '%{$what}%' 
+                            OR `responsibilities` LIKE '%{$what}%' 
+                            OR `main_requirements` LIKE '%{$what}%' 
+                            OR `additional_requirements` LIKE '%{$what}%' 
+                            OR `work_conditions` LIKE '%{$what}%'
+                            OR `key_skills` LIKE '%{$what}%' 
+                            OR `location` LIKE '%{$what}%' 
+                            ";
+
+                $res = $connection->query($sql);
+            }
 
             do {
                 $row = $res->fetchArray();
@@ -871,7 +886,7 @@ class VacanciesController extends ControllerBase
         }
 
         if (!empty($salary)) {
-            $builder->andWhere('[' . Vacancies::class . '].[salary] > :salary:', ['salary' => $salary]);
+            $builder->andWhere('[' . Vacancies::class . '].[salary] >= :salary:', ['salary' => $salary]);
         }
 
         if (!empty($type) && in_array($type, ['insite', 'remote', 'part-time', 'full-time', 'project', 'volunteer'])) {
@@ -879,7 +894,7 @@ class VacanciesController extends ControllerBase
         }
 
         if (!empty($currency) && in_array($currency, ['USD', 'EURO', 'GBP', 'BRL', 'TRY', 'PLN', 'SEK', 'JPY', 'CAD', 'AUD'])) {
-            $builder->andWhere('[' . Vacancies::class . '].[currency] = :currency:', ['currency' => '"' . $currency. '"']);
+            $builder->andWhere('[' . Vacancies::class . '].[currency] = :currency:', ['currency' => $currency]);
         }
 
         if ($order) {
