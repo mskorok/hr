@@ -149,7 +149,7 @@ class RouteBootstrap implements BootstrapInterface
         $api->get('/vacancy/applied/{page}', [$vacancyController, 'listApplied']);
         $api->get('/vacancy/user/list/{page}', [$vacancyController, 'listUserVacancies']);
         $api->delete('/vacancy/delete/{id}', [$vacancyController, 'deleteVacancy']);
-        $api->post('/vacancy/search', [$vacancyController, 'searchVacancy']);
+        $api->get('/vacancy/search', [$vacancyController, 'searchVacancy']);
         $api->get('/vacancy/apply/{user}/{vacancy}', [$vacancyController, 'apply']);
 
 

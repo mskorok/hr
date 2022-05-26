@@ -20,6 +20,7 @@ use App\Traits\RenderView;
 use App\User\Service;
 use App\Validators\ImagesValidator;
 use App\Validators\ResumesValidator;
+use Exception;
 use Phalcon\Mvc\Model;
 use Phalcon\Mvc\Model\Criteria;
 use Phalcon\Mvc\Model\Query\Builder;
@@ -420,7 +421,7 @@ class ResumesController extends ControllerBase
      * @return \Phalcon\Http\Response | null
      * @throws \RuntimeException
      * @throws \ReflectionException
-     * @throws \Exception
+     * @throws Exception
      */
     public function showResume($id): ?Response
     {
@@ -482,7 +483,7 @@ class ResumesController extends ControllerBase
      *
      * @throws \RuntimeException
      * @throws \ReflectionException
-     * @throws \Exception
+     * @throws Exception
      * @return Response | null
      */
     public function addResume(): ?Response
@@ -555,7 +556,7 @@ class ResumesController extends ControllerBase
      * @return \Phalcon\Http\Response | null
      * @throws \RuntimeException
      * @throws \ReflectionException
-     * @throws \Exception
+     * @throws Exception
      */
     public function updateResume($id): ?Response
     {
@@ -663,7 +664,7 @@ class ResumesController extends ControllerBase
     /**
      * @param $id
      * @return Response
-     * @throws \Exception
+     * @throws Exception
      */
     public function deleteResume($id): Response
     {
@@ -870,7 +871,7 @@ class ResumesController extends ControllerBase
 
     /**
      * @return mixed
-     * @throws \Exception
+     * @throws Exception
      */
     public function searchResume()
     {
@@ -913,7 +914,7 @@ class ResumesController extends ControllerBase
                 $order = null;
         }
 
-        if (!empty($what) && strlen($what) > 4) {
+        if (!empty($what) && strlen($what) > 1) {
             $sql = "SELECT id,
                 MATCH (`position`, `professional_area`, `about_me`, `certification`, `key_skills`, `location`) AGAINST ('{$what}' IN BOOLEAN MODE) as REL
                 FROM `resumes`
@@ -932,7 +933,7 @@ class ResumesController extends ControllerBase
         }
 
 
-        if (!empty($where) && strlen($where) > 4) {
+        if (!empty($where) && strlen($where) > 1) {
             $sql1 = "SELECT id,
                 MATCH (location) AGAINST ('{$where}' IN BOOLEAN MODE) as REL
                 FROM `resumes`
@@ -981,13 +982,6 @@ class ResumesController extends ControllerBase
         if (!empty($order)) {
             $builder->orderBy($order);
         }
-
-        $query = $builder->getQuery()->getSql();
-
-//        return $this->createArrayResponse($query, 'sql');
-
-
-
 
 
         $options = [
@@ -1049,10 +1043,6 @@ class ResumesController extends ControllerBase
             'pagesRange'    => $pagesInRange,
             'bottomInRange' => $this->bottomInRange,
             'topInRange'    => $this->topInRange,
-            'query'         => $query,
-            'params'        => $params,
-            'currency'      => $currency,
-            'salary'        => $salary,
         ];
 
         return $this->createArrayResponse($data, 'data');
@@ -1155,7 +1145,7 @@ class ResumesController extends ControllerBase
      *
      * @throws \RuntimeException
      * @throws \ReflectionException
-     * @throws \Exception
+     * @throws Exception
      * @return Response | null
      */
     public function add(): ?Response
@@ -1228,7 +1218,7 @@ class ResumesController extends ControllerBase
      * @return \Phalcon\Http\Response | null
      * @throws \RuntimeException
      * @throws \ReflectionException
-     * @throws \Exception
+     * @throws Exception
      */
     public function updates($id): ?Response
     {

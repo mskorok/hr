@@ -36,12 +36,11 @@ trait RenderView
 
     /**
      * @param string $name
-     * @param array $params
+     * @param array|null $params
      * @param bool $var
      * @return string
-     * @throws \ReflectionException
      */
-    protected function returnView(string $name, array $params = null, $var = false): string
+    protected function returnView(string $name, array $params = null, bool $var = false): string
     {
         $view = $this->getUserView();
         if (!empty($params)) {
@@ -62,12 +61,11 @@ trait RenderView
 
     /**
      * @param string $name
-     * @param array $params
+     * @param array|null $params
      * @param bool $var
      * @return string
-     * @throws \ReflectionException
      */
-    protected function returnViewWithEmptyLayout(string $name, array $params = null, $var = false): string
+    protected function returnViewWithEmptyLayout(string $name, array $params = null, bool $var = false): string
     {
         $view = $this->getUserView();
         $view->setLayout('empty');
@@ -89,7 +87,7 @@ trait RenderView
 
 
     /**
-     * @param $string
+     * @param string $string
      * @param bool $injection
      * @return string
      */

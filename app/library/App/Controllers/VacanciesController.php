@@ -18,6 +18,8 @@ use App\Services\UsersService;
 use App\Traits\RenderView;
 use App\User\Service;
 use App\Validators\VacanciesValidator;
+use Exception;
+use Phalcon\Http\ResponseInterface;
 use Phalcon\Mvc\Model;
 use Phalcon\Mvc\Model\Criteria;
 use Phalcon\Mvc\Model\Query\Builder;
@@ -28,6 +30,8 @@ use Phalcon\Mvc\Model\Query\Builder as QueryBuilder;
 use Phalcon\Paginator\Factory;
 use Phalcon\Validation\Message\Group;
 use Phalcon\Http\Response;
+use ReflectionException;
+use RuntimeException;
 
 /**
  * Class VacanciesController
@@ -62,16 +66,14 @@ class VacanciesController extends ControllerBase
 
     /**
      * Index action
-     * @throws \ReflectionException
      */
-    public function indexAction()
+    public function indexAction(): void
     {
         $this->returnView('index');
     }
 
     /**
      * Searches for vacancies
-     * @throws \ReflectionException
      */
     public function searchAction()
     {
@@ -112,7 +114,6 @@ class VacanciesController extends ControllerBase
 
     /**
      * Searches for vacancies
-     * @throws \ReflectionException
      */
     public function listAction()
     {
@@ -143,7 +144,7 @@ class VacanciesController extends ControllerBase
 
     /**
      * Displays the creation form
-     * @throws \ReflectionException
+     * @throws ReflectionException
      */
     public function newAction()
     {
@@ -152,10 +153,9 @@ class VacanciesController extends ControllerBase
 
     /**
      * @param $id
-     * @return null|Response
-     * @throws \ReflectionException
+     * @return ResponseInterface|null
      */
-    public function editAction($id): ?Response
+    public function editAction($id): ?ResponseInterface
     {
         if ($this->request->isPost()) {
             return $this->response->redirect('/admin/vacancies/index');
@@ -188,9 +188,10 @@ class VacanciesController extends ControllerBase
     }
 
     /**
-     * Creates a new vacancy
+     * @desc Creates a new vacancy
+     * @return ResponseInterface
      */
-    public function createAction()
+    public function createAction(): ResponseInterface
     {
         if (!$this->request->isPost()) {
             return $this->response->redirect('/admin/vacancies/index');
@@ -215,10 +216,7 @@ class VacanciesController extends ControllerBase
         $this->transformModelBeforeSave($vacancy);
 
         if (!$vacancy->save()) {
-            $mes = '';
-            foreach ($vacancy->getMessages() as $message) {
-                $mes .= $message;
-            }
+            $mes = implode('', $vacancy->getMessages());
 
             return $this->response->redirect('/admin/vacancies/index?notice=' . urlencode($mes));
         }
@@ -227,10 +225,10 @@ class VacanciesController extends ControllerBase
     }
 
     /**
-     * Saves a vacancy edited
-     *
+     * @desc Saves edited vacancy
+     * @return ResponseInterface
      */
-    public function saveAction()
+    public function saveAction(): ResponseInterface
     {
 
         if (!$this->request->isPost()) {
@@ -262,10 +260,7 @@ class VacanciesController extends ControllerBase
         $this->transformModelBeforeSave($vacancy);
 
         if (!$vacancy->save()) {
-            $mes = '';
-            foreach ($vacancy->getMessages() as $message) {
-                $mes .= $message;
-            }
+            $mes = implode('', $vacancy->getMessages());
 
             return $this->response->redirect('/admin/vacancies/index?notice=' . urlencode($mes));
         }
@@ -275,9 +270,9 @@ class VacanciesController extends ControllerBase
 
     /**
      * @param $id
-     * @return Response
+     * @return ResponseInterface
      */
-    public function deleteAction($id): Response
+    public function deleteAction($id): ResponseInterface
     {
         $vacancy = Vacancies::findFirst((int)$id);
         if (!$vacancy) {
@@ -285,10 +280,7 @@ class VacanciesController extends ControllerBase
         }
 
         if (!$vacancy->delete()) {
-            $mes = '';
-            foreach ($vacancy->getMessages() as $message) {
-                $mes .= $message;
-            }
+            $mes = implode('', $vacancy->getMessages());
 
             return $this->response->redirect('/admin/vacancies/index?notice=' . urlencode($mes));
         }
@@ -320,10 +312,10 @@ class VacanciesController extends ControllerBase
 
     /**
      * @param $id
-     * @return \Phalcon\Http\Response | null | array
-     * @throws \RuntimeException
-     * @throws \ReflectionException
-     * @throws \Exception
+     * @return Response | null | array
+     * @throws RuntimeException
+     * @throws ReflectionException
+     * @throws Exception
      */
     public function showVacancy($id)
     {
@@ -382,9 +374,9 @@ class VacanciesController extends ControllerBase
 
     /**
      *
-     * @throws \RuntimeException
-     * @throws \ReflectionException
-     * @throws \Exception
+     * @throws RuntimeException
+     * @throws ReflectionException
+     * @throws Exception
      * @return Response | null | array
      */
     public function addVacancy()
@@ -450,8 +442,7 @@ class VacanciesController extends ControllerBase
 
         $company = $vacancy->getCompanies();
         $image = null;
-        if ($company && $company instanceof Companies) {
-            /** @var Companies $company */
+        if ($company instanceof Companies) {
             $image = $company->getImages();
         }
 
@@ -476,10 +467,10 @@ class VacanciesController extends ControllerBase
 
     /**
      * @param $id
-     * @return \Phalcon\Http\Response | null | array
-     * @throws \RuntimeException
-     * @throws \ReflectionException
-     * @throws \Exception
+     * @return Response | null | array
+     * @throws RuntimeException
+     * @throws ReflectionException
+     * @throws Exception
      */
     public function updateVacancy($id)
     {
@@ -586,7 +577,7 @@ class VacanciesController extends ControllerBase
     /**
      * @param $id
      * @return Response
-     * @throws \Exception
+     * @throws Exception
      */
     public function deleteVacancy($id): Response
     {
@@ -612,10 +603,7 @@ class VacanciesController extends ControllerBase
         }
 
         if (!$vacancy->delete()) {
-            $mes = '';
-            foreach ($vacancy->getMessages() as $message) {
-                $mes .= $message;
-            }
+            $mes = implode('', $vacancy->getMessages());
 
             return $this->createErrorResponse($mes);
         }
@@ -631,11 +619,13 @@ class VacanciesController extends ControllerBase
     {
         $numberPage = (int)($page ?? 1);
 
-        /** @var Resultset $vacancies */
-        $vacancies = Vacancies::find();
-        if ($vacancies->count() === 0) {
+        $count = Vacancies::count();
+        if ($count() === 0) {
             return $this->createErrorResponse('Not found');
         }
+
+        /** @var Resultset $vacancies */
+        $vacancies = Vacancies::find();
 
         $paginator = new Paginator([
             'data' => $vacancies,
@@ -704,11 +694,15 @@ class VacanciesController extends ControllerBase
             /** @var Users $user */
             $user = (int) $userService->getDetails();
 
-            /** @var Resultset\Simple $companies */
             $companies = $user->getCompanies();
-            /** @var Companies $company */
-            $company = $companies[0];
-            $vacancies = Vacancies::find('company_id = ' . $company->getId());
+            if ($companies->count() > 0) {
+                /** @var Companies $company */
+                $company = $companies[0];
+                $vacancies = Vacancies::find('company_id = ' . $company->getId());
+            } else {
+                return $this->createErrorResponse('Company not found');
+            }
+
         }
 
         if ($vacancies->count() === 0) {
@@ -776,19 +770,39 @@ class VacanciesController extends ControllerBase
 
         $results = [];
         $results1 = [];
+        $results2 = [];
+
 
         $where = $this->sanitize($params['where']);
         $what = $this->sanitize($params['what']);
         $salary = (int) ($params['salary'] ?? 0);
+        $currency = $params['currency'] ?? '';
         $type = $params['type'] ?? null;
-        $order = $params['order'] ?? null;
+        $_order = (int) ($params['order'] ?? 0);
         $offset = (int) ($params['page'] ?? 1);
 
-        if (!empty($what) && strlen($what) > 3) {
+        switch ($_order) {
+            case 1:
+                $order = 'creationDate';
+                break;
+            case 2:
+                $order = 'creationDate DESC';
+                break;
+            case 3:
+                $order = 'salary ASC';
+                break;
+            case 4:
+                $order = 'salary DESC';
+                break;
+            default:
+                $order = null;
+        }
+
+        if (!empty($what) && strlen($what) > 1) {
             $sql = "SELECT id,
-                MATCH (professional_experience, description, responsibilities, main_requirements, additional_requirements, work_conditions) AGAINST ('{$what}' IN BOOLEAN MODE) as REL
+                MATCH (`name`, `professional_experience`, `description`, `responsibilities`, `main_requirements`, `additional_requirements`, `work_conditions`, `key_skills`,`location`) AGAINST ('{$what}' IN BOOLEAN MODE) as REL
                 FROM `vacancies`
-                WHERE MATCH (professional_experience, description, responsibilities, main_requirements, additional_requirements, work_conditions) AGAINST ('{$what}' IN BOOLEAN MODE)
+                WHERE MATCH (`name`, `professional_experience`, `description`, `responsibilities`, `main_requirements`, `additional_requirements`, `work_conditions`, `key_skills`,`location`) AGAINST ('{$what}' IN BOOLEAN MODE)
                 ORDER BY REL;";
 
             $connection = $this->db;
@@ -802,15 +816,15 @@ class VacanciesController extends ControllerBase
             } while($row);
         }
 
-        if (!empty($where) && strlen($where) > 3) {
-            $sql = "SELECT id,
-                MATCH (location) AGAINST ('{$where}' IN BOOLEAN MODE) as REL
+        if (!empty($where) && strlen($where) > 1) {
+            $sql1 = "SELECT id,
+                MATCH (`location`) AGAINST ('{$where}' IN BOOLEAN MODE) as REL
                 FROM `vacancies`
-                WHERE MATCH (location) AGAINST ('{$where}' IN BOOLEAN MODE)
+                WHERE MATCH (`location`) AGAINST ('{$where}' IN BOOLEAN MODE)
                 ORDER BY REL;";
 
             $connection = $this->db;
-            $res = $connection->query($sql);
+            $res = $connection->query($sql1);
 
             do {
                 $row = $res->fetchArray();
@@ -820,26 +834,58 @@ class VacanciesController extends ControllerBase
             } while($row);
         }
 
-        $ids = array_intersect($results, $results1);
+        if (!empty($where) && strlen($where) > 1) {
+            $sql2 = "SELECT id,
+                MATCH (`city`) AGAINST ('{$where}' IN BOOLEAN MODE) as REL
+                FROM `vacancies`
+                WHERE MATCH (`city`) AGAINST ('{$where}' IN BOOLEAN MODE)
+                ORDER BY REL;";
 
-        if (empty($ids)) {
-            return $this->createErrorResponse('Empty query!');
+            $connection = $this->db;
+            $res = $connection->query($sql2);
+
+            do {
+                $row = $res->fetchArray();
+                if ($row) {
+                    $results2[] = (int)$row['id'];
+                }
+            } while($row);
+        }
+
+        if ($what && $where) {
+            $_ids = array_merge($results1, $results2);
+            $_ids = array_unique($_ids);
+            $ids = array_intersect($results, $_ids);
+        } elseif ($what) {
+            $ids = $results;
+        } elseif ($where) {
+            $_ids = array_merge($results1, $results2);
+            $ids = array_unique($_ids);
         }
 
         $builder = new Builder();
         $builder->addFrom(Vacancies::class);
-        $builder->inWhere('id', $ids);
-        if ($salary) {
+
+        if (!empty($ids)) {
+            $builder->inWhere('id', $ids);
+        }
+
+        if (!empty($salary)) {
             $builder->andWhere('[' . Vacancies::class . '].[salary] > :salary:', ['salary' => $salary]);
         }
 
-        if ($type && in_array($type, ['insite', 'remote', 'remote-partially', 'no-matter'])) {
+        if (!empty($type) && in_array($type, ['insite', 'remote', 'part-time', 'full-time', 'project', 'volunteer'])) {
             $builder->andWhere('[' . Vacancies::class . '].[work_place] = :type:', ['type' => $type]);
+        }
+
+        if (!empty($currency) && in_array($currency, ['USD', 'EURO', 'GBP', 'BRL', 'TRY', 'PLN', 'SEK', 'JPY', 'CAD', 'AUD'])) {
+            $builder->andWhere('[' . Vacancies::class . '].[currency] = :currency:', ['currency' => '"' . $currency. '"']);
         }
 
         if ($order) {
             $builder->orderBy($order);
         }
+
 
         $options = [
             'builder' => $builder,
@@ -968,12 +1014,11 @@ class VacanciesController extends ControllerBase
     /**
      * @param $data
      * @return mixed
-     * @throws \RuntimeException
+     * @throws RuntimeException
      */
     protected function onDataInvalid($data)
     {
         $mes = [];
-        $mes['Post-data is invalid'];
         foreach ($this->messages as $message) {
             $mes[] = $message->getMessage();
         }
@@ -985,21 +1030,20 @@ class VacanciesController extends ControllerBase
 
     /**
      *
-     * @throws \ReflectionException
      */
-    public function listVacancies()
+    public function listVacancies(): void
     {
         $this->returnView('list');
     }
 
     /**
      *
-     * @throws \RuntimeException
-     * @throws \ReflectionException
-     * @throws \Exception
-     * @return Response | null
+     * @return ResponseInterface|null
+     *@throws ReflectionException
+     * @throws Exception
+     * @throws RuntimeException
      */
-    public function add(): ?Response
+    public function add(): ?ResponseInterface
     {
         $vacancy = new Vacancies();
         $messages = [];
@@ -1029,12 +1073,12 @@ class VacanciesController extends ControllerBase
 
     /**
      * @param $id
-     * @return \Phalcon\Http\Response | null
-     * @throws \RuntimeException
-     * @throws \ReflectionException
-     * @throws \Exception
+     * @return ResponseInterface|null
+     * @throws RuntimeException
+     * @throws ReflectionException
+     * @throws Exception
      */
-    public function updates($id): ?Response
+    public function updates($id): ?ResponseInterface
     {
         $id = (int)$id;
         if (empty($id)) {
