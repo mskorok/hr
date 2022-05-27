@@ -263,7 +263,7 @@ class UsersTransformer extends ModelTransformer
      * @param Users $model
      * @return Collection
      */
-    public function includeAppliedVacancy(Users $model): Collection
+    public function includeAppliedVacancies(Users $model): Collection
     {
         return $this->collection($model->getAppliedVacancies(), new VacanciesTransformer());
     }

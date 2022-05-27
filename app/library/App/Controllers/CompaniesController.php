@@ -14,6 +14,8 @@ use App\Services\UsersService;
 use App\Traits\RenderView;
 use App\Validators\CompaniesValidator;
 use App\Validators\ImagesValidator;
+use Exception;
+use Phalcon\Http\ResponseInterface;
 use Phalcon\Mvc\Model\Criteria;
 use Phalcon\Http\Response;
 use Phalcon\Mvc\Model\Resultset;
@@ -24,6 +26,8 @@ use Phalcon\Mvc\Model\Query\Builder as QueryBuilder;
 use Phalcon\Validation\Message;
 use Phalcon\Validation\Message\Group;
 use PhalconApi\Constants\PostedDataMethods;
+use ReflectionException;
+use RuntimeException;
 
 /**
  * Class CompaniesController
@@ -58,7 +62,6 @@ class CompaniesController extends ControllerBase
 
     /**
      * Index action
-     * @throws \ReflectionException
      */
     public function indexAction()
     {
@@ -67,7 +70,6 @@ class CompaniesController extends ControllerBase
 
     /**
      * Searches for companies
-     * @throws \ReflectionException
      */
     public function searchAction()
     {
@@ -105,7 +107,6 @@ class CompaniesController extends ControllerBase
 
     /**
      * Searches for articles
-     * @throws \ReflectionException
      */
     public function listAction()
     {
@@ -137,7 +138,6 @@ class CompaniesController extends ControllerBase
 
     /**
      * Displays the creation form
-     * @throws \ReflectionException
      */
     public function newAction()
     {
@@ -146,10 +146,10 @@ class CompaniesController extends ControllerBase
 
     /**
      * @param $id
-     * @return null|Response
-     * @throws \ReflectionException
+     * @return ResponseInterface|null
+     * @throws ReflectionException
      */
-    public function editAction($id)
+    public function editAction($id): ?ResponseInterface
     {
         if ($this->request->isPost()) {
             return $this->response->redirect('/admin/companies/index');
@@ -212,10 +212,7 @@ class CompaniesController extends ControllerBase
         $this->transformModelBeforeSave($company);
 
         if (!$company->save()) {
-            $mes = '';
-            foreach ($company->getMessages() as $message) {
-                $mes .= $message;
-            }
+            $mes = implode('', $company->getMessages());
 
             return $this->response->redirect('/admin/companies/index?notice=' . urlencode($mes));
         }
@@ -270,10 +267,7 @@ class CompaniesController extends ControllerBase
         $this->transformModelBeforeSave($company);
 
         if (!$company->save()) {
-            $mes = '';
-            foreach ($company->getMessages() as $message) {
-                $mes .= $message;
-            }
+            $mes = implode('', $company->getMessages());
 
             return $this->response->redirect('/admin/companies/index?notice=' . urlencode($mes));
         }
@@ -283,9 +277,9 @@ class CompaniesController extends ControllerBase
 
     /**
      * @param $id
-     * @return Response
+     * @return ResponseInterface
      */
-    public function deleteAction($id)
+    public function deleteAction($id): ResponseInterface
     {
         $company = Companies::findFirst((int)$id);
         if (!$company) {
@@ -293,10 +287,7 @@ class CompaniesController extends ControllerBase
         }
 
         if (!$company->delete()) {
-            $mes = '';
-            foreach ($company->getMessages() as $message) {
-                $mes .= $message;
-            }
+            $mes = implode('', $company->getMessages());
 
             return $this->response->redirect('/admin/companies/index?notice=' . urlencode($mes));
         }
@@ -307,7 +298,6 @@ class CompaniesController extends ControllerBase
 
     /**
      *
-     * @throws \ReflectionException
      */
     public function listCompanies()
     {
@@ -316,12 +306,12 @@ class CompaniesController extends ControllerBase
 
     /**
      *
-     * @throws \RuntimeException
-     * @throws \ReflectionException
-     * @throws \Exception
-     * @return Response | null
+     * @return ResponseInterface|null
+     *@throws ReflectionException
+     * @throws Exception
+     * @throws RuntimeException
      */
-    public function add(): ?Response
+    public function add(): ?ResponseInterface
     {
         $company = new Companies();
         $messages = [];
@@ -348,7 +338,7 @@ class CompaniesController extends ControllerBase
                 $uploadDir = $config->application->uploadDir;
 
                 if (!is_dir($uploadDir) && !mkdir($uploadDir, 0755) && !is_dir($uploadDir)) {
-                    throw new \RuntimeException(sprintf('Directory "%s" was not created', $uploadDir));
+                    throw new RuntimeException(sprintf('Directory "%s" was not created', $uploadDir));
                 }
                 /** @var \Phalcon\Http\Request\File $file */
                 foreach ($this->request->getUploadedFiles(true) as $file) {
@@ -368,7 +358,7 @@ class CompaniesController extends ControllerBase
                             } else {
                                 $messages = $imageValidator->getMessages();
                             }
-                        } catch (\RuntimeException $exception) {
+                        } catch (RuntimeException $exception) {
                             $messages['image_not_created'] = $exception->getMessage();
                         }
                     }
@@ -405,12 +395,12 @@ class CompaniesController extends ControllerBase
 
     /**
      * @param $id
-     * @return \Phalcon\Http\Response | null
-     * @throws \RuntimeException
-     * @throws \ReflectionException
-     * @throws \Exception
+     * @return ResponseInterface|null
+     * @throws RuntimeException
+     * @throws ReflectionException
+     * @throws Exception
      */
-    public function updates($id): ?Response
+    public function updates($id): ?ResponseInterface
     {
         $id = (int)$id;
         if (empty($id)) {
@@ -436,7 +426,7 @@ class CompaniesController extends ControllerBase
                 $uploadDir = $config->application->uploadDir;
 
                 if (!is_dir($uploadDir) && !mkdir($uploadDir, 0755) && !is_dir($uploadDir)) {
-                    throw new \RuntimeException(sprintf('Directory "%s" was not created', $uploadDir));
+                    throw new RuntimeException(sprintf('Directory "%s" was not created', $uploadDir));
                 }
                 /** @var \Phalcon\Http\Request\File $file */
                 foreach ($this->request->getUploadedFiles(true) as $file) {
@@ -456,7 +446,7 @@ class CompaniesController extends ControllerBase
                             } else {
                                 $messages = $imageValidator->getMessages();
                             }
-                        } catch (\RuntimeException $exception) {
+                        } catch (RuntimeException $exception) {
                             $messages['image_not_created'] = $exception->getMessage();
                         }
                     }
@@ -512,10 +502,10 @@ class CompaniesController extends ControllerBase
 
     /**
      * @param $id
-     * @return \Phalcon\Http\Response | null
-     * @throws \RuntimeException
-     * @throws \ReflectionException
-     * @throws \Exception
+     * @return Response | null
+     * @throws RuntimeException
+     * @throws ReflectionException
+     * @throws Exception
      */
     public function showCompany($id): ?Response
     {
@@ -573,9 +563,9 @@ class CompaniesController extends ControllerBase
 
     /**
      *
-     * @throws \RuntimeException
-     * @throws \ReflectionException
-     * @throws \Exception
+     * @throws RuntimeException
+     * @throws ReflectionException
+     * @throws Exception
      * @return Response|null|array
      */
     public function addCompany()
@@ -612,7 +602,7 @@ class CompaniesController extends ControllerBase
                     $uploadDir = $config->application->uploadDir;
 
                     if (!is_dir($uploadDir) && !mkdir($uploadDir, 0755) && !is_dir($uploadDir)) {
-                        throw new \RuntimeException(sprintf('Directory "%s" was not created', $uploadDir));
+                        throw new RuntimeException(sprintf('Directory "%s" was not created', $uploadDir));
                     }
                     /** @var \Phalcon\Http\Request\File $file */
                     foreach ($this->request->getUploadedFiles(true) as $file) {
@@ -632,7 +622,7 @@ class CompaniesController extends ControllerBase
                                 } else {
                                     $this->messages = $imageValidator->getMessages();
                                 }
-                            } catch (\RuntimeException $exception) {
+                            } catch (RuntimeException $exception) {
                                 $message = new Message($exception->getMessage());
                                 if (!($this->messages instanceof Group)) {
                                     $this->messages = new Group;
@@ -652,6 +642,15 @@ class CompaniesController extends ControllerBase
                     $manager->setCompanyId($company->getId());
                     $manager->setUserId($userService->getIdentity());
                     $manager->save();
+
+                    if (!\in_array($role, [AclRoles::SUPERADMIN, AclRoles::ADMIN], true)) {
+                        $user = $userService->getDetails();
+                        if ($user instanceof Users) {
+                            $user->setRole(AclRoles::COMPANY_ADMIN);
+                            $user->save();
+                        }
+                    }
+
 
                     return $this->createOkResponse();
                 }
@@ -691,10 +690,10 @@ class CompaniesController extends ControllerBase
 
     /**
      * @param $id
-     * @return \Phalcon\Http\Response|null|array
-     * @throws \RuntimeException
-     * @throws \ReflectionException
-     * @throws \Exception
+     * @return Response|null|array
+     * @throws RuntimeException
+     * @throws ReflectionException
+     * @throws Exception
      */
     public function updateCompany($id)
     {
@@ -743,7 +742,7 @@ class CompaniesController extends ControllerBase
                     $uploadDir = $config->application->uploadDir;
 
                     if (!is_dir($uploadDir) && !mkdir($uploadDir, 0755) && !is_dir($uploadDir)) {
-                        throw new \RuntimeException(sprintf('Directory "%s" was not created', $uploadDir));
+                        throw new RuntimeException(sprintf('Directory "%s" was not created', $uploadDir));
                     }
                     /** @var \Phalcon\Http\Request\File $file */
                     foreach ($this->request->getUploadedFiles(true) as $file) {
@@ -763,7 +762,7 @@ class CompaniesController extends ControllerBase
                                 } else {
                                     $this->messages = $imageValidator->getMessages();
                                 }
-                            } catch (\RuntimeException $exception) {
+                            } catch (RuntimeException $exception) {
                                 $message = new Message($exception->getMessage());
                                 if (!($this->messages instanceof Group)) {
                                     $this->messages = new Group;
@@ -846,7 +845,7 @@ class CompaniesController extends ControllerBase
     /**
      * @param $id
      * @return Response
-     * @throws \Exception
+     * @throws Exception
      */
     public function deleteCompany($id): Response
     {
@@ -970,7 +969,7 @@ class CompaniesController extends ControllerBase
     /**
      * @param $data
      * @return array
-     * @throws \RuntimeException
+     * @throws RuntimeException
      */
     protected function transformPostData($data)
     {
@@ -985,7 +984,7 @@ class CompaniesController extends ControllerBase
             $uploadDir = $config->application->uploadDir;
 
             if (!is_dir($uploadDir) && !mkdir($uploadDir, 0755) && !is_dir($uploadDir)) {
-                throw new \RuntimeException(sprintf('Directory "%s" was not created', $uploadDir));
+                throw new RuntimeException(sprintf('Directory "%s" was not created', $uploadDir));
             }
             /** @var \Phalcon\Http\Request\File $file */
             foreach ($this->request->getUploadedFiles(true) as $file) {
@@ -1005,7 +1004,7 @@ class CompaniesController extends ControllerBase
                         } else {
                             $this->messages = $imageValidator->getMessages();
                         }
-                    } catch (\RuntimeException $exception) {
+                    } catch (RuntimeException $exception) {
                         $message = new Message($exception->getMessage());
                         if (!($this->messages instanceof Group)) {
                             $this->messages = new Group;
@@ -1026,7 +1025,7 @@ class CompaniesController extends ControllerBase
             foreach ($this->messages as $message) {
                 $messages .= $message->getMessage().PHP_EOL;
             }
-            throw new \RuntimeException($messages);
+            throw new RuntimeException($messages);
         }
 
         return parent::transformPostData($data);
@@ -1064,7 +1063,7 @@ class CompaniesController extends ControllerBase
     /**
      * @param $data
      * @return mixed
-     * @throws \RuntimeException
+     * @throws RuntimeException
      */
     protected function onDataInvalid($data)
     {
@@ -1099,14 +1098,14 @@ class CompaniesController extends ControllerBase
 
     /**
      * @param $id
-     * @throws \RuntimeException
+     * @throws RuntimeException
      * @throws \PhalconApi\Exception
      */
     protected function beforeHandleRemove($id)
     {
         $admin = $this->isAdminUser();
         if (!$admin) {
-            throw new \RuntimeException('Only admin has permission to remove User');
+            throw new RuntimeException('Only admin has permission to remove User');
         }
     }
 }

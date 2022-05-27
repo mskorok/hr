@@ -9,6 +9,7 @@ declare(strict_types=1);
 
 namespace App\Controllers;
 
+use App\Constants\AclRoles;
 use App\Constants\Settings as SettingsConst;
 use App\Constants\Services;
 use App\Model\Users;
@@ -154,7 +155,7 @@ class ControllerBase extends CrudResourceController
         /** @var Service $service */
         $service = $this->userService;
         $role = $service->getRole();
-        return \in_array($role, ['Superadmin', 'Admin'], true);
+        return \in_array($role, [AclRoles::SUPERADMIN, AclRoles::ADMIN], true);
     }
 
     /**

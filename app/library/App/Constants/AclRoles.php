@@ -9,16 +9,17 @@ namespace App\Constants;
  */
 class AclRoles
 {
-    public const UNAUTHORIZED = 'Unauthorized';
-    public const AUTHORIZED = 'Authorized';
+    public const UNAUTHORIZED = 'unauthorized';
+    public const AUTHORIZED = 'authorized';
     public const SUPERADMIN = 'Superadmin';
-    public const ADMIN = 'Admin';
+    public const ADMIN = 'admin';
+    public const COMPANY_ADMIN = 'CompanyAdmin';
     public const MANAGER = 'Manager';
-    public const EMPLOYER = 'Employer';
-    public const APPLICANT = 'Applicant';
-    public const PARTNER = 'Partner';
-    public const EXPERT = 'Expert';
-    public const AUTHOR = 'Author';
+    public const EMPLOYER = 'employer';
+    public const APPLICANT = 'applicant';
+    public const PARTNER = 'partner';
+    public const EXPERT = 'expert';
+    public const AUTHOR = 'author';
 
     public const ALL_ROLES = [
         self::UNAUTHORIZED,
@@ -30,7 +31,8 @@ class AclRoles
         self::APPLICANT,
         self::PARTNER,
         self::EXPERT,
-        self::AUTHOR
+        self::AUTHOR,
+        self::COMPANY_ADMIN,
     ];
 
     public const ALL_AUTHORIZED = [
@@ -41,7 +43,8 @@ class AclRoles
         self::EMPLOYER,
         self::PARTNER,
         self::EXPERT,
-        self::AUTHOR
+        self::AUTHOR,
+        self::COMPANY_ADMIN,
     ];
 
     public const ADMIN_ROLES = [
