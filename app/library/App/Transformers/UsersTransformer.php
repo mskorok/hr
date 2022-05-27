@@ -32,6 +32,7 @@ class UsersTransformer extends ModelTransformer
             'ExpertInfo',
             'FavoriteVacancies',
             'Favorites',
+            'FavoriteResume',
             'ProfessionalExperiences',
             'Recipients',
             'Resumes',
@@ -46,7 +47,7 @@ class UsersTransformer extends ModelTransformer
             'Applied',
             'Invitations',
             'Invited',
-            'Vacancies',
+            'AppliedVacancies',
             'FavoriteResumes'
         ];
     }
@@ -127,9 +128,18 @@ class UsersTransformer extends ModelTransformer
      * @param Users $model
      * @return Collection
      */
-    public function includeFavoriteResumes(Users $model): Collection
+    public function includeFavoriteResume(Users $model): Collection
     {
         return $this->collection($model->getFavoriteResume(), new ResumesTransformer());
+    }
+
+    /**
+     * @param Users $model
+     * @return Collection
+     */
+    public function includeFavoriteResumes(Users $model): Collection
+    {
+        return $this->collection($model->getFavoriteResumes(), new ResumesTransformer());
     }
 
     /**
@@ -253,8 +263,8 @@ class UsersTransformer extends ModelTransformer
      * @param Users $model
      * @return Collection
      */
-    public function includeVacancy(Users $model): Collection
+    public function includeAppliedVacancy(Users $model): Collection
     {
-        return $this->collection($model->getVacancies(), new VacanciesTransformer());
+        return $this->collection($model->getAppliedVacancies(), new VacanciesTransformer());
     }
 }

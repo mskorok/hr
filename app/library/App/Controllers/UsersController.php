@@ -68,7 +68,11 @@ class UsersController extends ControllerBase
         'Images',
         'Companies',
         'Payments',
-        'Subscriptions'
+        'Subscriptions',
+        'AppliedVacancies',
+        'Invitations',
+        'FavoriteResumes',
+        'FavoriteVacancies'
     ];
 
     public static $encodedFields = [
@@ -204,8 +208,13 @@ class UsersController extends ControllerBase
                 }
                 throw new RuntimeException('User not found');
             }
+            /** @var @vag Phalcon\Validation\Message\Group $messages */
             $messages = $validator->getMessages();
-            return $this->createArrayResponse($messages->toArray, 'messages');
+            $mes = '';
+            foreach ($messages as $message) {
+                $mes .= $message->getMessage();
+            }
+            return $this->createArrayResponse($mes, 'messages');
         }
         if ($test) {
             /** @var Simple $view */
@@ -246,7 +255,6 @@ class UsersController extends ControllerBase
             $user->setEmailConfirmed(1);
             $this->transformModelBeforeSave($user);
             if ($user->save()) {
-                /** @var \Phalcon\DiInterface $di */
                 $di = $this->getDI();
                 $queue = $this->getDI()->get(Services::QUEUE);
                 if ($di instanceof DiInterface) {
@@ -287,7 +295,6 @@ class UsersController extends ControllerBase
 
     /**
      * Index action
-     * @throws ReflectionException
      */
     public function indexAction()
     {
@@ -296,7 +303,6 @@ class UsersController extends ControllerBase
 
     /**
      * Searches for users
-     * @throws ReflectionException
      */
     public function searchAction()
     {
@@ -459,10 +465,7 @@ class UsersController extends ControllerBase
         $this->transformModelBeforeSave($user);
 
         if (!$user->save()) {
-            $mes = '';
-            foreach ($user->getMessages() as $message) {
-                $mes .= $message;
-            }
+            $mes = implode('', $user->getMessages());
 
             return $this->response->redirect('/admin/users/index?notice=' . urlencode($mes));
         }
@@ -513,10 +516,7 @@ class UsersController extends ControllerBase
         $this->transformModelBeforeSave($user);
 
         if (!$user->save()) {
-            $mes = '';
-            foreach ($user->getMessages() as $message) {
-                $mes .= $message;
-            }
+            $mes = implode('', $user->getMessages());
 
             return $this->response->redirect('/admin/users/index?notice=' . urlencode($mes));
         }
@@ -666,7 +666,9 @@ class UsersController extends ControllerBase
     {
         $this->createMode = true;
         $resource = $this->getResource();
-        $resource->postedDataMethod(PostedDataMethods::POST);
+        if ($resource) {
+            $resource->postedDataMethod(PostedDataMethods::POST);
+        }
     }
 
     /**
@@ -760,12 +762,12 @@ class UsersController extends ControllerBase
 
     /**
      *
-     * @return ResponseInterface
-     *@throws ReflectionException
+     * @return ResponseInterface|null
+     * @throws ReflectionException
      * @throws Exception
      * @throws RuntimeException
      */
-    public function add(): ResponseInterface
+    public function add(): ?ResponseInterface
     {
         $user = new Users();
         $messages = [];
@@ -838,17 +840,18 @@ class UsersController extends ControllerBase
         $form = new UsersForm($user, $options);
         $form->renderForm();
         $this->returnView('add', compact('form', 'messages'));
+        return null;
     }
 
 
     /**
      * @param $id
-     * @return \Phalcon\Http\Response | null
+     * @return ResponseInterface|null
      * @throws RuntimeException
      * @throws ReflectionException
      * @throws Exception
      */
-    public function updates($id): ?Response
+    public function updates($id): ?ResponseInterface
     {
         $id = (int)$id;
         $url = $this->router->getRewriteUri();

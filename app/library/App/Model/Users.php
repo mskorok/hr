@@ -23,6 +23,7 @@ use Phalcon\Validation\Validator\Email as EmailValidator;
  * @method Favorites getFavorites
  * @method Simple getFavoriteVacancies
  * @method Collection getFavoriteResume
+ * @method Collection getFavoriteResumes
  * @method Simple getInvitations
  * @method Collection getInvited
  * @method Collection getProfessionalExperiences
@@ -36,7 +37,7 @@ use Phalcon\Validation\Validator\Email as EmailValidator;
  * @method Simple getCompanies
  * @method Collection getPayments
  * @method Simple getSubscriptions
- * @method Simple getVacancies
+ * @method Simple getAppliedVacancies
  */
 class Users extends DateTrackingModel
 {
@@ -844,6 +845,17 @@ class Users extends DateTrackingModel
         );
         $this->hasManyToMany(
             'id',
+            FavoriteResume::class,
+            'user_id',
+            'resume_id',
+            Resumes::class,
+            'id',
+            [
+                'alias' => 'FavoriteResumes'
+            ]
+        );
+        $this->hasManyToMany(
+            'id',
             CompanyManager::class,
             'user_id',
             'company_id',
@@ -883,7 +895,7 @@ class Users extends DateTrackingModel
             Vacancies::class,
             'id',
             [
-                'alias' => 'Vacancies'
+                'alias' => 'AppliedVacancies'
             ]
         );
     }
