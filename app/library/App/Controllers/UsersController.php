@@ -1493,13 +1493,12 @@ class UsersController extends ControllerBase
 
     /**
      * @return mixed|void
-     * @throws Exception
      */
-    public function getSubscriptions() {
+    public function getSubscriptions($id) {
         /** @var Users $user */
-        $user = $this->userService->getDetails();
+        $user = Users::findFirst((int)$id);
         if (!$user) {
-            return $this->createErrorResponse('Only for authorized users ' . json_encode($this->authManager->getSession()));
+            return $this->createErrorResponse('Only for authorized users');
         }
         $companies = $user->getCompanies();
         $subscriptionsForUser = $user->getSubscriptions();
@@ -1538,6 +1537,8 @@ class UsersController extends ControllerBase
         $response = [
             'user' => $user,
             'subscriptions' => $data,
+            'us' => $subscriptionsForUser,
+            'cp' => $subscriptionsForCompanies,
         ];
 
         return $this->createArrayResponse($response, 'subscriptions');
