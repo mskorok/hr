@@ -5,7 +5,7 @@ namespace App\Controllers;
 
 use App\Constants\Limits;
 use App\Traits\RenderView;
-use Phalcon\Http\Response;
+use Phalcon\Http\ResponseInterface;
 use Phalcon\Mvc\Model\Criteria;
 use Phalcon\Mvc\Model\Resultset;
 use Phalcon\Paginator\Adapter\Model as Paginator;
@@ -35,7 +35,6 @@ class SubscriptionsController extends ControllerBase
 
     /**
      * Index action
-     * @throws \ReflectionException
      */
     public function indexAction()
     {
@@ -44,7 +43,6 @@ class SubscriptionsController extends ControllerBase
 
     /**
      * Searches for subscriptions
-     * @throws \ReflectionException
      */
     public function searchAction()
     {
@@ -84,7 +82,6 @@ class SubscriptionsController extends ControllerBase
 
     /**
      * Searches for subscriptions
-     * @throws \ReflectionException
      */
     public function listAction()
     {
@@ -115,7 +112,6 @@ class SubscriptionsController extends ControllerBase
 
     /**
      * Displays the creation form
-     * @throws \ReflectionException
      */
     public function newAction()
     {
@@ -124,10 +120,9 @@ class SubscriptionsController extends ControllerBase
 
     /**
      * @param $id
-     * @return null|Response
-     * @throws \ReflectionException
+     * @return ResponseInterface|null
      */
-    public function editAction($id): ?Response
+    public function editAction($id): ?ResponseInterface
     {
         if ($this->request->isPost()) {
             return $this->response->redirect('/admin/subscriptions/index');
@@ -150,7 +145,7 @@ class SubscriptionsController extends ControllerBase
     /**
      * Creates a new subscription
      */
-    public function createAction()
+    public function createAction(): ResponseInterface
     {
         if (!$this->request->isPost()) {
             return $this->response->redirect('/admin/subscriptions/index');
@@ -163,10 +158,7 @@ class SubscriptionsController extends ControllerBase
         $this->transformModelBeforeSave($subscription);
 
         if (!$subscription->save()) {
-            $mes = '';
-            foreach ($subscription->getMessages() as $message) {
-                $mes .= $message;
-            }
+            $mes = implode('', $subscription->getMessages());
 
             return $this->response->redirect('/admin/subscriptions/index?notice=' . urlencode($mes));
         }
@@ -178,7 +170,7 @@ class SubscriptionsController extends ControllerBase
      * Saves a subscription edited
      *
      */
-    public function saveAction()
+    public function saveAction(): ResponseInterface
     {
 
         if (!$this->request->isPost()) {
@@ -198,10 +190,7 @@ class SubscriptionsController extends ControllerBase
         $this->transformModelBeforeSave($subscription);
 
         if (!$subscription->save()) {
-            $mes = '';
-            foreach ($subscription->getMessages() as $message) {
-                $mes .= $message;
-            }
+            $mes = implode('', $subscription->getMessages());
 
             return $this->response->redirect('/admin/subscriptions/index?notice=' . urlencode($mes));
         }
@@ -211,9 +200,9 @@ class SubscriptionsController extends ControllerBase
 
     /**
      * @param $id
-     * @return Response
+     * @return ResponseInterface
      */
-    public function deleteAction($id): Response
+    public function deleteAction($id): ResponseInterface
     {
         $subscription = Subscriptions::findFirst((int)$id);
         if (!$subscription) {
@@ -221,10 +210,7 @@ class SubscriptionsController extends ControllerBase
         }
 
         if (!$subscription->delete()) {
-            $mes = '';
-            foreach ($subscription->getMessages() as $message) {
-                $mes .= $message;
-            }
+            $mes = implode('', $subscription->getMessages());
 
             return $this->response->redirect('/admin/subscriptions/index?notice=' . urlencode($mes));
         }
@@ -261,7 +247,6 @@ class SubscriptionsController extends ControllerBase
     protected function onDataInvalid($data)
     {
         $mes = [];
-        $mes['Post-data is invalid'];
         foreach ($this->messages as $message) {
             $mes[] = $message->getMessage();
         }

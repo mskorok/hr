@@ -15,8 +15,10 @@ use App\Jobs\ConfirmationLetterJob;
 use App\Jobs\RecoveryLetterJob;
 use App\Jobs\ThankYouLetterJob;
 use App\Mail\MailService;
+use App\Model\Companies;
 use App\Model\Images;
 use App\Model\MailSubscription;
+use App\Model\Subscriptions;
 use App\Services\UsersService;
 use App\Traits\RenderView;
 use App\Transformers\UsersTransformer;
@@ -1297,10 +1299,7 @@ class UsersController extends ControllerBase
         }
 
         if (!$user->delete()) {
-            $mes = '';
-            foreach ($user->getMessages() as $message) {
-                $mes .= $message;
-            }
+            $mes = implode('', $user->getMessages());
 
             return $this->createErrorResponse($mes);
         }
@@ -1490,6 +1489,58 @@ class UsersController extends ControllerBase
 
         }
         return $this->createErrorResponse('Wrong method');
+    }
+
+    /**
+     * @return mixed|void
+     * @throws Exception
+     */
+    public function getSubscriptions() {
+        /** @var Users $user */
+        $user = $this->userService->getDetails();
+        if (!$user) {
+            return $this->createErrorResponse('Only for authorized users ' . json_encode($this->authManager->getSession()));
+        }
+        $companies = $user->getCompanies();
+        $subscriptionsForUser = $user->getSubscriptions();
+        $subscriptionsForCompanies = [];
+        $companyIds = [];
+        $userIds = [];
+        /** @var Companies $company */
+        foreach ($companies as $company) {
+            $sub = $company->getSubscriptions();
+            /** @var Subscriptions $item */
+            foreach ($sub as $item) {
+                $companyIds[] = $item->getId();
+                $subscriptionsForCompanies[$item->getId()][] = $company;
+            }
+        }
+
+        foreach ($subscriptionsForUser as $item) {
+            $userIds[] = $item->getId();
+        }
+
+        $subscriptionsAll = Subscriptions::find();
+
+        $data = [];
+
+        foreach ($subscriptionsAll as $subscription) {
+            $subscribedUser = in_array($subscription->getId(), $userIds, true);
+            $subscribedCompany = in_array($subscription->getId(), $companyIds, true);
+            $data[] = [
+                'subscription' => $subscription,
+                'user'    => $subscribedUser,
+                'company' => $subscribedCompany,
+                'companies' =>  $subscriptionsForCompanies[$subscription->getId()],
+            ];
+        }
+
+        $response = [
+            'user' => $user,
+            'subscriptions' => $data,
+        ];
+
+        return $this->createArrayResponse($response, 'subscriptions');
     }
 
 

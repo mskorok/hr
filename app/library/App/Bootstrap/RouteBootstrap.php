@@ -111,6 +111,7 @@ class RouteBootstrap implements BootstrapInterface
 
         $api->post('/subscribe/mail', [$userController, 'subscribe']);
         $api->post('/unsubscribe/mail', [$userController, 'subscribe']);
+        $api->post('/subscriptions', [$userController, 'getSubscriptions']);
 
 
         $api->get('/articles-list', [$articlesController, 'listAllArticles']);

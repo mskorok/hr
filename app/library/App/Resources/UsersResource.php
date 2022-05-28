@@ -144,6 +144,11 @@ class UsersResource extends ApiResource
                     //->allow(AclRoles::AUTHORIZED)
                     ->description('Confirm user by admin')
             )
+//            ->endpoint(
+//                ApiEndpoint::post('/subscriptions', 'getSubscriptions')
+//                    ->allow(AclRoles::AUTHORIZED)
+//                    ->description('get subscriptions')
+//            )
             /*
             ->endpoint(
                 ApiEndpoint::get('/has/autoresponder/{id:[0-9]+}', 'hasAutoresponder')
