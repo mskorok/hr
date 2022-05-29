@@ -1503,8 +1503,13 @@ class UsersController extends ControllerBase
         $companies = $user->getCompanies();
         $subscriptionsForUser = $user->getSubscriptions();
         $subscriptionsForCompanies = [];
+        $subscriptionsForCompaniesId = [];
         $companyIds = [];
         $userIds = [];
+
+        $subscriptionsAll = Subscriptions::find();
+        $notSubscribedCompanies = []
+;
         /** @var Companies $company */
         foreach ($companies as $company) {
             $sub = $company->getSubscriptions();
@@ -1512,14 +1517,27 @@ class UsersController extends ControllerBase
             foreach ($sub as $item) {
                 $companyIds[] = $item->getId();
                 $subscriptionsForCompanies[$item->getId()][] = $company;
+                $subscriptionsForCompaniesId[$item->getId()][] = $company->getId();
             }
         }
+
+        /** @var Companies $company */
+        foreach ($companies as $company) {
+            /** @var Subscriptions $sub */
+            foreach ($subscriptionsAll as $sub) {
+                if (!array_key_exists($sub->getId(), $subscriptionsForCompaniesId)) {
+                    $notSubscribedCompanies[$sub->getId()][] = $company;
+                }
+            }
+        }
+
+
 
         foreach ($subscriptionsForUser as $item) {
             $userIds[] = $item->getId();
         }
 
-        $subscriptionsAll = Subscriptions::find();
+
 
         $data = [];
 
@@ -1530,6 +1548,7 @@ class UsersController extends ControllerBase
                 'subscription' => $subscription,
                 'user'    => $subscribedUser,
                 'company' => $subscribedCompany,
+                'notSubscribedCompanies' => $notSubscribedCompanies[$subscription->getId()],
                 'companies' =>  $subscriptionsForCompanies[$subscription->getId()],
             ];
         }
