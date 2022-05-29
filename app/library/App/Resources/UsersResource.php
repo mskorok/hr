@@ -145,7 +145,7 @@ class UsersResource extends ApiResource
                     ->description('Confirm user by admin')
             )
             ->endpoint(
-                ApiEndpoint::get('/subscriptions/{id:[0-9]+}', 'getSubscriptions')
+                ApiEndpoint::get('/subscriptions', 'getSubscriptions')
                     ->allow(AclRoles::AUTHORIZED)
                     ->description('get subscriptions')
             )
