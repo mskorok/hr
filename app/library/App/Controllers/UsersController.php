@@ -141,6 +141,8 @@ class UsersController extends ControllerBase
             $user->setLastLoginDate(date('Y-m-d H:i:s'));
             $this->transformModelBeforeSave($user);
             $user->save();
+        } else {
+            throw new RuntimeException('User not found');
         }
 
         $role = $user->getRole();
@@ -539,7 +541,9 @@ class UsersController extends ControllerBase
             return $this->response->redirect('/admin/users/index?notice=' . urlencode('user was not found'));
         }
 
-        if (!$user->delete()) {
+        $user->setDeleted(1);
+
+        if (!$user->save()) {
             $mes = implode('', $user->getMessages());
 
             return $this->response->redirect('/admin/users/index?notice=' . urlencode($mes));
@@ -1290,6 +1294,10 @@ class UsersController extends ControllerBase
     {
         $user = Users::findFirst((int)$id);
 
+        if (!$user) {
+            return $this->createErrorResponse('User not found');
+        }
+
         $me = $this->userService->getDetails();
 
         if ($me) {
@@ -1300,7 +1308,9 @@ class UsersController extends ControllerBase
             return $this->createErrorResponse('You have no permission for this operation');
         }
 
-        if (!$user->delete()) {
+        $user->setDeleted(1);
+
+        if (!$user->save()) {
             $mes = implode('', $user->getMessages());
 
             return $this->createErrorResponse($mes);
@@ -1337,6 +1347,8 @@ class UsersController extends ControllerBase
                 $this->transformModelBeforeSave($user);
 
                 $user->save();
+            } else {
+                return $this->createErrorResponse('User not found');
             }
             /** @var Users $user */
             $user = $this->createItemResponse($user, $transformer);
@@ -1428,6 +1440,7 @@ class UsersController extends ControllerBase
             return $this->createErrorResponse($e->getMessage());
         }
     }
+
 
     /**
      * @return mixed

@@ -5,6 +5,7 @@ namespace App\Model;
 
 use App\Constants\Services;
 use League\Fractal\Resource\Collection;
+use Phalcon\Mvc\Model\ResultInterface;
 use Phalcon\Mvc\Model\Resultset\Simple;
 use Phalcon\Validation;
 use Phalcon\Validation\Validator\Email as EmailValidator;
@@ -217,6 +218,12 @@ class Users extends DateTrackingModel
      * @Column(type="string", nullable=true)
      */
     protected $lastLoginDate;
+
+    /**
+     *
+     * @var integer
+     */
+    protected $deleted;
 
     /**
      * Method to set the value of field id
@@ -529,6 +536,27 @@ class Users extends DateTrackingModel
 
         return $this;
     }
+    /**
+     * @param string $about_me
+     */
+    public function setAboutMe(string $about_me): void
+    {
+        $this->about_me = $about_me;
+    }
+
+
+    /**
+     * Method to set the value of field deleted
+     *
+     * @param integer|null $deleted
+     * @return $this
+     */
+    public function setDeleted(int $deleted = null): Users
+    {
+        $this->deleted = $deleted;
+
+        return $this;
+    }
 
     /**
      * Returns the value of field id
@@ -779,11 +807,13 @@ class Users extends DateTrackingModel
     }
 
     /**
-     * @param string $about_me
+     * Returns the value of field deleted
+     *
+     * @return integer|null
      */
-    public function setAboutMe(string $about_me): void
+    public function getDeleted(): ?int
     {
-        $this->about_me = $about_me;
+        return $this->deleted;
     }
 
     /**
@@ -918,18 +948,35 @@ class Users extends DateTrackingModel
      */
     public static function find($parameters = null)
     {
-        return parent::find($parameters);
+        //        return parent::find($parameters);
+        $users = [];
+        $collection = parent::find($parameters);
+
+        /** @var Users $user */
+        foreach ($collection as $user) {
+            if ($user->getEmailConfirmed() && !$user->getDeleted()) {
+                $users[] = $user;
+            }
+        }
+
+        return $users;
     }
 
     /**
      * Allows to query the first record that match the specified conditions
      *
      * @param mixed $parameters
-     * @return Users|\Phalcon\Mvc\Model\ResultInterface
+     * @return Users|ResultInterface
      */
     public static function findFirst($parameters = null)
     {
-        return parent::findFirst($parameters);
+        //   return parent::findFirst($parameters);
+        $user = parent::findFirst($parameters);
+        if ($user instanceof self && $user->getEmailConfirmed() && !$user->getDeleted()) {
+            return $user;
+        }
+
+        return null;
     }
 
     /**
@@ -948,6 +995,7 @@ class Users extends DateTrackingModel
                 'password' => 'password',
                 'birthday' => 'birthday',
                 'gender' => 'gender',
+                'about_me' => 'about_me',
                 'github' => 'github',
                 'linkedIn' => 'linkedIn',
                 'fb' => 'fb',
@@ -965,7 +1013,7 @@ class Users extends DateTrackingModel
                 'status' => 'status',
                 'role' => 'role',
                 'lastLoginDate' => 'lastLoginDate',
-                'about_me' => 'about_me'
+                'deleted' => 'deleted'
             ];
     }
 }

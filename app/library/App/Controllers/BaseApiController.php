@@ -17,6 +17,7 @@ use App\Traits\Ajax;
 use App\Traits\Limit;
 use App\User\Service;
 use Phalcon\Mvc\Model\Query\Builder as QueryBuilder;
+use Phalcon\Mvc\Model\ResultInterface;
 use Phalcon\Mvc\Model\Resultset\Simple;
 use Phalcon\Validation\Message\Group;
 use PhalconRest\Mvc\Controllers\CrudResourceController;
@@ -127,9 +128,9 @@ class BaseApiController extends CrudResourceController
     }
 
     /**
-     * @return Users|\Phalcon\Mvc\Model\ResultInterface
+     * @return Users|ResultInterface|null
      */
-    protected function getAdminUser()
+    protected function getAdminUser(): ?Users
     {
         $adminId = $this->getAdminUserId();
 

@@ -241,9 +241,9 @@ class ControllerBase extends CrudResourceController
     }
 
     /**
-     * @return Users|ResultInterface
+     * @return Users|ResultInterface|null
      */
-    protected function getAdminUser()
+    protected function getAdminUser(): ?Users
     {
         $adminId = $this->getAdminUserId();
 
