@@ -123,7 +123,7 @@ class RouteBootstrap implements BootstrapInterface
         $api->post('/profile/create', [$userController, 'addProfile']);
         $api->get('/profile/update/{id}', [$userController, 'updateProfile']);
         $api->post('/profile/update/{id}', [$userController, 'updateProfile']);
-        $api->delete('/profile/delete/{id}', [$userController, 'deleteProfile']);
+        $api->get('/profile/delete/{id}', [$userController, 'deleteProfile']);
         $api->get('/login', [$userController, 'profileLogin']);
         $api->get('/password/new', [$userController, 'profileNewPassword']);
         $api->get('/password/recovery', [$userController, 'profileLoginRecovery']);

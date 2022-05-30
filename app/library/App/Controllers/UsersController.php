@@ -1304,7 +1304,7 @@ class UsersController extends ControllerBase
             return $this->createErrorResponse('Only for authorized users');
         }
 
-        if ((int)$id !== $me->getId() && !in_array($this->userService->getRole(), AclRoles::ADMIN_ROLES, true)) {
+        if ((int)$id !== $me->getId() || !in_array($this->userService->getRole(), AclRoles::ADMIN_ROLES, true)) {
             return $this->createErrorResponse('You have no permission for this operation');
         }
 
