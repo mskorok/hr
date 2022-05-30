@@ -149,6 +149,32 @@ class UsersResource extends ApiResource
                     ->allow(AclRoles::AUTHORIZED)
                     ->description('get subscriptions')
             )
+
+            ->endpoint(
+                ApiEndpoint::get('/company/subscriptions', 'getCompanySubscriptions')
+                    ->allow(AclRoles::AUTHORIZED)
+                    ->description('')
+            )
+            ->endpoint(
+                ApiEndpoint::get('/subscribe/user/{sid:[0-9]+}', 'subscribeUser')
+                    ->allow(AclRoles::AUTHORIZED)
+                    ->description('')
+            )
+            ->endpoint(
+                ApiEndpoint::get('/unsubscribe/user/{sid:[0-9]+}', 'unsubscribeUser')
+                    ->allow(AclRoles::AUTHORIZED)
+                    ->description('')
+            )
+            ->endpoint(
+                ApiEndpoint::get('/subscribe/company/{cid:[0-9]+}/{sid:[0-9]+}', 'subscribeCompany')
+                    ->allow(AclRoles::AUTHORIZED)
+                    ->description('')
+            )
+            ->endpoint(
+                ApiEndpoint::get('/unsubscribe/company/{cid:[0-9]+}/{sid:[0-9]+}', 'unsubscribeCompany')
+                    ->allow(AclRoles::AUTHORIZED)
+                    ->description('')
+            )
             /*
             ->endpoint(
                 ApiEndpoint::get('/has/autoresponder/{id:[0-9]+}', 'hasAutoresponder')

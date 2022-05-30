@@ -11,10 +11,10 @@ class AclRoles
 {
     public const UNAUTHORIZED = 'unauthorized';
     public const AUTHORIZED = 'authorized';
-    public const SUPERADMIN = 'Superadmin';
+    public const SUPERADMIN = 'superadmin';
     public const ADMIN = 'admin';
-    public const COMPANY_ADMIN = 'CompanyAdmin';
-    public const MANAGER = 'Manager';
+    public const COMPANY_ADMIN = 'companyAdmin';
+    public const MANAGER = 'manager';
     public const EMPLOYER = 'employer';
     public const APPLICANT = 'applicant';
     public const PARTNER = 'partner';

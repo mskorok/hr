@@ -16,9 +16,11 @@ use App\Jobs\RecoveryLetterJob;
 use App\Jobs\ThankYouLetterJob;
 use App\Mail\MailService;
 use App\Model\Companies;
+use App\Model\CompanySubscription;
 use App\Model\Images;
 use App\Model\MailSubscription;
 use App\Model\Subscriptions;
+use App\Model\UserSubscription;
 use App\Services\UsersService;
 use App\Traits\RenderView;
 use App\Transformers\UsersTransformer;
@@ -1467,7 +1469,7 @@ class UsersController extends ControllerBase
                 return $this->createErrorResponse('Email not found');
             }
 
-            if (isset($category)) {
+            if ($category && $category !== 0) {
                 $condition = " email = '{$email}' AND category_id = {$category} ";
             } else {
                 $condition = " email = '{$email}' ";
@@ -1495,7 +1497,8 @@ class UsersController extends ControllerBase
      * @return mixed|void
      * @throws Exception
      */
-    public function getSubscriptions() {
+    public function getSubscriptions()
+    {
         $user = $this->userService->getDetails();
         if (!$user) {
             return $this->createErrorResponse('Only for authorized users ');
@@ -1503,33 +1506,31 @@ class UsersController extends ControllerBase
         $companies = $user->getCompanies();
         $subscriptionsForUser = $user->getSubscriptions();
         $subscriptionsForCompanies = [];
-        $subscriptionsForCompaniesId = [];
         $companyIds = [];
         $userIds = [];
+        $allCompanyIds = [];
+        $subscribedCompaniesIds = [];
 
         $subscriptionsAll = Subscriptions::find();
-        $notSubscribedCompanies = []
 ;
         /** @var Companies $company */
         foreach ($companies as $company) {
             $sub = $company->getSubscriptions();
+            $allCompanyIds[] = $company->getId();
             /** @var Subscriptions $item */
             foreach ($sub as $item) {
                 $companyIds[] = $item->getId();
+                $subscribedCompaniesIds[$item->getId()][] =  $company->getId();
                 $subscriptionsForCompanies[$item->getId()][] = $company;
-                $subscriptionsForCompaniesId[$item->getId()][] = $company->getId();
             }
         }
 
-        /** @var Companies $company */
-        foreach ($companies as $company) {
-            /** @var Subscriptions $sub */
-            foreach ($subscriptionsAll as $sub) {
-                if (!array_key_exists($sub->getId(), $subscriptionsForCompaniesId)) {
-                    $notSubscribedCompanies[$sub->getId()][] = $company;
-                }
-            }
+        $companyIds = array_unique($companyIds);
+        foreach ($subscribedCompaniesIds as &$ids) {
+            $ids = array_unique($ids);
         }
+
+        unset($ids);
 
 
 
@@ -1544,24 +1545,165 @@ class UsersController extends ControllerBase
         foreach ($subscriptionsAll as $subscription) {
             $subscribedUser = in_array($subscription->getId(), $userIds, true);
             $subscribedCompany = in_array($subscription->getId(), $companyIds, true);
+            $notSubscribedCompaniesIds = [];
+            if ($subscription->isCompany()) {
+                if (isset($subscribedCompaniesIds[$subscription->getId()])) {
+                    $notSubscribedCompaniesIds = array_diff($allCompanyIds, $subscribedCompaniesIds[$subscription->getId()]);
+                } else {
+                    $notSubscribedCompaniesIds = $allCompanyIds;
+                }
+            }
+            $notSubscribedCompanies = [];
+            foreach ($companies as $company) {
+                if (in_array($company->getId(), $notSubscribedCompaniesIds, true)) {
+                    $notSubscribedCompanies[] = $company;
+                }
+            }
+
             $data[] = [
                 'subscription' => $subscription,
                 'user'    => $subscribedUser,
+                'userIds' => $userIds,
+                'us' => $user->getSubscriptions(),
                 'company' => $subscribedCompany,
-                'notSubscribedCompanies' => $notSubscribedCompanies[$subscription->getId()],
-                'companies' =>  $subscriptionsForCompanies[$subscription->getId()],
+                'not_subscribed_companies' => $notSubscribedCompanies,
+                'companies' =>  isset($subscribedCompaniesIds[$subscription->getId()])
+                    ? $subscriptionsForCompanies[$subscription->getId()]
+                    : [],
             ];
         }
 
-        $response = [
-            'user' => $user,
-            'subscriptions' => $data,
-            'us' => $subscriptionsForUser,
-            'cp' => $subscriptionsForCompanies,
-            'companies' => $companies
-        ];
+        return $this->createArrayResponse($data, 'data');
+    }
 
-        return $this->createArrayResponse($response, 'subscriptions');
+    /**
+     * @return mixed
+     * @throws Exception
+     */
+    public function getCompanySubscriptions()
+    {
+        $user = $this->userService->getDetails();
+        if (!$user) {
+            return $this->createErrorResponse('Only for authorized users ');
+        }
+        $companies = $user->getCompanies();
+        $userSubscriptions = $user->getSubscriptions();
+        if (!$userSubscriptions) {
+            $userSubscriptions = [];
+        }
+        $companiesSubscriptions = [];
+        /** @var Companies $company */
+        foreach ($companies as $company) {
+            $subscriptions = $company->getSubscriptions();
+            foreach ($subscriptions as $subscription) {
+                $companiesSubscriptions[] = $subscription;
+            }
+        }
+
+        $data = [
+            'user' => $userSubscriptions,
+            'companies' => $companiesSubscriptions
+        ];
+        return $this->createArrayResponse($data, 'data');
+    }
+
+    /**
+     * @param $sid
+     * @return mixed|void
+     * @throws Exception
+     */
+    public function subscribeUser($sid)
+    {
+        /** @var Users $user */
+        $user = $this->userService->getDetails();
+        if (!$user) {
+            return $this->createErrorResponse('Only for authorized users ' . json_encode($user));
+        }
+
+        $us = new UserSubscription();
+        $us->setUserId($user->getId());
+        $us->setSubscriptionId((int)$sid);
+        if ($us->save()) {
+            return $this->createOkResponse();
+        }
+
+        return $this->createErrorResponse('error');
+    }
+
+    /**
+     * @param $sid
+     * @return mixed
+     * @throws Exception
+     */
+    public function unsubscribeUser($sid)
+    {
+        $user = $this->userService->getDetails();
+        if (!$user) {
+            return $this->createErrorResponse('Only for authorized users ' . json_encode($user));
+        }
+        $us = UserSubscription::findFirst(['subscription_id' => $sid]);
+
+        if ($us) {
+            if ($us->delete()) {
+                return $this->createOkResponse();
+            }
+            return $this->createErrorResponse($us->getMessages());
+        }
+        return $this->createErrorResponse('error');
+    }
+
+    /**
+     * @param $cid
+     * @param $sid
+     * @return mixed
+     * @throws Exception
+     */
+    public function subscribeCompany($cid, $sid)
+    {
+        $user = $this->userService->getDetails();
+        if (!$user) {
+            return $this->createErrorResponse('Only for authorized users ');
+        }
+        $company = Companies::findFirst($cid);
+        $subscription = Subscriptions::findFirst((int) $sid);
+        if ($company && $subscription) {
+            $cs = new CompanySubscription();
+            $cs->setCompanyId((int) $cid);
+            $cs->setSubscriptionId((int) $sid);
+
+            if ($cs->save()) {
+                return $this->createOkResponse();
+            }
+            return $this->createErrorResponse($cs->getMessages());
+        }
+
+        return $this->createErrorResponse('error');
+    }
+
+    /**
+     * @param $cid
+     * @param $sid
+     * @return mixed
+     * @throws Exception
+     */
+    public function unsubscribeCompany($cid, $sid)
+    {
+        $user = $this->userService->getDetails();
+        if (!$user) {
+            return $this->createErrorResponse('Only for authorized users ');
+        }
+        $company = Companies::findFirst($cid);
+        $subscription = Subscriptions::findFirst($sid);
+        if ($company && $subscription) {
+            $cs = CompanySubscription::findFirst(['company_id' => $cid, 'subscription_id' => $sid]);
+            if ($cs && $cs->delete()) {
+                return $this->createOkResponse();
+            }
+
+            return $this->createErrorResponse($cs->getMessages());
+        }
+
+        return $this->createErrorResponse('error');
     }
 
 

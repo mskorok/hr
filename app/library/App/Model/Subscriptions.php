@@ -5,6 +5,8 @@ namespace App\Model;
 use App\Constants\Services;
 use League\Fractal\Resource\Collection;
 use Phalcon\Mvc\Model;
+use Phalcon\Mvc\Model\ResultInterface;
+use Phalcon\Mvc\Model\ResultsetInterface;
 
 /**
  * Subscriptions
@@ -42,6 +44,32 @@ class Subscriptions extends Model
      * @Column(type="string", nullable=true)
      */
     protected $description;
+
+    /**
+     *
+     * @var boolean
+     */
+    protected $is_company;
+
+    /**
+     *
+     * @var boolean
+     */
+    protected $is_user;
+
+    /**
+     *
+     * @var integer
+     * @Column(type="integer", length=11, nullable=true)
+     */
+    protected $amount;
+
+    /**
+     *
+     * @var integer
+     * @Column(type="integer", length=2, nullable=true)
+     */
+    protected $percentage;
 
     /**
      *
@@ -127,6 +155,58 @@ class Subscriptions extends Model
     public function setDescription(string $description): self
     {
         $this->description = $description;
+
+        return $this;
+    }
+
+    /**
+     * Method to set the value of field company
+     *
+     * @param boolean $company
+     * @return $this
+     */
+    public function setIsCompany(bool $company = true): Subscriptions
+    {
+        $this->is_company = $company;
+
+        return $this;
+    }
+
+    /**
+     * Method to set the value of field user
+     *
+     * @param boolean $user
+     * @return $this
+     */
+    public function setIsUser(bool $user = true): Subscriptions
+    {
+        $this->is_user = $user;
+
+        return $this;
+    }
+
+    /**
+     * Method to set the value of field amount
+     *
+     * @param integer $amount
+     * @return $this
+     */
+    public function setAmount(int $amount): self
+    {
+        $this->amount = $amount;
+
+        return $this;
+    }
+
+    /**
+     * Method to set the value of field percentage
+     *
+     * @param integer $percentage
+     * @return $this
+     */
+    public function setPercentage(int $percentage): self
+    {
+        $this->percentage = $percentage;
 
         return $this;
     }
@@ -253,6 +333,46 @@ class Subscriptions extends Model
     }
 
     /**
+     * Returns the value of field company
+     *
+     * @return boolean
+     */
+    public function isCompany(): bool
+    {
+        return (bool) $this->is_company;
+    }
+
+    /**
+     * Returns the value of field user
+     *
+     * @return boolean
+     */
+    public function isUser(): bool
+    {
+        return (bool) $this->is_user;
+    }
+
+    /**
+     * Returns the value of field amount
+     *
+     * @return integer|null
+     */
+    public function getAmount(): ?int
+    {
+        return (int)$this->amount;
+    }
+
+    /**
+     * Returns the value of field percentage
+     *
+     * @return integer|null
+     */
+    public function getPercentage(): ?int
+    {
+        return (int)$this->percentage;
+    }
+
+    /**
      * Returns the value of field amount_candidate
      *
      * @return integer|null
@@ -369,7 +489,7 @@ class Subscriptions extends Model
      * Allows to query a set of records that match the specified conditions
      *
      * @param mixed $parameters
-     * @return Subscriptions[]|Subscriptions|\Phalcon\Mvc\Model\ResultSetInterface
+     * @return Subscriptions[]|Subscriptions|ResultSetInterface
      */
     public static function find($parameters = null)
     {
@@ -380,7 +500,7 @@ class Subscriptions extends Model
      * Allows to query the first record that match the specified conditions
      *
      * @param mixed $parameters
-     * @return Subscriptions|\Phalcon\Mvc\Model\ResultInterface
+     * @return Subscriptions|ResultInterface
      */
     public static function findFirst($parameters = null)
     {
@@ -399,6 +519,10 @@ class Subscriptions extends Model
             'id' => 'id',
             'title' => 'title',
             'description' => 'description',
+            'is_company' => 'is_company',
+            'is_user' => 'is_user',
+            'amount' => 'amount',
+            'percentage' => 'percentage',
             'amount_candidate' => 'amount_candidate',
             'percentage_candidate' => 'percentage_candidate',
             'amount_resume' => 'amount_resume',
