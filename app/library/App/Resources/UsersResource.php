@@ -140,7 +140,7 @@ class UsersResource extends ApiResource
             )
             ->endpoint(
                 ApiEndpoint::get('/delete', 'deleteAction')
-                    ->allow([AclRoles::ADMIN, AclRoles::SUPERADMIN, AclRoles::APPLICANT])
+                    ->allow([AclRoles::ADMIN, AclRoles::SUPERADMIN])
                     //->allow(AclRoles::AUTHORIZED)
                     ->description('Confirm user by admin')
             )
