@@ -5,6 +5,8 @@ namespace App\Model;
 
 use App\Constants\Services;
 use Phalcon\Mvc\Model;
+use Phalcon\Mvc\Model\ResultInterface;
+use Phalcon\Mvc\Model\ResultSetInterface;
 
 /**
  * CompanyManager
@@ -40,6 +42,12 @@ class CompanyManager extends Model
      * @Column(type="integer", length=11, nullable=false)
      */
     protected $user_id;
+
+    /**
+     *
+     * @var integer
+     */
+    protected $is_admin;
 
     /**
      * Method to set the value of field id
@@ -81,6 +89,19 @@ class CompanyManager extends Model
     }
 
     /**
+     * Method to set the value of field is_admin
+     *
+     * @param integer $is_admin
+     * @return $this
+     */
+    public function setIsAdmin(int $is_admin): CompanyManager
+    {
+        $this->is_admin = $is_admin;
+
+        return $this;
+    }
+
+    /**
      * Returns the value of field id
      *
      * @return integer
@@ -111,6 +132,16 @@ class CompanyManager extends Model
     }
 
     /**
+     * Returns the value of field is_admin
+     *
+     * @return integer|null
+     */
+    public function getIsAdmin(): ?int
+    {
+        return (int) $this->is_admin;
+    }
+
+    /**
      * Initialize method for model.
      */
     public function initialize(): void
@@ -135,7 +166,7 @@ class CompanyManager extends Model
      * Allows to query a set of records that match the specified conditions
      *
      * @param mixed $parameters
-     * @return CompanyManager[]|CompanyManager|\Phalcon\Mvc\Model\ResultSetInterface
+     * @return CompanyManager[]|CompanyManager|ResultSetInterface
      */
     public static function find($parameters = null)
     {
@@ -146,7 +177,7 @@ class CompanyManager extends Model
      * Allows to query the first record that match the specified conditions
      *
      * @param mixed $parameters
-     * @return CompanyManager|\Phalcon\Mvc\Model\ResultInterface
+     * @return CompanyManager|ResultInterface
      */
     public static function findFirst($parameters = null)
     {
@@ -164,7 +195,8 @@ class CompanyManager extends Model
         return [
             'id' => 'id',
             'company_id' => 'company_id',
-            'user_id' => 'user_id'
+            'user_id' => 'user_id',
+            'is_admin' => 'is_admin'
         ];
     }
 }

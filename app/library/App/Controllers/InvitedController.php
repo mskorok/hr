@@ -6,6 +6,7 @@ namespace App\Controllers;
 use App\Constants\Limits;
 use App\Model\Companies;
 use App\Model\FavoriteResume;
+use App\Model\Invited;
 use App\Model\Resumes;
 use App\Model\Users;
 use App\User\Service;
@@ -18,7 +19,7 @@ use Phalcon\Paginator\Factory;
  * Class FavoritesController
  * @package App\Controllers
  */
-class FavoriteResumeController extends ControllerBase
+class InvitedController extends ControllerBase
 {
     public static $availableIncludes = [
         'Companies',
@@ -31,7 +32,7 @@ class FavoriteResumeController extends ControllerBase
      * @param $resume
      * @return mixed
      */
-    public function addFavorite($user, $resume)
+    public function addInvited($user, $resume)
     {
         $id = $user;
         /** @var Users $user */
@@ -43,11 +44,11 @@ class FavoriteResumeController extends ControllerBase
         $companies = $user->getCompanies();
         $company = $companies[0];
         if ($company instanceof Companies) {
-            $favorite = new FavoriteResume();
-            $favorite->setCompanyId((int) $company->getId());
-            $favorite->setResumeId((int) $resume);
-            $favorite->setUserId((int) $id);
-            if ($favorite->save()) {
+            $invited = new Invited();
+            $invited->setCompanyId((int) $company->getId());
+            $invited->setResumeId((int) $resume);
+            $invited->setUserId((int) $id);
+            if ($invited->save()) {
                 return $this->createOkResponse();
             }
 
@@ -61,7 +62,7 @@ class FavoriteResumeController extends ControllerBase
      * @param $resume
      * @return mixed
      */
-    public function removeFavorite($user, $resume)
+    public function removeInvited($user, $resume)
     {
         $id = $user;
         $user = Users::findFirst((int) $user);
@@ -73,9 +74,9 @@ class FavoriteResumeController extends ControllerBase
         /** @var Companies $company */
         $company = $companies[0];
         if ($company instanceof Companies) {
-            $favorite = FavoriteResume::findFirst(['user_id' => $id, 'resume_id' => $resume, 'company_id' => $company->getId()]);
-            if ($favorite instanceof FavoriteResume) {
-                if ($favorite->delete()) {
+            $invited = Invited::findFirst(['user_id' => $id, 'resume_id' => $resume, 'company_id' => $company->getId()]);
+            if ($invited instanceof Invited) {
+                if ($invited->delete()) {
                     return $this->createOkResponse();
                 }
 
@@ -90,7 +91,7 @@ class FavoriteResumeController extends ControllerBase
      * @param $page
      * @return mixed
      */
-    public function listFavorites($page)
+    public function listInvited($page)
     {
         /** @var Service $userService */
         $userService = $this->userService;
@@ -98,10 +99,10 @@ class FavoriteResumeController extends ControllerBase
         $builder = new Builder();
         $builder->addFrom(Resumes::class);
         $builder->leftJoin(
-            FavoriteResume::class,
-            '[' . FavoriteResume::class . '].[resume_id] = [' . Resumes::class . '].[id]'
+            Invited::class,
+            '[' . Invited::class . '].[resume_id] = [' . Resumes::class . '].[id]'
         );
-        $builder->where('[' . FavoriteResume::class . '].[user_id] = :user:', ['user' => $id]);
+        $builder->where('[' . Invited::class . '].[user_id] = :user:', ['user' => $id]);
 
         $options = [
             'builder' => $builder,

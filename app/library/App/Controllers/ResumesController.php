@@ -1082,10 +1082,10 @@ class ResumesController extends ControllerBase
         $builder = new Builder();
         $builder->addFrom(Resumes::class);
         $builder->leftJoin(
-            FavoriteResume::class,
-            '[' . FavoriteResume::class . '].[resume_id] = [' . Resumes::class . '].[id]'
+            Invited::class,
+            '[' . Invited::class . '].[resume_id] = [' . Resumes::class . '].[id]'
         );
-        $builder->where('[' . FavoriteResume::class . '].[user_id] = :user:', ['user' => $id]);
+        $builder->where('[' . Invited::class . '].[user_id] = :user:', ['user' => $id]);
 
         $options = [
             'builder' => $builder,

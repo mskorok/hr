@@ -3,7 +3,7 @@ declare(strict_types=1);
 
 namespace App\Resources;
 
-use App\Controllers\FavoritesController;
+use App\Controllers\FavoriteResumeController;
 use App\Model\FavoriteResume;
 use App\Transformers\FavoritesTransformer;
 use PhalconApi\Constants\PostedDataMethods;
@@ -25,7 +25,7 @@ class FavoriteResumeResource extends ApiResource
             ->model(FavoriteResume::class)
             ->expectsJsonData()
             ->transformer(FavoritesTransformer::class)
-            ->handler(FavoritesController::class)
+            ->handler(FavoriteResumeController::class)
             ->itemKey('favorite-resume')
             ->collectionKey('favorites-resume')
 //            ->allow([AclRoles::ADMIN, AclRoles::SUPERADMIN, AclRoles::EMPLOYER, AclRoles::MANAGER])

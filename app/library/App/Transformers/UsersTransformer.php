@@ -27,6 +27,7 @@ class UsersTransformer extends ModelTransformer
 
         $this->availableIncludes = [
             'Comments',
+            'Companies',
             'CompanyManager',
             'Education',
             'ExpertInfo',
@@ -39,7 +40,6 @@ class UsersTransformer extends ModelTransformer
             'Senders',
             'UserSubscription',
             'Images',
-            'Companies',
             'Payments',
             'Subscriptions',
             'Teachers',
