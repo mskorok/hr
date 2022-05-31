@@ -41,13 +41,6 @@ class FavoriteResume extends Model
      * @var integer
      * @Column(type="integer", length=11, nullable=false)
      */
-    protected $company_id;
-
-    /**
-     *
-     * @var integer
-     * @Column(type="integer", length=11, nullable=false)
-     */
     protected $resume_id;
 
     /**
@@ -72,19 +65,6 @@ class FavoriteResume extends Model
     public function setUserId(int $user_id): self
     {
         $this->user_id = $user_id;
-
-        return $this;
-    }
-
-    /**
-     * Method to set the value of field company_id
-     *
-     * @param integer $company_id
-     * @return $this
-     */
-    public function setCompanyId(int $company_id): self
-    {
-        $this->company_id = $company_id;
 
         return $this;
     }
@@ -120,16 +100,6 @@ class FavoriteResume extends Model
     public function getUserId(): ?int
     {
         return (int)$this->user_id;
-    }
-
-    /**
-     * Returns the value of field company_id
-     *
-     * @return integer|null
-     */
-    public function getCompanyId(): ?int
-    {
-        return (int)$this->company_id;
     }
 
     /**

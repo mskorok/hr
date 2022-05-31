@@ -189,8 +189,8 @@ class RouteBootstrap implements BootstrapInterface
         $api->get('/favorite/remove/{user:[0-9]+}/{vacancy}', [$favoriteController, 'removeFavorite']);
         $api->get('/favorite/list/{page}', [$favoriteController, 'listFavorites']);
 
-        $api->get('/favorite-resume/add/{user:[0-9]+}/{resume:[0-9]+}', [$favoriteResumeController, 'addFavorite']);
-        $api->get('/favorite-resume/remove/{user:[0-9]+}/{resume:[0-9]+}', [$favoriteResumeController, 'removeFavorite']);
+        $api->get('/favorite-resume/add/{resume:[0-9]+}', [$favoriteResumeController, 'addFavorite']);
+        $api->get('/favorite-resume/remove/{resume:[0-9]+}', [$favoriteResumeController, 'removeFavorite']);
         $api->get('/favorite-resume/list/{page:[0-9]+}', [$favoriteResumeController, 'listFavorites']);
 
         $api->get('/home', [$homeController, 'indexAction']);

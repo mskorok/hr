@@ -4,14 +4,12 @@ declare(strict_types=1);
 namespace App\Controllers;
 
 use App\Constants\Limits;
-use App\Model\Companies;
 use App\Model\FavoriteResume;
 use App\Model\Resumes;
 use App\Model\Users;
-use App\User\Service;
 use Phalcon\Mvc\Model\Query\Builder;
-use Phalcon\Mvc\Model\Resultset\Simple;
 use Phalcon\Paginator\Factory;
+use PhalconApi\Exception;
 
 
 /**
@@ -27,74 +25,66 @@ class FavoriteResumeController extends ControllerBase
     ];
 
     /**
-     * @param $user
      * @param $resume
      * @return mixed
+     * @throws Exception
      */
-    public function addFavorite($user, $resume)
+    public function addFavorite($resume)
     {
-        $id = $user;
         /** @var Users $user */
-        $user = Users::find((int) $user)[0];
+        $user = $this->userService->getDetails();
         if (!$user) {
             return $this->createErrorResponse('User not found');
         }
-        /** @var Simple $companies */
-        $companies = $user->getCompanies();
-        $company = $companies[0];
-        if ($company instanceof Companies) {
-            $favorite = new FavoriteResume();
-            $favorite->setCompanyId((int) $company->getId());
-            $favorite->setResumeId((int) $resume);
-            $favorite->setUserId((int) $id);
-            if ($favorite->save()) {
-                return $this->createOkResponse();
-            }
 
-            return $this->createErrorResponse('Model not saved');
+        $favorite = new FavoriteResume();
+        $favorite->setResumeId((int) $resume);
+        $favorite->setUserId((int) $user->getId());
+        if ($favorite->save()) {
+            return $this->createOkResponse();
         }
-        return $this->createErrorResponse('Company not found');
+        return $this->createErrorResponse($favorite->getMessages());
     }
 
     /**
-     * @param $user
      * @param $resume
      * @return mixed
+     * @throws Exception
      */
-    public function removeFavorite($user, $resume)
+    public function removeFavorite($resume)
     {
-        $id = $user;
-        $user = Users::findFirst((int) $user);
+        /** @var Users $user */
+        $user = $this->userService->getDetails();
         if (!$user) {
             return $this->createErrorResponse('User not found');
         }
-        /** @var Simple $companies */
-        $companies = $user->getCompanies();
-        /** @var Companies $company */
-        $company = $companies[0];
-        if ($company instanceof Companies) {
-            $favorite = FavoriteResume::findFirst(['user_id' => $id, 'resume_id' => $resume, 'company_id' => $company->getId()]);
-            if ($favorite instanceof FavoriteResume) {
-                if ($favorite->delete()) {
-                    return $this->createOkResponse();
-                }
+        $favorite = FavoriteResume::findFirst([
+            'conditions' => ' user_id = :uid: AND resume_id = :rid: ',
+            'bind' => [
+                'uid' =>  $user->getId(),
+                'rid' => $resume,
+            ]
+        ]);
 
-                return $this->createErrorResponse('Model not deleted');
+        if ($favorite instanceof FavoriteResume) {
+            if ($favorite->delete()) {
+                return $this->createOkResponse();
             }
+
+            return $this->createErrorResponse($favorite->getMessages());
         }
 
-        return $this->createErrorResponse('Model not found user=' . $id . ' resume=' . $resume);
+        return $this->createErrorResponse('Model not found user=' . $user->getId() . ' resume=' . $resume);
     }
 
     /**
      * @param $page
      * @return mixed
+     * @throws \Exception
      */
     public function listFavorites($page)
     {
-        /** @var Service $userService */
-        $userService = $this->userService;
-        $id = $userService->getIdentity();
+        $id = $this->userService->getIdentity();
         $builder = new Builder();
         $builder->addFrom(Resumes::class);
         $builder->leftJoin(

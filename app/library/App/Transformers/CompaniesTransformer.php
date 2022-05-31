@@ -35,7 +35,6 @@ class CompaniesTransformer extends ModelTransformer
             'Type',
             'Images',
             'Invited',
-            'FavoriteResume',
             'Candidates',
             'Payments'
         ];
@@ -66,15 +65,6 @@ class CompaniesTransformer extends ModelTransformer
     public function includeInvited(Companies $model): Collection
     {
         return $this->collection($model->getInvited(), new InvitedTransformer());
-    }
-
-    /**
-     * @param Companies $model
-     * @return Collection
-     */
-    public function includeFavoriteResume(Companies $model): Collection
-    {
-        return $this->collection($model->getFavoriteResume(), new FavoriteResumeTransformer());
     }
 
     /**

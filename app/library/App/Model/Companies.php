@@ -20,7 +20,6 @@ use Phalcon\Validation\Validator\Email as EmailValidator;
  * @method Collection getCompanySubscription
  * @method Collection getCompanyManager
  * @method Countries getCountries
- * @method Collection getFavoriteResume
  * @method Collection getInvited
  * @method Collection getPayments
  * @method Collection getSubscriptions
@@ -486,7 +485,6 @@ class Companies extends DateTrackingModel
         $this->hasMany('id', Candidates::class, 'company_id', ['alias' => 'Candidates']);
         $this->hasMany('id', CompanySubscription::class, 'company_id', ['alias' => 'CompanySubscription']);
         $this->hasMany('id', CompanyManager::class, 'company_id', ['alias' => 'CompanyManager']);
-        $this->hasMany('id', FavoriteResume::class, 'company_id', ['alias' => 'FavoriteResume']);
         $this->hasMany('id', Invited::class, 'company_id', ['alias' => 'Invited']);
         $this->hasMany('id', Payments::class, 'company_id', ['alias' => 'Payments']);
         $this->belongsTo('country', Countries::class, 'id', ['alias' => 'Countries']);
