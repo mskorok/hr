@@ -20,6 +20,7 @@ class AclRoles
     public const PARTNER = 'partner';
     public const EXPERT = 'expert';
     public const AUTHOR = 'author';
+    public const TEACHER = 'teacher';
 
     public const ALL_ROLES = [
         self::UNAUTHORIZED,
@@ -44,6 +45,7 @@ class AclRoles
         self::PARTNER,
         self::EXPERT,
         self::AUTHOR,
+        self::TEACHER,
         self::COMPANY_ADMIN,
     ];
 
