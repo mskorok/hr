@@ -13,6 +13,7 @@ use App\Controllers\EducationController;
 use App\Controllers\FavoriteResumeController;
 use App\Controllers\FavoritesController;
 use App\Controllers\HomeController;
+use App\Controllers\InvitedController;
 use App\Controllers\ProfessionalExperienceController;
 use App\Controllers\ResumesController;
 use App\Controllers\UsersController;
@@ -95,6 +96,9 @@ class RouteBootstrap implements BootstrapInterface
         $favoriteController = new FavoritesController();
         $favoriteController->setDI($api->di);
 
+        $inviteController = new InvitedController();
+        $inviteController->setDI($api->di);
+
         $favoriteResumeController = new FavoriteResumeController();
         $favoriteResumeController->setDI($api->di);
 
@@ -118,74 +122,76 @@ class RouteBootstrap implements BootstrapInterface
 
         $api->get('/article-translated/{article}/{lang}', [$articlesTranslatedController, 'getTranslated']);
 
-        $api->get('/profile/show/{id}', [$userController, 'showProfile']);
+        $api->get('/profile/show/{id:[0-9]+}', [$userController, 'showProfile']);
         $api->get('/profile/create', [$userController, 'addProfile']);
         $api->post('/profile/create', [$userController, 'addProfile']);
-        $api->get('/profile/update/{id}', [$userController, 'updateProfile']);
-        $api->post('/profile/update/{id}', [$userController, 'updateProfile']);
-        $api->get('/profile/delete/{id}', [$userController, 'deleteProfile']);
+        $api->get('/profile/update/{id:[0-9]+}', [$userController, 'updateProfile']);
+        $api->post('/profile/update/{id:[0-9]+}', [$userController, 'updateProfile']);
+        $api->get('/profile/delete/{id:[0-9]+}', [$userController, 'deleteProfile']);
         $api->get('/login', [$userController, 'profileLogin']);
         $api->get('/password/new', [$userController, 'profileNewPassword']);
         $api->get('/password/recovery', [$userController, 'profileLoginRecovery']);
 
-        $api->get('/resume/show/{id}', [$resumeController, 'showResume']);
+        $api->get('/resume/show/{id:[0-9]+}', [$resumeController, 'showResume']);
         $api->get('/resume/create', [$resumeController, 'addResume']);
         $api->post('/resume/create', [$resumeController, 'addResume']);
-        $api->get('/resume/update/{id}', [$resumeController, 'updateResume']);
-        $api->post('/resume/update/{id}', [$resumeController, 'updateResume']);
-        $api->get('/resume/list/{page}', [$resumeController, 'listAllResumes']);
-        $api->get('/resume/invited/{page}', [$resumeController, 'listInvited']);
-        $api->get('/resume/user/list/{page}', [$resumeController, 'listUserResumes']);
-        $api->delete('/resume/delete/{id}', [$resumeController, 'deleteResume']);
+        $api->get('/resume/update/{id:[0-9]+}', [$resumeController, 'updateResume']);
+        $api->post('/resume/update/{id:[0-9]+}', [$resumeController, 'updateResume']);
+        $api->get('/resume/list/{page:[0-9]+}', [$resumeController, 'listAllResumes']);
+        $api->get('/resume/invited/{page:[0-9]+}', [$resumeController, 'listInvited']);
+        $api->get('/resume/user/list/{page:[0-9]+}', [$resumeController, 'listUserResumes']);
+        $api->delete('/resume/delete/{id:[0-9]+}', [$resumeController, 'deleteResume']);
         $api->get('/resume/search', [$resumeController, 'searchResume']);
-        $api->get('/resume/invite/{user}/{resume}', [$resumeController, 'invite']);
 
-        $api->get('/vacancy/show/{id}', [$vacancyController, 'showVacancy']);
+        $api->get('/resume/invite/{resume:[0-9]+}', [$inviteController, 'addInvited']);
+        $api->get('/resume/remove/invited/{resume:[0-9]+}', [$inviteController, 'removeInvited']);
+
+        $api->get('/vacancy/show/{id:[0-9]+}', [$vacancyController, 'showVacancy']);
         $api->get('/vacancy/create', [$vacancyController, 'addVacancy']);
         $api->post('/vacancy/create', [$vacancyController, 'addVacancy']);
-        $api->get('/vacancy/update/{id}', [$vacancyController, 'updateVacancy']);
-        $api->post('/vacancy/update/{id}', [$vacancyController, 'updateVacancy']);
-        $api->get('/vacancy/list/{page}', [$vacancyController, 'listAllVacancies']);
-        $api->get('/vacancy/applied/{page}', [$vacancyController, 'listApplied']);
-        $api->get('/vacancy/user/list/{page}', [$vacancyController, 'listUserVacancies']);
-        $api->delete('/vacancy/delete/{id}', [$vacancyController, 'deleteVacancy']);
+        $api->get('/vacancy/update/{id:[0-9]+}', [$vacancyController, 'updateVacancy']);
+        $api->post('/vacancy/update/{id:[0-9]+}', [$vacancyController, 'updateVacancy']);
+        $api->get('/vacancy/list/{page:[0-9]+}', [$vacancyController, 'listAllVacancies']);
+        $api->get('/vacancy/applied/{page:[0-9]+}', [$vacancyController, 'listApplied']);
+        $api->get('/vacancy/user/list/{page:[0-9]+}', [$vacancyController, 'listUserVacancies']);
+        $api->delete('/vacancy/delete/{id:[0-9]+}', [$vacancyController, 'deleteVacancy']);
         $api->get('/vacancy/search', [$vacancyController, 'searchVacancy']);
-        $api->get('/vacancy/apply/{user}/{vacancy}', [$vacancyController, 'apply']);
+        $api->get('/vacancy/apply/{user:[0-9]+}/{vacancy:[0-9]+}', [$vacancyController, 'apply']);
 
 
-        $api->get('/experience/show/{id}', [$experienceController, 'showExperience']);
+        $api->get('/experience/show/{id:[0-9]+}', [$experienceController, 'showExperience']);
         $api->get('/experience/create', [$experienceController, 'addExperience']);
         $api->post('/experience/create', [$experienceController, 'addExperience']);
-        $api->get('/experience/update/{id}', [$experienceController, 'updateExperience']);
-        $api->post('/experience/update/{id}', [$experienceController, 'updateExperience']);
+        $api->get('/experience/update/{id:[0-9]+}', [$experienceController, 'updateExperience']);
+        $api->post('/experience/update/{id:[0-9]+}', [$experienceController, 'updateExperience']);
         $api->get('/experience/user/list', [$experienceController, 'listUserExperiences']);
-        $api->delete('/experience/delete/{id}', [$experienceController, 'deleteExperience']);
+        $api->delete('/experience/delete/{id:[0-9]+}', [$experienceController, 'deleteExperience']);
 
 
-        $api->get('/education/show/{id}', [$educationController, 'showEducation']);
+        $api->get('/education/show/{id:[0-9]+}', [$educationController, 'showEducation']);
         $api->get('/education/create', [$educationController, 'addEducation']);
         $api->post('/education/create', [$educationController, 'addEducation']);
-        $api->get('/education/update/{id}', [$educationController, 'updateEducation']);
-        $api->post('/education/update/{id}', [$educationController, 'updateEducation']);
+        $api->get('/education/update/{id:[0-9]+}', [$educationController, 'updateEducation']);
+        $api->post('/education/update/{id:[0-9]+}', [$educationController, 'updateEducation']);
         $api->get('/education/user/list', [$educationController, 'listUserEducation']);
-        $api->delete('/education/delete/{id}', [$educationController, 'deleteEducation']);
+        $api->delete('/education/delete/{id:[0-9]+}', [$educationController, 'deleteEducation']);
 
-        $api->get('/company/show/{id}', [$companyController, 'showCompany']);
-        $api->get('/company/list/{page}', [$companyController, 'listUserCompanies']);
+        $api->get('/company/show/{id:[0-9]+}', [$companyController, 'showCompany']);
+        $api->get('/company/list/{page:[0-9]+}', [$companyController, 'listUserCompanies']);
         $api->get('/company/create', [$companyController, 'addCompany']);
         $api->post('/company/create', [$companyController, 'addCompany']);
-        $api->get('/company/update/{id}', [$companyController, 'updateCompany']);
-        $api->post('/company/update/{id}', [$companyController, 'updateCompany']);
-        $api->delete('/company/delete/{id}', [$companyController, 'deleteCompany']);
+        $api->get('/company/update/{id:[0-9]+}', [$companyController, 'updateCompany']);
+        $api->post('/company/update/{id:[0-9]+}', [$companyController, 'updateCompany']);
+        $api->delete('/company/delete/{id:[0-9]+}', [$companyController, 'deleteCompany']);
 
 
-        $api->get('/favorite/add/{user}/{vacancy}', [$favoriteController, 'addFavorite']);
-        $api->get('/favorite/remove/{user}/{vacancy}', [$favoriteController, 'removeFavorite']);
+        $api->get('/favorite/add/{user:[0-9]+}/{vacancy:[0-9]+}', [$favoriteController, 'addFavorite']);
+        $api->get('/favorite/remove/{user:[0-9]+}/{vacancy}', [$favoriteController, 'removeFavorite']);
         $api->get('/favorite/list/{page}', [$favoriteController, 'listFavorites']);
 
-        $api->get('/favorite-resume/add/{user}/{resume}', [$favoriteResumeController, 'addFavorite']);
-        $api->get('/favorite-resume/remove/{user}/{resume}', [$favoriteResumeController, 'removeFavorite']);
-        $api->get('/favorite-resume/list/{page}', [$favoriteResumeController, 'listFavorites']);
+        $api->get('/favorite-resume/add/{user:[0-9]+}/{resume:[0-9]+}', [$favoriteResumeController, 'addFavorite']);
+        $api->get('/favorite-resume/remove/{user:[0-9]+}/{resume:[0-9]+}', [$favoriteResumeController, 'removeFavorite']);
+        $api->get('/favorite-resume/list/{page:[0-9]+}', [$favoriteResumeController, 'listFavorites']);
 
         $api->get('/home', [$homeController, 'indexAction']);
 

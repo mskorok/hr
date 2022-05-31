@@ -349,7 +349,6 @@ class UsersController extends ControllerBase
 
     /**
      * Searches for users
-     * @throws ReflectionException
      */
     public function listAction()
     {
@@ -380,7 +379,6 @@ class UsersController extends ControllerBase
 
     /**
      * Displays the creation form
-     * @throws ReflectionException
      */
     public function newAction()
     {
@@ -390,7 +388,6 @@ class UsersController extends ControllerBase
     /**
      * @param $id
      * @return null
-     * @throws ReflectionException
      */
     public function editAction($id)
     {
@@ -1723,6 +1720,7 @@ class UsersController extends ControllerBase
     /**
      * @param $item
      * @return mixed
+     * @throws \Exception
      */
     protected function getFindResponse($item)
     {

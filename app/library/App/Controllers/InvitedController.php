@@ -5,14 +5,12 @@ namespace App\Controllers;
 
 use App\Constants\Limits;
 use App\Model\Companies;
-use App\Model\FavoriteResume;
 use App\Model\Invited;
 use App\Model\Resumes;
 use App\Model\Users;
-use App\User\Service;
 use Phalcon\Mvc\Model\Query\Builder;
-use Phalcon\Mvc\Model\Resultset\Simple;
 use Phalcon\Paginator\Factory;
+use PhalconApi\Exception;
 
 
 /**
@@ -28,74 +26,110 @@ class InvitedController extends ControllerBase
     ];
 
     /**
-     * @param $user
      * @param $resume
      * @return mixed
+     * @throws Exception
      */
-    public function addInvited($user, $resume)
+    public function addInvited($resume)
     {
-        $id = $user;
         /** @var Users $user */
-        $user = Users::find((int) $user)[0];
+        $user = $this->userService->getDetails();
         if (!$user) {
             return $this->createErrorResponse('User not found');
         }
-        /** @var Simple $companies */
-        $companies = $user->getCompanies();
-        $company = $companies[0];
-        if ($company instanceof Companies) {
-            $invited = new Invited();
-            $invited->setCompanyId((int) $company->getId());
-            $invited->setResumeId((int) $resume);
-            $invited->setUserId((int) $id);
-            if ($invited->save()) {
-                return $this->createOkResponse();
-            }
 
-            return $this->createErrorResponse('Model not saved');
+        $companies = $this->request->getQuery('companies', 'string');
+        if (!$companies) {
+            return $this->createErrorResponse('Companies ids empty');
         }
-        return $this->createErrorResponse('Company not found');
+        $companies = explode(',', $companies);
+        $userCompanies = $user->getCompanies();
+        $messages = [];
+
+        /** @var Companies $company */
+        foreach ($userCompanies as $company) {
+            if (in_array($company->getId(), $companies, false)) {
+                $invited = new Invited();
+                $invited->setCompanyId((int) $company->getId());
+                $invited->setResumeId((int) $resume);
+                $invited->setUserId((int) $user->getId());
+                if (!$invited->save()) {
+                    $messages[] = $invited->getMessages();
+                }
+            }
+        }
+
+        if (count($messages) === 0) {
+            return $this->createOkResponse();
+        }
+
+        $mes = implode(',', $messages);
+
+        return $this->createErrorResponse($mes);
     }
 
     /**
-     * @param $user
      * @param $resume
      * @return mixed
+     * @throws Exception
      */
-    public function removeInvited($user, $resume)
+    public function removeInvited($resume)
     {
-        $id = $user;
-        $user = Users::findFirst((int) $user);
+
+        /** @var Users $user */
+        $user = $this->userService->getDetails();
         if (!$user) {
             return $this->createErrorResponse('User not found');
         }
-        /** @var Simple $companies */
-        $companies = $user->getCompanies();
-        /** @var Companies $company */
-        $company = $companies[0];
-        if ($company instanceof Companies) {
-            $invited = Invited::findFirst(['user_id' => $id, 'resume_id' => $resume, 'company_id' => $company->getId()]);
-            if ($invited instanceof Invited) {
-                if ($invited->delete()) {
-                    return $this->createOkResponse();
-                }
 
-                return $this->createErrorResponse('Model not deleted');
+        $companies = $this->request->getQuery('companies', 'string');
+        if (!$companies) {
+            return $this->createErrorResponse('Companies ids empty');
+        }
+        $companies = explode(',', $companies);
+        $userCompanies = $user->getCompanies();
+        $messages = [];
+
+        /** @var Companies $company */
+        foreach ($userCompanies as $company) {
+            if (in_array($company->getId(), $companies, false)) {
+                $invited = Invited::findFirst([
+                    'conditions' => ' user_id = :uid: AND resume_id = :rid: AND company_id = :cid: ',
+                    'bind' => [
+                        'uid' =>  $user->getId(),
+                        'rid' => $resume,
+                        'cid' => $company->getId(),
+                    ]
+                ]);
+//                $messages[] = json_encode(['invited' => $invited, 'uid' => $user->getId(), 'rid' => $resume, 'cid' => $company->getId()]);
+                if ($invited instanceof Invited) {
+                    if (!$invited->delete()) {
+                        $messages[] = $invited->getMessages();
+                    }
+                } else {
+                    $messages[] = 'Invited id = ' . $resume . ' not found';
+                }
             }
         }
 
-        return $this->createErrorResponse('Model not found user=' . $id . ' resume=' . $resume);
+        if (count($messages) === 0) {
+            return $this->createOkResponse();
+        }
+
+        $mes = implode(',', $messages);
+
+        return $this->createErrorResponse($mes);
     }
 
     /**
      * @param $page
      * @return mixed
+     * @throws \Exception
      */
     public function listInvited($page)
     {
-        /** @var Service $userService */
-        $userService = $this->userService;
-        $id = $userService->getIdentity();
+        $id = $this->userService->getIdentity();
+
         $builder = new Builder();
         $builder->addFrom(Resumes::class);
         $builder->leftJoin(
