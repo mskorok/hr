@@ -101,7 +101,7 @@ class InvitedController extends ControllerBase
                         'cid' => $company->getId(),
                     ]
                 ]);
-//                $messages[] = json_encode(['invited' => $invited, 'uid' => $user->getId(), 'rid' => $resume, 'cid' => $company->getId()]);
+
                 if ($invited instanceof Invited) {
                     if (!$invited->delete()) {
                         $messages[] = $invited->getMessages();

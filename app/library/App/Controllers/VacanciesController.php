@@ -293,14 +293,19 @@ class VacanciesController extends ControllerBase
 
 
     /**
-     * @param $user
      * @param $vacancy
      * @return mixed
+     * @throws \PhalconApi\Exception
      */
-    public function apply($user, $vacancy)
+    public function apply($vacancy)
     {
+        /** @var Users $user */
+        $user = $this->userService->getDetails();
+        if (!$user) {
+            return $this->createErrorResponse('User not found');
+        }
         $applied = new Applied();
-        $applied->setUserId((int) $user);
+        $applied->setUserId((int) $user->getId());
         $applied->setVacancyId((int) $vacancy);
 
         if ($applied->save()) {

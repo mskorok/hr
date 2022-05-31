@@ -156,7 +156,7 @@ class RouteBootstrap implements BootstrapInterface
         $api->get('/vacancy/user/list/{page:[0-9]+}', [$vacancyController, 'listUserVacancies']);
         $api->delete('/vacancy/delete/{id:[0-9]+}', [$vacancyController, 'deleteVacancy']);
         $api->get('/vacancy/search', [$vacancyController, 'searchVacancy']);
-        $api->get('/vacancy/apply/{user:[0-9]+}/{vacancy:[0-9]+}', [$vacancyController, 'apply']);
+        $api->get('/vacancy/apply/{vacancy:[0-9]+}', [$vacancyController, 'apply']);
 
 
         $api->get('/experience/show/{id:[0-9]+}', [$experienceController, 'showExperience']);
@@ -185,9 +185,9 @@ class RouteBootstrap implements BootstrapInterface
         $api->delete('/company/delete/{id:[0-9]+}', [$companyController, 'deleteCompany']);
 
 
-        $api->get('/favorite/add/{user:[0-9]+}/{vacancy:[0-9]+}', [$favoriteController, 'addFavorite']);
-        $api->get('/favorite/remove/{user:[0-9]+}/{vacancy}', [$favoriteController, 'removeFavorite']);
-        $api->get('/favorite/list/{page}', [$favoriteController, 'listFavorites']);
+        $api->get('/favorite/add/{vacancy:[0-9]+}', [$favoriteController, 'addFavorite']);
+        $api->get('/favorite/remove/{vacancy:[0-9]+}', [$favoriteController, 'removeFavorite']);
+        $api->get('/favorite/list/{page:[0-9]+}', [$favoriteController, 'listFavorites']);
 
         $api->get('/favorite-resume/add/{resume:[0-9]+}', [$favoriteResumeController, 'addFavorite']);
         $api->get('/favorite-resume/remove/{resume:[0-9]+}', [$favoriteResumeController, 'removeFavorite']);

@@ -5,10 +5,12 @@ namespace App\Controllers;
 
 use App\Constants\Limits;
 use App\Model\Favorites;
+use App\Model\Users;
 use App\Model\Vacancies;
 use App\User\Service;
 use Phalcon\Mvc\Model\Query\Builder;
 use Phalcon\Paginator\Factory;
+use PhalconApi\Exception;
 
 
 /**
@@ -23,14 +25,19 @@ class FavoritesController extends ControllerBase
     ];
 
     /**
-     * @param $user
      * @param $vacancy
      * @return mixed
+     * @throws Exception
      */
-    public function addFavorite($user, $vacancy)
+    public function addFavorite($vacancy)
     {
+        /** @var Users $user */
+        $user = $this->userService->getDetails();
+        if (!$user) {
+            return $this->createErrorResponse('User not found');
+        }
         $favorite = new Favorites();
-        $favorite->setUserId((int) $user);
+        $favorite->setUserId((int) $user->getId());
         $favorite->setVacancyId((int) $vacancy);
 
         if ($favorite->save()) {
@@ -41,13 +48,26 @@ class FavoritesController extends ControllerBase
     }
 
     /**
-     * @param $user
      * @param $vacancy
      * @return mixed
+     * @throws Exception
      */
-    public function removeFavorite($user, $vacancy)
+    public function removeFavorite( $vacancy)
     {
-        $favorite = Favorites::findFirst(['user_id' => $user, 'vacancy_id' => $vacancy]);
+
+        /** @var Users $user */
+        $user = $this->userService->getDetails();
+        if (!$user) {
+            return $this->createErrorResponse('User not found');
+        }
+
+        $favorite = Favorites::findFirst([
+            'conditions' => ' user_id = :uid: AND vacancy_id = :vid: ',
+            'bind' => [
+                'uid' =>  $user->getId(),
+                'vid' => $vacancy,
+            ]
+        ]);
 
         if ($favorite instanceof Favorites) {
             if ($favorite->delete()) {
