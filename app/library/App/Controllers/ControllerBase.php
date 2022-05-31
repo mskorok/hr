@@ -20,7 +20,6 @@ use App\Model\Settings;
 use Phalcon\Mvc\Model;
 use Phalcon\Mvc\Model\Query\Builder as QueryBuilder;
 use Phalcon\Mvc\Model\ResultInterface;
-use Phalcon\Mvc\Model\Resultset;
 use Phalcon\Mvc\Model\Resultset\Simple;
 use Phalcon\Validation\Message\Group;
 use PhalconRest\Mvc\Controllers\CrudResourceController;

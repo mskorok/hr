@@ -5,6 +5,7 @@ namespace App\Bootstrap;
 
 use App\BootstrapInterface;
 use App\Collections\ExportCollection;
+use App\Model\Notifications;
 use App\Resources\ArticleImagesResource;
 use App\Resources\ArticlesResource;
 use App\Resources\ArticlesTranslatedResource;
@@ -26,6 +27,7 @@ use App\Resources\LanguagesResource;
 use App\Resources\MailResource;
 use App\Resources\MessagesResource;
 use App\Resources\MessengerCategoryResource;
+use App\Resources\NotificationsResource;
 use App\Resources\PartnerInfoResource;
 use App\Resources\PaymentsResource;
 use App\Resources\ProfessionalExperienceResource;
@@ -84,6 +86,7 @@ class CollectionBootstrap implements BootstrapInterface
                 ->resource(new MailResource($config->application->adapterPath . '/mail'))
                 ->resource(new MessagesResource($config->application->adapterPath . '/messages'))
                 ->resource(new MessengerCategoryResource($config->application->adapterPath . '/messenger_category'))
+                ->resource(new NotificationsResource($config->application->adapterPath . '/notifications'))
                 ->resource(new PartnerInfoResource($config->application->adapterPath . '/partners'))
                 ->resource(new PaymentsResource($config->application->adapterPath . '/payments'))
                 ->resource(new ProfessionalExperienceResource($config->application->adapterPath . '/experience'))

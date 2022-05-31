@@ -39,6 +39,7 @@ use Phalcon\Validation\Validator\Email as EmailValidator;
  * @method Collection getPayments
  * @method Simple getSubscriptions
  * @method Simple getAppliedVacancies
+ * @method Simple getNotifications
  */
 class Users extends DateTrackingModel
 {
@@ -855,6 +856,7 @@ class Users extends DateTrackingModel
         $this->hasMany('id', Invited::class, 'user_id', ['alias' => 'Invited']);
         $this->hasMany('id', Messages::class, 'recipient', ['alias' => 'Recipients']);
         $this->hasMany('id', Messages::class, 'sender', ['alias' => 'Senders']);
+        $this->hasMany('id', Notifications::class, 'creator_id', ['alias' => 'Notifications']);
         $this->hasMany('id', Payments::class, 'user_id', ['alias' => 'Payments']);
         $this->hasMany('id', ProfessionalExperience::class, 'user_id', ['alias' => 'ProfessionalExperiences']);
         $this->hasMany('id', Resumes::class, 'user_id', ['alias' => 'Resumes']);

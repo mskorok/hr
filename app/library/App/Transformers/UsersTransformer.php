@@ -26,29 +26,30 @@ class UsersTransformer extends ModelTransformer
         $this->modelClass = Users::class;
 
         $this->availableIncludes = [
+            'Applied',
+            'AppliedVacancies',
             'Comments',
             'Companies',
             'CompanyManager',
+            'Countries',
             'Education',
             'ExpertInfo',
-            'FavoriteVacancies',
-            'Favorites',
             'FavoriteResume',
+            'FavoriteResumes',
+            'Favorites',
+            'FavoriteVacancies',
+            'Images',
+            'Invitations',
+            'Invited',
+            'Notifications',
+            'Payments',
             'ProfessionalExperiences',
             'Recipients',
             'Resumes',
             'Senders',
-            'UserSubscription',
-            'Images',
-            'Payments',
             'Subscriptions',
             'Teachers',
-            'Countries',
-            'Applied',
-            'Invitations',
-            'Invited',
-            'AppliedVacancies',
-            'FavoriteResumes'
+            'UserSubscription',
         ];
     }
 
@@ -158,6 +159,15 @@ class UsersTransformer extends ModelTransformer
     public function includeInvited(Users $model): Collection
     {
         return $this->collection($model->getInvited(), new InvitedTransformer());
+    }
+
+    /**
+     * @param Users $model
+     * @return Collection
+     */
+    public function includeNotifications(Users $model): Collection
+    {
+        return $this->collection($model->getNotifications(), new NotificationsTransformer());
     }
 
     /**
