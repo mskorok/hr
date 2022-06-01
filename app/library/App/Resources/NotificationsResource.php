@@ -55,6 +55,10 @@ class NotificationsResource extends ApiResource
                 ApiEndpoint::remove()
                     ->allow([AclRoles::ADMIN, AclRoles::SUPERADMIN])
             )
+            ->endpoint(
+                ApiEndpoint::get('/collection', 'getNotifications')
+                    ->allow(AclRoles::AUTHORIZED)
+            )
         ;
     }
 }
