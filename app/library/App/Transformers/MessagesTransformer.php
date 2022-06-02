@@ -27,9 +27,9 @@ class MessagesTransformer extends ModelTransformer
 
     /**
      * @param Messages $model
-     * @return Collection
+     * @return Collection|null
      */
-    public function includeChildren(Messages $model): Collection
+    public function includeChildren(Messages $model): ?Collection
     {
         /** @var Simple $collection */
         $collection = $model->getChildren();
@@ -42,9 +42,9 @@ class MessagesTransformer extends ModelTransformer
 
     /**
      * @param Messages $model
-     * @return Item
+     * @return Item|null
      */
-    public function includeParentMessage(Messages $model): Item
+    public function includeParentMessage(Messages $model): ?Item
     {
         $parent = $model->getParentMessage();
         if (null !== $parent) {
@@ -54,7 +54,7 @@ class MessagesTransformer extends ModelTransformer
     }
 
     /**
-     * @param $model
+     * @param Messages $model
      * @return Item
      */
     public function includeReceiver(Messages $model): Item
@@ -63,7 +63,7 @@ class MessagesTransformer extends ModelTransformer
     }
 
     /**
-     * @param $model
+     * @param Messages $model
      * @return Item
      */
     public function includeAddresser(Messages $model): Item

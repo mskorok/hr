@@ -394,8 +394,8 @@ class Messages extends Model
         $this->hasMany('id', __CLASS__, 'parent', ['alias' => 'Children']);
         $this->belongsTo('category', MessengerCategory::class, 'id', ['alias' => 'MessengerCategory']);
         $this->belongsTo('parent', __CLASS__, 'id', ['alias' => 'ParentMessage']);
-        $this->belongsTo('recipient', Users::class, 'id', ['alias' => 'Users']);
-        $this->belongsTo('sender', Users::class, 'id', ['alias' => 'Users']);
+        $this->belongsTo('recipient', Users::class, 'id', ['alias' => 'Receiver']);
+        $this->belongsTo('sender', Users::class, 'id', ['alias' => 'Addresser']);
     }
 
     /**
