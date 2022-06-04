@@ -12,6 +12,7 @@ namespace App\Traits;
 use App\Auth\Manager;
 use App\Constants\AclRoles;
 use App\Constants\Message as Status;
+use App\Constants\Notification;
 use App\Model\Messages;
 use App\Model\Users;
 use App\Transformers\MessagesTransformer;
@@ -67,7 +68,7 @@ trait Messenger
         }
         $allowed = false;
         foreach ($users['users'] as $user) {
-            if ($user['id'] === (int) $recipient) {
+            if ($user['id'] === (int)$recipient) {
                 $allowed = true;
             }
         }
@@ -134,14 +135,14 @@ trait Messenger
     }
 
     /**
-     * @param $role
-     * @param $resourceKey
+     * @param mixed $role
+     * @param string $resourceKey
      *
      * @return mixed
      * @throws \RuntimeException
      * @throws Exception
      */
-    public function getMessages($role = AclRoles::ALL_AUTHORIZED, $resourceKey = 'messages')
+    public function getMessages($role = AclRoles::ALL_AUTHORIZED, string $resourceKey = 'messages')
     {
         /** @var \PhalconApi\Http\Request $req */
         $req = $this->request;
@@ -243,13 +244,34 @@ trait Messenger
 
         /** @var Messages $message */
         foreach ($messages as $message) {
-            $children = $message->getChildren();
-            $result[$message->getCategories()][] = [
-                'message' => $message,
-                'children' => $children
-            ];
+            if (in_array($user->getRole(), AclRoles::ADMIN_ROLES, true)) {
+                $result[$message->getCategories()][] = $this->getParentResult($message);
+            } elseif (
+                $user->getRole() === AclRoles::MANAGER
+                && in_array($message->getCategories(), Notification::MANAGER_CATEGORIES, true)
+            ) {
+                $result[$message->getCategories()][] = $this->getParentResult($message);
+            } elseif (
+                $user->getRole() === AclRoles::APPLICANT
+                && in_array($message->getCategories(), Notification::APPLICANT_CATEGORIES, true)
+            ) {
+                $result[$message->getCategories()][] = $this->getParentResult($message);
+            }
+
         }
         return $this->createArrayResponse($result, 'data');
+    }
+
+    /**
+     * @param Messages $message
+     * @return array
+     */
+    protected function getParentResult(Messages $message): array
+    {
+        return [
+            'message' => $message,
+            'children' => $message->getChildren()
+        ];
     }
 
     /**
@@ -271,7 +293,7 @@ trait Messenger
             throw new \RuntimeException('User not authorized');
         }
         if ($recipientId) {
-            $params['recipient'] = (int) $recipientId;
+            $params['recipient'] = (int)$recipientId;
         }
 
         $params['sender'] = $session->getIdentity();
@@ -333,7 +355,7 @@ trait Messenger
         if (!$session) {
             throw new \RuntimeException('User not authorized');
         }
-        $message = Messages::findFirst((int) $id);
+        $message = Messages::findFirst((int)$id);
         if (!($message instanceof Messages)) {
             throw new \RuntimeException('Message not found');
         }
@@ -369,7 +391,7 @@ trait Messenger
         if (!$session) {
             throw new \RuntimeException('User not authorized');
         }
-        $message = Messages::findFirst((int) $id);
+        $message = Messages::findFirst((int)$id);
         $senderRoles = [
             AclRoles::SUPERADMIN,
             AclRoles::ADMIN,
@@ -406,7 +428,7 @@ trait Messenger
         if (!$session) {
             throw new \RuntimeException('User not authorized');
         }
-        $message = Messages::findFirst((int) $id);
+        $message = Messages::findFirst((int)$id);
         $senderRoles = [
             AclRoles::SUPERADMIN,
             AclRoles::ADMIN,
@@ -476,7 +498,7 @@ trait Messenger
         if ($identity !== $message->getRecipient()
             && $identity !== $message->getSender()
             && !\in_array($role, [AclRoles::ADMIN, AclRoles::SUPERADMIN], true)
-            ) {
+        ) {
             throw new \RuntimeException('You are not allowed for this request');
         }
     }
