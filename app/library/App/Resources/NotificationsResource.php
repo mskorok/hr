@@ -59,6 +59,10 @@ class NotificationsResource extends ApiResource
                 ApiEndpoint::get('/collection', 'getNotifications')
                     ->allow(AclRoles::AUTHORIZED)
             )
+            ->endpoint(
+                ApiEndpoint::post('/create', 'createNotification')
+                    ->allow([AclRoles::ADMIN, AclRoles::SUPERADMIN])
+            )
         ;
     }
 }

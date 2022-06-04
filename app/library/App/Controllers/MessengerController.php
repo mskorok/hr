@@ -30,6 +30,8 @@ class MessengerController extends ControllerBase
         if (!$this->isEmployer($id)) {
             return $this->createErrorResponse('Recipient is not Employer');
         }
+
+        $this->sendMessage($id);
         return $this->createOkResponse();
     }
 
@@ -54,9 +56,21 @@ class MessengerController extends ControllerBase
         if (!$this->isApplicant($id)) {
             return $this->createErrorResponse('Recipient is not Applicant');
         }
-        $this->sendMessage($id);
-        return $this->createOkResponse();
+        return $this->sendMessage($id);
     }
+    /**
+     * @param $id
+     * @return mixed
+     * @throws \RuntimeException
+     */
+    public function sendMessagesToSupport($id)
+    {
+        if (!$this->isSupport($id)) {
+            return $this->createErrorResponse('Recipient is not Applicant');
+        }
+        return $this->sendMessage($id);
+    }
+
 
     /**
      * @return mixed
@@ -65,7 +79,6 @@ class MessengerController extends ControllerBase
     public function sendMessagesToApplicants()
     {
         $recipients = $this->_getApplicant();
-        $this->sendMessages($recipients);
-        return $this->createOkResponse();
+        return $this->sendMessages($recipients);
     }
 }

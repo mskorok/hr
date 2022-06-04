@@ -23,7 +23,7 @@ class MessagesController extends ControllerBase
     use RenderView, RelatedSearch;
 
     public static $availableIncludes = [
-        'Receiver', 'Addresser', 'MessengerCategory', 'Children', 'ParentMessage'
+        'Receiver', 'Addresser', 'Children', 'ParentMessage'
     ];
 
     public static $encodedFields = [
@@ -176,15 +176,18 @@ class MessagesController extends ControllerBase
     /**
      * @param Model $item
      * @param $data
+     * @return Messages|void
      */
     protected function beforeAssignData(Model $item, $data)
     {
         /** @var Messages $item */
         if ($item->getId()) {
-            $item->beforeUpdate();
+            $res = $item->beforeUpdate();
         } else {
-            $item->beforeCreate();
+            $res =$item->beforeCreate();
         }
+
+        return $res;
     }
 
     /**

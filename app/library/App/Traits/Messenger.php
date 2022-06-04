@@ -220,6 +220,39 @@ trait Messenger
     }
 
     /**
+     * @return mixed
+     * @throws Exception
+     */
+    public function getActiveParentMessages()
+    {
+        /** @var Users $user */
+        $user = $this->userService->getDetails();
+        if (!$user) {
+            return $this->createErrorResponse('User not found');
+        }
+
+
+        $query = new Builder();
+        $query->addFrom(Messages::class);
+        $query->where('[' . Messages::class . '].[recipient] = :id:', ['id' => $user->getId()]);
+        $query->andWhere('[' . Messages::class . '].[parent] = :parentId:', ['parentId' => null]);
+        $query->limit(50);
+        $query->orderBy('creationDate DESC');
+        $messages = $query->getQuery()->execute();
+        $result = [];
+
+        /** @var Messages $message */
+        foreach ($messages as $message) {
+            $children = $message->getChildren();
+            $result[$message->getCategories()][] = [
+                'message' => $message,
+                'children' => $children
+            ];
+        }
+        return $this->createArrayResponse($result, 'data');
+    }
+
+    /**
      * @param null $recipientId
      * @return mixed
      * @throws \RuntimeException

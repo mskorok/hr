@@ -12,6 +12,7 @@ namespace App\Controllers;
 use App\Model\Notifications;
 use App\Model\Users;
 use PhalconApi\Exception;
+use Phalcon\Http\Request;
 
 /**
  * Class NotificationsController
@@ -40,11 +41,36 @@ class NotificationsController  extends ControllerBase
             'bind' => [
                 'cat' =>  $category,
                 'date' =>  $date,
-            ]
+            ],
+            'limit' => 50,
+            'order' => 'creationDate DESC'
         ]);
 
         return $this->createArrayResponse($notifications, 'data');
 
+    }
+
+    /**
+     * @return mixed
+     * @throws Exception
+     */
+    public function createNotification()
+    {
+        /** @var Users $user */
+        $user = $this->userService->getDetails();
+        if (!$user) {
+            return $this->createErrorResponse('User not found');
+        }
+
+        $request = $this->request;
+        $params = $request->getPost();
+        $notification = new Notifications();
+        $params['creator_id'] = $user->getId();
+        if ($notification->save($params)) {
+            return  $this->createOkResponse();
+        }
+
+        return $this->createErrorResponse(implode(',', $notification->getMessages()));
     }
 
 }

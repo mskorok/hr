@@ -26,7 +26,6 @@ use App\Resources\ImagesResource;
 use App\Resources\LanguagesResource;
 use App\Resources\MailResource;
 use App\Resources\MessagesResource;
-use App\Resources\MessengerCategoryResource;
 use App\Resources\NotificationsResource;
 use App\Resources\PartnerInfoResource;
 use App\Resources\PaymentsResource;
@@ -85,7 +84,6 @@ class CollectionBootstrap implements BootstrapInterface
                 ->resource(new LanguagesResource($config->application->adapterPath . '/languages'))
                 ->resource(new MailResource($config->application->adapterPath . '/mail'))
                 ->resource(new MessagesResource($config->application->adapterPath . '/messages'))
-                ->resource(new MessengerCategoryResource($config->application->adapterPath . '/messenger_category'))
                 ->resource(new NotificationsResource($config->application->adapterPath . '/notifications'))
                 ->resource(new PartnerInfoResource($config->application->adapterPath . '/partners'))
                 ->resource(new PaymentsResource($config->application->adapterPath . '/payments'))

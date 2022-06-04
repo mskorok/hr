@@ -15,7 +15,6 @@ use Phalcon\Mvc\Model;
  * @date 2019-01-27, 13:00:14
  * @method Users getReceiver
  * @method Users getAddresser
- * @method MessengerCategory getMessengerCategory
  * @method Collection getChildren
  * @method Messages getParentMessage
  */
@@ -68,10 +67,10 @@ class Messages extends Model
 
     /**
      *
-     * @var integer
-     * @Column(type="integer", length=9, nullable=false)
+     * @var string
+     * @Column(type="string", nullable=false)
      */
-    protected $category;
+    protected $categories;
 
     /**
      *
@@ -187,14 +186,14 @@ class Messages extends Model
     }
 
     /**
-     * Method to set the value of field category
+     * Method to set the value of field categories
      *
-     * @param integer $category
+     * @param string $categories
      * @return $this
      */
-    public function setCategory(int $category): self
+    public function setCategories(string $categories): self
     {
-        $this->category = $category;
+        $this->categories = $categories;
 
         return $this;
     }
@@ -325,13 +324,13 @@ class Messages extends Model
     }
 
     /**
-     * Returns the value of field category
+     * Returns the value of field categories
      *
-     * @return integer
+     * @return string
      */
-    public function getCategory(): ?int
+    public function getCategories(): string
     {
-        return (int)$this->category;
+        return $this->categories;
     }
 
     /**
@@ -392,7 +391,6 @@ class Messages extends Model
         $this->setSchema($this->getDI()->get(Services::CONFIG)->database->dbname);
         $this->setSource('messages');
         $this->hasMany('id', __CLASS__, 'parent', ['alias' => 'Children']);
-        $this->belongsTo('category', MessengerCategory::class, 'id', ['alias' => 'MessengerCategory']);
         $this->belongsTo('parent', __CLASS__, 'id', ['alias' => 'ParentMessage']);
         $this->belongsTo('recipient', Users::class, 'id', ['alias' => 'Receiver']);
         $this->belongsTo('sender', Users::class, 'id', ['alias' => 'Addresser']);
@@ -461,7 +459,7 @@ class Messages extends Model
             'recipient' => 'recipient',
             'title' => 'title',
             'content' => 'content',
-            'category' => 'category',
+            'categories' => 'categories',
             'sendMethod' => 'sendMethod',
             'status' => 'status',
             'supportStatus' => 'supportStatus',

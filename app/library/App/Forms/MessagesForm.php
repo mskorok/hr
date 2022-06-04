@@ -10,7 +10,6 @@ declare(strict_types=1);
 namespace App\Forms;
 
 use App\Model\Messages;
-use App\Model\MessengerCategory;
 use App\Model\Users;
 use Phalcon\Filter;
 use Phalcon\Forms\Element\Date;
@@ -178,21 +177,6 @@ class MessagesForm extends BaseForm
                 return (new \DateTime($date))->format('Y-m-d');
             });
 
-            $category =  new Select(
-                'category',
-                MessengerCategory::find(),
-                [
-                    'using' => [
-                        'id',
-                        'name'
-                    ]
-                ]
-            );
-            $category->setLabel('Category');
-            $category->setAttribute('class', 'form-control');
-
-            $this->add($category);
-
             $sendMethod =  new Select(
                 'sendMethod',
                 [
@@ -325,20 +309,6 @@ class MessagesForm extends BaseForm
             $content->setLabel('Content');
 
             $this->add($content);
-
-            $category =  new Select(
-                'category',
-                MessengerCategory::find(),
-                [
-                    'using' => [
-                        'id',
-                        'name'
-                    ]
-                ]
-            );
-            $category->setLabel('Category');
-            $category->setAttribute('class', 'form-control');
-            $this->add($category);
 
             $supportStatus =  new Select(
                 'supportStatus',

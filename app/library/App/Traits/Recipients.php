@@ -181,6 +181,27 @@ trait Recipients
         return $users->count() > 0;
     }
 
+
+    /**
+     * @param $id
+     * @return bool
+     */
+    protected function isSupport($id): bool
+    {
+        $resource = new UsersResource('/users');
+        /** @var PhqlQueryParser $parser */
+        $parser = $this->phqlQueryParser;
+        /** @var Builder $query */
+        $query = $parser->fromQuery($this->query, $resource);
+        $query->inWhere('[' . Users::class . '].[role]', AclRoles::ADMIN_ROLES);
+        $query->andWhere('[' . Users::class . '].[id]  = :id:', ['id' => (int) $id]);
+
+        $this->addLimit($query);
+        /** @var Simple $users */
+        $users = $query->getQuery()->execute();
+        return $users->count() > 0;
+    }
+
     /**
      * @param Builder $query
      * @return mixed

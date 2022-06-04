@@ -21,7 +21,7 @@ class MessagesTransformer extends ModelTransformer
         $this->modelClass = Messages::class;
 
         $this->availableIncludes = [
-            'Receiver', 'Addresser', 'MessengerCategory', 'Children', 'ParentMessage'
+            'Receiver', 'Addresser',  'Children', 'ParentMessage'
         ];
     }
 
@@ -69,14 +69,5 @@ class MessagesTransformer extends ModelTransformer
     public function includeAddresser(Messages $model): Item
     {
         return $this->item($model->getAddresser(), new UsersTransformer());
-    }
-
-    /**
-     * @param $model
-     * @return Item
-     */
-    public function includeMessengerCategory(Messages $model): Item
-    {
-        return $this->item($model->getMessengerCategory(), new MessengerCategoryTransformer());
     }
 }
