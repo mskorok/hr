@@ -11,6 +11,7 @@ namespace App\Traits;
 
 use App\Auth\Manager;
 use App\Constants\AclRoles;
+use App\Constants\Message;
 use App\Constants\Message as Status;
 use App\Constants\Notification;
 use App\Model\Messages;
@@ -248,12 +249,12 @@ trait Messenger
                 $result[$message->getCategories()][] = $this->getParentResult($message);
             } elseif (
                 $user->getRole() === AclRoles::MANAGER
-                && in_array($message->getCategories(), Notification::MANAGER_CATEGORIES, true)
+                && in_array($message->getCategories(), Message::MANAGER_CATEGORIES, true)
             ) {
                 $result[$message->getCategories()][] = $this->getParentResult($message);
             } elseif (
                 $user->getRole() === AclRoles::APPLICANT
-                && in_array($message->getCategories(), Notification::APPLICANT_CATEGORIES, true)
+                && in_array($message->getCategories(), Message::APPLICANT_CATEGORIES, true)
             ) {
                 $result[$message->getCategories()][] = $this->getParentResult($message);
             }

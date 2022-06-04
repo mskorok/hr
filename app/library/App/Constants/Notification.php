@@ -9,22 +9,13 @@ namespace App\Constants;
  */
 class Notification
 {
+    public const ADMIN = 'admin';
     public const APPLICANT   = 'applicant';
-    public const APPLIED     = 'applied';
-    public const GENERAL     = 'general';
-    public const INVITATIONS = 'invitations';
-    public const INVITED     = 'invited';
-    public const SUPERADMIN  = 'superadmin';
-    public const SUPPORT     = 'support';
+    public const MANAGER = 'manager';
 
-
-    public const APPLICANT_CATEGORIES = [
+    public const CATEGORIES = [
+        self::ADMIN,
         self::APPLICANT,
-        self::INVITED
-    ];
-
-    public const MANAGER_CATEGORIES = [
-        self::APPLIED,
-        self::INVITATIONS
+        self::MANAGER
     ];
 }

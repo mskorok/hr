@@ -9,10 +9,10 @@ declare(strict_types=1);
 
 namespace App\Controllers;
 
+use App\Constants\Notification;
 use App\Model\Notifications;
 use App\Model\Users;
 use PhalconApi\Exception;
-use Phalcon\Http\Request;
 
 /**
  * Class NotificationsController
@@ -62,8 +62,35 @@ class NotificationsController  extends ControllerBase
             return $this->createErrorResponse('User not found');
         }
 
-        $request = $this->request;
-        $params = $request->getPost();
+        $params = $this->request->getJsonRawBody();
+
+        $params = json_decode(json_encode($params), true);
+
+        if (isset($params['category'])) {
+            $categories = explode(',', $params['category']);
+
+            if (count($categories) > 0) {
+                $messages = [];
+                foreach ($categories as $category) {
+                    $notification = new Notifications();
+                    $params['creator_id'] = $user->getId();
+                    if (!in_array($category, Notification::CATEGORIES, true)) {
+                        $messages[] = $category . ' not in category list';
+                        continue;
+                    }
+                    $params['category'] = $category;
+                    if (!$notification->save($params)) {
+                        $messages[] = implode(',', $notification->getMessages());
+                    }
+                }
+
+                if (count($messages) > 0) {
+                    return $this->createErrorResponse(implode(',', $messages));
+                }
+
+                return  $this->createOkResponse();
+            }
+        }
         $notification = new Notifications();
         $params['creator_id'] = $user->getId();
         if ($notification->save($params)) {

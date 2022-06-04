@@ -42,6 +42,25 @@ class Message
     public const SUPPORT_STATUS_PROGRESS = 'progress';
     public const SUPPORT_STATUS_CLOSED = 'closed';
 
+    public const APPLICANT   = 'applicant';
+    public const APPLIED     = 'applied';
+    public const GENERAL     = 'general';
+    public const INVITATIONS = 'invitations';
+    public const INVITED     = 'invited';
+    public const SUPERADMIN  = 'superadmin';
+    public const SUPPORT     = 'support';
+
+
+    public const APPLICANT_CATEGORIES = [
+        self::APPLICANT,
+        self::INVITED
+    ];
+
+    public const MANAGER_CATEGORIES = [
+        self::APPLICANT_CATEGORIES,
+        self::INVITATIONS
+    ];
+
     public const ALL_MESSAGES = [
         self::THANK_YOU,
         self::FIRST_BOOKING,
