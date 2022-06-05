@@ -54,17 +54,22 @@ class MessagesRouteBootstrap implements BootstrapInterface
             [$messengerController, 'getActiveParentMessages']
         );
 
-        $api->get(
+        $api->post(
+            '/messages/send/{id}',
+            [$messengerController, 'sendMessage']
+        );
+
+        $api->post(
             '/messages/employer/send/{id}',
             [$messengerController, 'sendMessagesToEmployer']
         );
 
-        $api->get(
+        $api->post(
             '/messages/employers/send',
             [$messengerController, 'sendMessagesToEmployers']
         );
 
-        $api->get(
+        $api->post(
             '/messages/support/send/{id}',
             [$messengerController, 'sendMessagesToSupport']
         );
@@ -74,7 +79,7 @@ class MessagesRouteBootstrap implements BootstrapInterface
             [$messengerController, 'sendMessagesToApplicant']
         );
 
-        $api->get(
+        $api->post(
             '/messages/applicants/send',
             [$messengerController, 'sendMessagesToApplicants']
         );

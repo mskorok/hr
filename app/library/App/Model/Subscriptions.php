@@ -335,21 +335,41 @@ class Subscriptions extends Model
     /**
      * Returns the value of field company
      *
-     * @return boolean
+     * @return integer|null
      */
-    public function isCompany(): bool
+    public function isCompany(): ?int
     {
-        return (bool) $this->is_company;
+        return (int) $this->is_company;
     }
 
     /**
      * Returns the value of field user
      *
-     * @return boolean
+     * @return integer|null
      */
-    public function isUser(): bool
+    public function isUser(): ?int
     {
-        return (bool) $this->is_user;
+        return (int) $this->is_user;
+    }
+
+    /**
+     * Returns the value of field company
+     *
+     * @return integer|null
+     */
+    public function getCompany(): ?int
+    {
+        return (int) $this->is_company;
+    }
+
+    /**
+     * Returns the value of field user
+     *
+     * @return integer|null
+     */
+    public function getUser(): ?int
+    {
+        return (int) $this->is_user;
     }
 
     /**

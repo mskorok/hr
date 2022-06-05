@@ -116,23 +116,20 @@ class MessagesController extends ControllerBase
 
         $role = $this->userService->getRole();
 
-        if (\in_array($role, [AclRoles::SUPERADMIN, AclRoles::ADMIN], true)) {
-            //
-        } elseif ($role === AclRoles::UNAUTHORIZED) {
-            $query->andWhere('0');
-        } else {
-            $id = null;
-            $session = $this->authManager->getSession();
-            if ($session instanceof Session) {
-                $id = $session->getIdentity();
-            }
-            if ($id) {
-                $query->andWhere(function (QueryBuilder $query) use ($id) {
-                    $query->andWhere('sender = :ids:', ['ids' => $id]);
-                    $query->orWhere('recipient = :idr:', ['idr' => $id]);
-                });
-            } else {
+        if (!\in_array($role, [AclRoles::SUPERADMIN, AclRoles::ADMIN], true)) {
+            if ($role === AclRoles::UNAUTHORIZED) {
                 $query->andWhere('0');
+            } else {
+                $id = null;
+                $session = $this->authManager->getSession();
+                if ($session instanceof Session) {
+                    $id = $session->getIdentity();
+                }
+                if ($id) {
+                    $query->andWhere(' sender = :id: OR  recipient = :id: ', ['id' => $id]);
+                } else {
+                    $query->andWhere('0');
+                }
             }
         }
     }

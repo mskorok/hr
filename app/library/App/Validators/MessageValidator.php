@@ -26,18 +26,7 @@ class MessageValidator extends Validation
     {
         $this->add(
             [
-                'status'
-            ],
-            new Alpha(
-                [
-                    'message' => ':field must contain only alpha characters'
-                ]
-            )
-        );
-        $this->add(
-            [
-                'title',
-                'sendMethod'
+                'title'
             ],
             new StringLength(
                 [
@@ -52,8 +41,7 @@ class MessageValidator extends Validation
         $this->add(
             [
                 'sender',
-                'recipient',
-                'category'
+                'recipient'
 
             ],
             new Digit(
@@ -65,16 +53,10 @@ class MessageValidator extends Validation
 
         $this->add(
             [
-                'status',
-                'sendMethod',
                 'sender',
                 'recipient',
-                'category',
                 'title',
                 'content',
-                'sentDate'
-
-
             ],
             new PresenceOf(
                 [

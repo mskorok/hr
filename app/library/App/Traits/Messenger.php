@@ -13,7 +13,6 @@ use App\Auth\Manager;
 use App\Constants\AclRoles;
 use App\Constants\Message;
 use App\Constants\Message as Status;
-use App\Constants\Notification;
 use App\Model\Messages;
 use App\Model\Users;
 use App\Transformers\MessagesTransformer;
@@ -26,6 +25,7 @@ use Phalcon\Mvc\Model\Resultset\Simple;
 use Phalcon\Validation\Message\Group;
 use PhalconApi\Auth\Session;
 use PhalconApi\Exception;
+use RuntimeException;
 
 /**
  * Trait Messenger
@@ -82,7 +82,7 @@ trait Messenger
     /**
      * @param Simple|ArrayObject $recipients
      * @return array
-     * @throws \RuntimeException
+     * @throws RuntimeException
      */
     protected function sendMessages($recipients): array
     {
@@ -93,7 +93,7 @@ trait Messenger
         $authManager = $this->authManager;
         $session = $authManager->getSession();
         if (!$session) {
-            throw new \RuntimeException('User not authorized');
+            throw new RuntimeException('User not authorized');
         }
         $errors = [];
         /** @var Users $recipient */
@@ -140,14 +140,12 @@ trait Messenger
      * @param string $resourceKey
      *
      * @return mixed
-     * @throws \RuntimeException
+     * @throws RuntimeException
      * @throws Exception
      */
     public function getMessages($role = AclRoles::ALL_AUTHORIZED, string $resourceKey = 'messages')
     {
-        /** @var \PhalconApi\Http\Request $req */
-        $req = $this->request;
-        $read = $req->get('read');
+        $read = $this->request->get('read');
         /** @var Manager $authManager */
         $authManager = $this->authManager;
         $session = $authManager->getSession();
@@ -155,7 +153,7 @@ trait Messenger
         $userService = $this->userService;
         $senderRole = $userService->getRole();
         if (!$session) {
-            throw new \RuntimeException('User not authorized');
+            throw new RuntimeException('User not authorized');
         }
         $id = $session->getIdentity();
         $query = new Builder();
@@ -195,18 +193,18 @@ trait Messenger
      * @param $resourceKey
      * @param Simple|ArrayObject $collection
      * @return mixed
-     * @throws \RuntimeException
+     * @throws RuntimeException
      */
     public function getActiveMessages($role, $resourceKey, $collection)
     {
         if (\is_array($role)) {
-            throw new \RuntimeException('Role is not string');
+            throw new RuntimeException('Role is not string');
         }
         /** @var Manager $authManager */
         $authManager = $this->authManager;
         $session = $authManager->getSession();
         if (!$session) {
-            throw new \RuntimeException('User not authorized');
+            throw new RuntimeException('User not authorized');
         }
         $ids = [];
         /** @var Users $item */
@@ -233,13 +231,18 @@ trait Messenger
             return $this->createErrorResponse('User not found');
         }
 
+        $id = $user->getId();
+
 
         $query = new Builder();
         $query->addFrom(Messages::class);
-        $query->where('[' . Messages::class . '].[recipient] = :id:', ['id' => $user->getId()]);
-        $query->andWhere('[' . Messages::class . '].[parent] = :parentId:', ['parentId' => null]);
+        $query->where('[' . Messages::class . '].[parent] IS NULL');
+        $query->andWhere(' sender = :id: OR  recipient = :id: ', ['id' => $user->getId()]);
+
+
         $query->limit(50);
-        $query->orderBy('creationDate DESC');
+        $query->orderBy('sentDate DESC');
+
         $messages = $query->getQuery()->execute();
         $result = [];
 
@@ -248,13 +251,7 @@ trait Messenger
             if (in_array($user->getRole(), AclRoles::ADMIN_ROLES, true)) {
                 $result[$message->getCategories()][] = $this->getParentResult($message);
             } elseif (
-                $user->getRole() === AclRoles::MANAGER
-                && in_array($message->getCategories(), Message::MANAGER_CATEGORIES, true)
-            ) {
-                $result[$message->getCategories()][] = $this->getParentResult($message);
-            } elseif (
-                $user->getRole() === AclRoles::APPLICANT
-                && in_array($message->getCategories(), Message::APPLICANT_CATEGORIES, true)
+                !in_array($message->getCategories(), Message::ADMIN_CATEGORIES, true)
             ) {
                 $result[$message->getCategories()][] = $this->getParentResult($message);
             }
@@ -271,67 +268,60 @@ trait Messenger
     {
         return [
             'message' => $message,
-            'children' => $message->getChildren()
+            'children' => $message->getChildren(),
+            'sender' => $message->getAddresser(),
+            'recipient' => $message->getReceiver(),
+            'role' => (int)$message->getSender() === (int)$this->userService->getIdentity() ? 'sender' : 'recipient'
         ];
     }
 
     /**
      * @param null $recipientId
      * @return mixed
-     * @throws \RuntimeException
+     * @throws RuntimeException
      */
-    protected function sendMessage($recipientId = null)
+    public function sendMessage($recipientId = null)
     {
-        $params = null;
-        $res = null;
-        /** @var Request $request */
-        $request = $this->request;
-        /** @var Manager $authManager */
-        $authManager = $this->authManager;
-        $params = $request->getPost();
-        $session = $authManager->getSession();
-        if (!$session) {
-            throw new \RuntimeException('User not authorized');
-        }
-        if ($recipientId) {
-            $params['recipient'] = (int)$recipientId;
+        $params = $this->request->getJsonRawBody();
+
+        $params = json_decode(json_encode($params), true);
+
+        if (!$this->userService->getIdentity()) {
+            throw new RuntimeException('User not authorized');
         }
 
-        $params['sender'] = $session->getIdentity();
-        $params['status'] = Status::STATUS_SENT;
-        $params['sendMethod'] = $params['sendMethod'] ?? 'site';
-        $params['sendMethod'] = $params['sendMethod'] ?: 'site';
-        $params['parent'] = is_numeric($params['parent']) ? $params['parent'] : null;
-        $recipient = Users::findFirst($params['recipient']);
+        $recipient = Users::findFirst((int)$recipientId);
         if (!($recipient instanceof Users)) {
             return $this->createErrorResponse('Recipient not found');
         }
+
         $role = $recipient->getRole();
+
         $params['supportStatus'] = Status::SUPPORT_STATUS_OPEN;
-        if (!\in_array($role, [AclRoles::ADMIN, AclRoles::MANAGER, AclRoles::SUPERADMIN], true)) {
+        if (!\in_array($role, [AclRoles::ADMIN, AclRoles::SUPERADMIN], true)) {
             $params['supportStatus'] = Status::SUPPORT_STATUS_NOT_SUPPORT;
         }
-        $validator = new MessageValidator();
+
         $message = new Messages();
-        $date = (new \DateTime())->format('Y-m-d H:i:s');
-        $message->setSentDate($date);
-        $params['sentDate'] = $date;
-        $res = $validator->validate($params) ?? null;
-        if ($res->count() === 0) {
-            if ($message->save($params)) {
-                return $this->createOkResponse();
-            }
-            return $this->createErrorResponse('Message not saved');
+        $message->setContent($params['content']);
+        $message->setTitle($params['title']);
+        $message->setSender((int)$this->userService->getIdentity());
+        $message->setRecipient((int)$recipientId);
+        $message->setSupportStatus($params['supportStatus']);
+        $message->setCategories($params['categories']);
+        if ($params['parent']) {
+            $message->setParent((int) $params['parent']);
         }
-        /** @var Group $messages */
-        $messages = $validator->getMessages();
+        if ($message->save($params)) {
+            return $this->createOkResponse();
+        }
+        $messages = $message->getMessages();
         $errors = [];
-        /** @var \Phalcon\Validation\Message $message */
-        foreach ($messages as $message) {
+        foreach ($messages as $m) {
             $errors[] = [
-                'type' => $message->getType(),
-                'field' => $message->getField(),
-                'message' => $message->getMessage()
+                'type' => $m->getType(),
+                'field' => $m->getField(),
+                'message' => $m->getMessage()
             ];
         }
         return $this->createErrorResponse($errors);
@@ -340,7 +330,7 @@ trait Messenger
     /**
      * @param $id
      * @return mixed
-     * @throws \RuntimeException
+     * @throws RuntimeException
      */
     public function getMessage($id)
     {
@@ -354,21 +344,21 @@ trait Messenger
         }
         $session = $authManager->getSession() ?? null;
         if (!$session) {
-            throw new \RuntimeException('User not authorized');
+            throw new RuntimeException('User not authorized');
         }
         $message = Messages::findFirst((int)$id);
         if (!($message instanceof Messages)) {
-            throw new \RuntimeException('Message not found');
+            throw new RuntimeException('Message not found');
         }
         $this->_checkAvailability($message, $session);
         if (!($message instanceof Messages)) {
-            throw new \RuntimeException('Message not found');
+            throw new RuntimeException('Message not found');
         }
         if ($message->getRecipient() === $session->getIdentity()) {
             $message->setStatus(Status::STATUS_READ);
             $message->setReadDate((new \DateTime())->format('Y-m-d H:i:s'));
             if (!$message->save()) {
-                throw new \RuntimeException('message not saved');
+                throw new RuntimeException('message not saved');
             }
         }
         return $this->createItemResponse($message, new MessagesTransformer());
@@ -377,7 +367,7 @@ trait Messenger
     /**
      * @param $id
      * @return mixed
-     * @throws \RuntimeException
+     * @throws RuntimeException
      */
     public function setClosedSupportStatus($id)
     {
@@ -390,7 +380,7 @@ trait Messenger
         }
         $session = $authManager->getSession() ?? null;
         if (!$session) {
-            throw new \RuntimeException('User not authorized');
+            throw new RuntimeException('User not authorized');
         }
         $message = Messages::findFirst((int)$id);
         $senderRoles = [
@@ -405,7 +395,7 @@ trait Messenger
         $this->_checkAvailability($message, $session, $senderRoles);
         $message->setSupportStatus(Status::SUPPORT_STATUS_CLOSED);
         if (!$message->save()) {
-            throw new \RuntimeException('message not saved');
+            throw new RuntimeException('message not saved');
         }
 
         return $this->createOkResponse();
@@ -414,7 +404,7 @@ trait Messenger
     /**
      * @param $id
      * @return mixed
-     * @throws \RuntimeException
+     * @throws RuntimeException
      */
     public function setProgressSupportStatus($id)
     {
@@ -427,7 +417,7 @@ trait Messenger
         }
         $session = $authManager->getSession();
         if (!$session) {
-            throw new \RuntimeException('User not authorized');
+            throw new RuntimeException('User not authorized');
         }
         $message = Messages::findFirst((int)$id);
         $senderRoles = [
@@ -443,7 +433,7 @@ trait Messenger
         try {
             $role = $userService->getDetails()->getRole();
         } catch (Exception $exception) {
-            throw new \RuntimeException($exception->getMessage());
+            throw new RuntimeException($exception->getMessage());
         }
         $allowedRoles = [
             AclRoles::SUPERADMIN,
@@ -453,11 +443,11 @@ trait Messenger
         if (!\in_array($role, $allowedRoles, true)
             || $session->getIdentity() === $message->getSender()
         ) {
-            throw new \RuntimeException('You are not allowed for this request');
+            throw new RuntimeException('You are not allowed for this request');
         }
         $message->setSupportStatus(Status::SUPPORT_STATUS_PROGRESS);
         if (!$message->save()) {
-            throw new \RuntimeException('message not saved');
+            throw new RuntimeException('message not saved');
         }
 
         return $this->createOkResponse();
@@ -467,7 +457,7 @@ trait Messenger
      * @param Messages $message
      * @param null $session
      * @param null $senderRoles
-     * @throws \RuntimeException
+     * @throws RuntimeException
      */
     protected function _checkAvailability(Messages $message, $session = null, $senderRoles = null)
     {
@@ -476,7 +466,7 @@ trait Messenger
             $authManager = $this->authManager;
             $session = $authManager->getSession() ?? null;
             if (!$session) {
-                throw new \RuntimeException('User not authorized');
+                throw new RuntimeException('User not authorized');
             }
         }
         $identity = $session->getIdentity();
@@ -486,21 +476,21 @@ trait Messenger
         try {
             $role = $userService->getDetails()->getRole();
         } catch (Exception $exception) {
-            throw new \RuntimeException($exception->getMessage());
+            throw new RuntimeException($exception->getMessage());
         }
         /** @var Users $sender */
         $sender = $message->getSender();
         if (!($sender instanceof Users)) {
-            throw new \RuntimeException('Wrong message');
+            throw new RuntimeException('Wrong message');
         }
         if ($senderRoles && !\in_array($sender->getRole(), $senderRoles, true)) {
-            throw new \RuntimeException('Sender is not allowed');
+            throw new RuntimeException('Sender is not allowed');
         }
         if ($identity !== $message->getRecipient()
             && $identity !== $message->getSender()
             && !\in_array($role, [AclRoles::ADMIN, AclRoles::SUPERADMIN], true)
         ) {
-            throw new \RuntimeException('You are not allowed for this request');
+            throw new RuntimeException('You are not allowed for this request');
         }
     }
 }

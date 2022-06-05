@@ -52,13 +52,17 @@ class Message
 
 
     public const APPLICANT_CATEGORIES = [
-        self::APPLICANT,
-        self::INVITED
+        self::APPLIED
     ];
 
     public const MANAGER_CATEGORIES = [
-        self::APPLICANT_CATEGORIES,
         self::INVITATIONS
+    ];
+
+    public const ADMIN_CATEGORIES = [
+        self::SUPERADMIN,
+        self::SUPPORT,
+        self::GENERAL
     ];
 
     public const ALL_MESSAGES = [
