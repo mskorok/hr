@@ -53,4 +53,12 @@ class AclRoles
         self::SUPERADMIN,
         self::ADMIN
     ];
+
+    public const COMPANY_ROLES = [
+        self::SUPERADMIN,
+        self::ADMIN,
+        self::MANAGER,
+        self::EMPLOYER,
+        self::COMPANY_ADMIN,
+    ];
 }

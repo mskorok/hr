@@ -5,12 +5,14 @@ namespace App\Controllers;
 
 use App\Constants\AclRoles;
 use App\Constants\Limits;
+use App\Constants\Message;
 use App\Constants\Services;
 use App\Forms\VacanciesForm;
 use App\Model\Applied;
 use App\Model\Companies;
 use App\Model\Images;
 use App\Model\JobTypes;
+use App\Model\Messages;
 use App\Model\Users;
 use App\Model\Vacancies;
 use App\Model\VacancyJobTypes;
@@ -293,22 +295,60 @@ class VacanciesController extends ControllerBase
 
 
     /**
-     * @param $vacancy
+     * @param $vacancyId
      * @return mixed
      * @throws \PhalconApi\Exception
      */
-    public function apply($vacancy)
+    public function apply($vacancyId)
     {
         /** @var Users $user */
         $user = $this->userService->getDetails();
+
         if (!$user) {
             return $this->createErrorResponse('User not found');
         }
+        $vacancy = Vacancies::findFirst((int) $vacancyId);
+
+        if (!$vacancy) {
+            return $this->createErrorResponse('Vacancy not found');
+        }
+
+
         $applied = new Applied();
         $applied->setUserId((int) $user->getId());
-        $applied->setVacancyId((int) $vacancy);
+        $applied->setVacancyId((int) $vacancyId);
 
         if ($applied->save()) {
+
+            $company = $vacancy->getCompanies();
+            $managers = $company->getUsers();
+
+            $messages = []
+;
+            $text = 'Applicant ' . $user->getName() . ' ' . $user->getSurname() . ' with email ' . $user->getEmail()
+                . ' and phone '. $user->getPhone() . ' from ' . $user->getCity()
+                . ' applied to vacancy ' . $vacancy->getName();
+
+            /** @var Users $manager */
+            foreach ($managers as $manager) {
+                $message = new Messages();
+                $message->setSender($user->getId());
+                $message->setRecipient($manager->getId());
+                $message->setCategories(Message::APPLIED);
+                $message->setTitle('Vacancy ' . $vacancy->getName() . ' is applied');
+                $message->setContent($text);
+                if (!$message->save()) {
+                    $messages[] = implode(',', $message->getMessages());
+                }
+            }
+
+
+
+//            if (count($messages) > 0) {
+                // todo something
+//                return $this->createArrayResponse($messages, 'errors');
+//            }
+
             return $this->createOkResponse();
         }
         return $this->createErrorResponse('Model not saved');

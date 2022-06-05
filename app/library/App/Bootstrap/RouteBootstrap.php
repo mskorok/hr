@@ -143,7 +143,7 @@ class RouteBootstrap implements BootstrapInterface
         $api->delete('/resume/delete/{id:[0-9]+}', [$resumeController, 'deleteResume']);
         $api->get('/resume/search', [$resumeController, 'searchResume']);
 
-        $api->get('/resume/invite/{resume:[0-9]+}', [$inviteController, 'addInvited']);
+        $api->get('/resume/invite/{resumeId:[0-9]+}', [$inviteController, 'addInvited']);
         $api->get('/resume/remove/invited/{resume:[0-9]+}', [$inviteController, 'removeInvited']);
 
         $api->get('/vacancy/show/{id:[0-9]+}', [$vacancyController, 'showVacancy']);
@@ -156,7 +156,7 @@ class RouteBootstrap implements BootstrapInterface
         $api->get('/vacancy/user/list/{page:[0-9]+}', [$vacancyController, 'listUserVacancies']);
         $api->delete('/vacancy/delete/{id:[0-9]+}', [$vacancyController, 'deleteVacancy']);
         $api->get('/vacancy/search', [$vacancyController, 'searchVacancy']);
-        $api->get('/vacancy/apply/{vacancy:[0-9]+}', [$vacancyController, 'apply']);
+        $api->get('/vacancy/apply/{vacancyId:[0-9]+}', [$vacancyController, 'apply']);
 
 
         $api->get('/experience/show/{id:[0-9]+}', [$experienceController, 'showExperience']);

@@ -3,9 +3,12 @@ declare(strict_types=1);
 
 namespace App\Controllers;
 
+use App\Constants\AclRoles;
 use App\Constants\Limits;
+use App\Constants\Message;
 use App\Model\Companies;
 use App\Model\Invited;
+use App\Model\Messages;
 use App\Model\Resumes;
 use App\Model\Users;
 use Phalcon\Mvc\Model\Query\Builder;
@@ -26,16 +29,20 @@ class InvitedController extends ControllerBase
     ];
 
     /**
-     * @param $resume
+     * @param $resumeId
      * @return mixed
      * @throws Exception
      */
-    public function addInvited($resume)
+    public function addInvited($resumeId)
     {
         /** @var Users $user */
         $user = $this->userService->getDetails();
         if (!$user) {
             return $this->createErrorResponse('User not found');
+        }
+
+        if (!in_array($user->getRole(), AclRoles::COMPANY_ROLES, true)) {
+            return $this->createErrorResponse('User has no permission');
         }
 
         $companies = $this->request->getQuery('companies', 'string');
@@ -46,15 +53,29 @@ class InvitedController extends ControllerBase
         $userCompanies = $user->getCompanies();
         $messages = [];
 
+        $resume = Resumes::findFirst((int) $resumeId);
+
+
+
         /** @var Companies $company */
         foreach ($userCompanies as $company) {
             if (in_array($company->getId(), $companies, false)) {
                 $invited = new Invited();
                 $invited->setCompanyId((int) $company->getId());
-                $invited->setResumeId((int) $resume);
+                $invited->setResumeId((int) $resumeId);
                 $invited->setUserId((int) $user->getId());
                 if (!$invited->save()) {
                     $messages[] = $invited->getMessages();
+                } else {
+
+                    $text =  'Dear user! You invited to be candidate to work at ' . $company->getName();
+                    $message = new Messages();
+                    $message->setSender($user->getId());
+                    $message->setRecipient($resume->getUserId());
+                    $message->setCategories(Message::INVITATIONS);
+                    $message->setTitle('Invitation');
+                    $message->setContent($text);
+                    $message->save();
                 }
             }
         }
