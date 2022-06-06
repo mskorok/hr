@@ -849,6 +849,7 @@ class CompaniesController extends ControllerBase
      */
     public function deleteCompany($id): Response
     {
+        /** @var Companies $company */
         $company = Companies::findFirst((int)$id);
 
         /** @var Users $me */
@@ -867,11 +868,11 @@ class CompaniesController extends ControllerBase
             $ids[] = $user->getId();
         }
 
-        if (!in_array($me->getId(), $ids, true) || !in_array($this->userService->getRole(), AclRoles::ADMIN_ROLES, true)) {
+        if (!in_array($me->getId(), $ids, true) && !in_array($this->userService->getRole(), AclRoles::ADMIN_ROLES, true)) {
             return $this->createErrorResponse('You have no permission for this operation');
         }
 
-        if (in_array($me->getId(), $ids, true)) {
+        if (count($ids) > 1 && !in_array($this->userService->getRole(), AclRoles::ADMIN_ROLES, true) && in_array($me->getId(), $ids, true)) {
             $manager = CompanyManager::findFirst(' user_id = ' . $me->getId() . ' AND company_id = ' . $company->getId() . ' ');
             if ($manager instanceof CompanyManager && $manager->delete()) {
                 return $this->createOkResponse();
@@ -880,10 +881,21 @@ class CompaniesController extends ControllerBase
             return $this->createErrorResponse('Something went wrong');
         }
 
+        $companyId = $company->getId();
+
+
+
         if (!$company->delete()) {
             $mes = implode('', $user->getMessages());
 
             return $this->createErrorResponse($mes);
+        }
+
+        foreach ($ids as $uid) {
+            $manager = CompanyManager::findFirst(' user_id = ' . $uid . ' AND company_id = ' . $companyId . ' ');
+            if ($manager instanceof CompanyManager) {
+                $manager->delete();
+            }
         }
 
         return $this->createOkResponse();
