@@ -914,13 +914,22 @@ class CompaniesController extends ControllerBase
 
 
         $role = $userService->getRole();
+        $user =  $userService->getDetails();
+        $userCollection = [];
+
         if (\in_array($role, AclRoles::ADMIN_ROLES, true)) {
             /** @var Simple $collection */
             $collection = Companies::find();
+            $userCollection = $user->getCompanies();
         } else {
             /** @var Users $user */
-            $user =  $userService->getDetails();
             $collection = $user->getCompanies();
+        }
+
+        $ids = [];
+
+        foreach ($userCollection as $item) {
+            $ids[] = $item->getId();
         }
 
 
@@ -957,7 +966,8 @@ class CompaniesController extends ControllerBase
             'first'         => $this->firstPage,
             'pagesRange'    => $pagesInRange,
             'bottomInRange' => $this->bottomInRange,
-            'topInRange'    => $this->topInRange
+            'topInRange'    => $this->topInRange,
+            'userCompanies' => $ids
         ];
 
         return $this->createArrayResponse($data, 'data');
