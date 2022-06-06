@@ -973,6 +973,33 @@ class CompaniesController extends ControllerBase
         return $this->createArrayResponse($data, 'data');
     }
 
+    /**
+     * @param $cid
+     * @return mixed
+     */
+    public function disconnectCompany($cid)
+    {
+        $userId = $this->userService->getIdentity();
+
+        if (!$userId) {
+            throw new RuntimeException('User not found');
+        }
+
+        $manager = CompanyManager::findFirst([
+            'conditions' => ' user_id = :id: AND company_id = :cid: ',
+            'bind' => [
+                'id' => $userId,
+                'cid'     => $cid
+            ]
+        ]);
+
+        if ($manager && $manager->delete()) {
+            return $this->createOkResponse();
+        }
+
+        return $this->createErrorResponse('Company not disconnected ' . implode(',', $manager->getMessages()));
+    }
+
 
     /********    PROTECTED    *******/
 

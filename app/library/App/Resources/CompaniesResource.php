@@ -54,6 +54,11 @@ class CompaniesResource extends ApiResource
                 ApiEndpoint::remove()
                     ->allow([AclRoles::ADMIN, AclRoles::SUPERADMIN, AclRoles::APPLICANT])
             )
+            ->endpoint(
+                ApiEndpoint::get('/disconnect/{cid:[0-9]+}', 'disconnectCompany')
+                    ->allow(AclRoles::COMPANY_ROLES)
+                    ->description('Disconnect user from company')
+            )
         ;
     }
 }
