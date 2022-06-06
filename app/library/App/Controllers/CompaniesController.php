@@ -646,7 +646,7 @@ class CompaniesController extends ControllerBase
                     if (!\in_array($role, [AclRoles::SUPERADMIN, AclRoles::ADMIN], true)) {
                         $user = $userService->getDetails();
                         if ($user instanceof Users) {
-                            $user->setRole(AclRoles::COMPANY_ADMIN);
+                            $user->setRole(AclRoles::MANAGER);
                             $user->save();
                         }
                     }
@@ -867,7 +867,7 @@ class CompaniesController extends ControllerBase
             $ids[] = $user->getId();
         }
 
-        if (!in_array($me->getId(), $ids, true) && !in_array($this->userService->getRole(), AclRoles::ADMIN_ROLES, true)) {
+        if (!in_array($me->getId(), $ids, true) || !in_array($this->userService->getRole(), AclRoles::ADMIN_ROLES, true)) {
             return $this->createErrorResponse('You have no permission for this operation');
         }
 
@@ -881,10 +881,7 @@ class CompaniesController extends ControllerBase
         }
 
         if (!$company->delete()) {
-            $mes = '';
-            foreach ($user->getMessages() as $message) {
-                $mes .= $message;
-            }
+            $mes = implode('', $user->getMessages());
 
             return $this->createErrorResponse($mes);
         }

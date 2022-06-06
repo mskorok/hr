@@ -102,4 +102,11 @@ class Message
         self::SUPPORT_STATUS_CLOSED,
         self::SUPPORT_STATUS_NOT_SUPPORT
     ];
+
+    public const SUPPORT_STATUS = [
+        self::SUPPORT_STATUS_OPEN,
+        self::SUPPORT_STATUS_PROGRESS,
+        self::SUPPORT_STATUS_CLOSED,
+        self::SUPPORT_STATUS_NOT_SUPPORT
+    ];
 }

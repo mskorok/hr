@@ -3,9 +3,12 @@ declare(strict_types=1);
 
 namespace App\Controllers;
 
+use App\Constants\Message as Status;
+use App\Model\Logs;
 use App\Traits\Recipients;
 use App\Traits\Messenger;
 use App\Traits\SearchByRoles;
+use RuntimeException;
 
 /**
  * Class MessengerController
@@ -23,7 +26,7 @@ class MessengerController extends ControllerBase
     /**
      * @param $id
      * @return mixed
-     * @throws \RuntimeException
+     * @throws RuntimeException
      */
     public function sendMessagesToEmployer($id)
     {
@@ -37,7 +40,7 @@ class MessengerController extends ControllerBase
 
     /**
      * @return mixed
-     * @throws \RuntimeException
+     * @throws RuntimeException
      */
     public function sendMessagesToEmployers()
     {
@@ -49,7 +52,7 @@ class MessengerController extends ControllerBase
     /**
      * @param $id
      * @return mixed
-     * @throws \RuntimeException
+     * @throws RuntimeException
      */
     public function sendMessagesToApplicant($id)
     {
@@ -58,23 +61,32 @@ class MessengerController extends ControllerBase
         }
         return $this->sendMessage($id);
     }
+
     /**
-     * @param $id
      * @return mixed
-     * @throws \RuntimeException
      */
-    public function sendMessagesToSupport($id)
+    public function sendMessagesToSupport()
     {
-        if (!$this->isSupport($id)) {
-            return $this->createErrorResponse('Recipient is not Applicant');
+        $recipient = $this->getAdminUser();
+        if (!$recipient) {
+            $log = new Logs();
+            $log->setLog('Admin User not found app/library/App/Controllers/MessengerController.php:68 | public function sendMessagesToSupport');
+            $log->save();
+            return $this->createErrorResponse('Something went wrong');
         }
-        return $this->sendMessage($id);
+        if (!$this->isSupport($recipient->getId())) {
+            $log = new Logs();
+            $log->setLog('Admin User is not Support app/library/App/Controllers/MessengerController.php:75 | public function sendMessagesToSupport');
+            $log->save();
+            return $this->createErrorResponse('Something went wrong');
+        }
+        return $this->sendMessage($recipient->getId(), Status::SUPPORT_STATUS_OPEN);
     }
 
 
     /**
      * @return mixed
-     * @throws \RuntimeException
+     * @throws RuntimeException
      */
     public function sendMessagesToApplicants()
     {

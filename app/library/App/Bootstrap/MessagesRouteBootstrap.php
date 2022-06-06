@@ -58,6 +58,10 @@ class MessagesRouteBootstrap implements BootstrapInterface
             '/messages/send/{id}',
             [$messengerController, 'sendMessage']
         );
+        $api->post(
+            '/messages/support/send',
+            [$messengerController, 'sendMessagesToSupport']
+        );
 
         $api->post(
             '/messages/employer/send/{id}',
@@ -67,11 +71,6 @@ class MessagesRouteBootstrap implements BootstrapInterface
         $api->post(
             '/messages/employers/send',
             [$messengerController, 'sendMessagesToEmployers']
-        );
-
-        $api->post(
-            '/messages/support/send/{id}',
-            [$messengerController, 'sendMessagesToSupport']
         );
 
         $api->get(

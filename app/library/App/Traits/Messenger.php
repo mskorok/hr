@@ -22,7 +22,6 @@ use ArrayObject;
 use Phalcon\Http\Request;
 use Phalcon\Mvc\Model\Query\Builder;
 use Phalcon\Mvc\Model\Resultset\Simple;
-use Phalcon\Validation\Message\Group;
 use PhalconApi\Auth\Session;
 use PhalconApi\Exception;
 use RuntimeException;
@@ -255,8 +254,10 @@ trait Messenger
             ) {
                 $result[$message->getCategories()][] = $this->getParentResult($message);
             }
-
         }
+
+
+
         return $this->createArrayResponse($result, 'data');
     }
 
@@ -280,7 +281,7 @@ trait Messenger
      * @return mixed
      * @throws RuntimeException
      */
-    public function sendMessage($recipientId = null)
+    public function sendMessage($recipientId = null, $supportStatus = null)
     {
         $params = $this->request->getJsonRawBody();
 
@@ -297,10 +298,15 @@ trait Messenger
 
         $role = $recipient->getRole();
 
-        $params['supportStatus'] = Status::SUPPORT_STATUS_OPEN;
-        if (!\in_array($role, [AclRoles::ADMIN, AclRoles::SUPERADMIN], true)) {
-            $params['supportStatus'] = Status::SUPPORT_STATUS_NOT_SUPPORT;
+        if ($supportStatus && in_array($supportStatus, Status::SUPPORT_STATUS, true)) {
+            $params['supportStatus'] = $supportStatus;
+        } else {
+            $params['supportStatus'] = Status::SUPPORT_STATUS_OPEN;
+            if (!\in_array($role, [AclRoles::ADMIN, AclRoles::SUPERADMIN], true)) {
+                $params['supportStatus'] = Status::SUPPORT_STATUS_NOT_SUPPORT;
+            }
         }
+
 
         $message = new Messages();
         $message->setContent($params['content']);
