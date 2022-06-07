@@ -665,7 +665,7 @@ class VacanciesController extends ControllerBase
         $numberPage = (int)($page ?? 1);
 
         $count = Vacancies::count();
-        if ($count() === 0) {
+        if ($count === 0) {
             return $this->createErrorResponse('Not found');
         }
 
