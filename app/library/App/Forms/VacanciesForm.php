@@ -13,6 +13,7 @@ use App\Constants\AclRoles;
 use App\Model\Companies;
 use App\Model\Users;
 use App\Model\Vacancies;
+use Exception;
 use Phalcon\Filter;
 use Phalcon\Forms\Element\Date;
 use Phalcon\Forms\Element\Hidden;
@@ -30,7 +31,7 @@ class VacanciesForm extends BaseForm
 {
     private static $counter = 0;
 
-    private $user;
+    protected $user;
 
     /**
      * VacanciesForm constructor.
@@ -47,7 +48,8 @@ class VacanciesForm extends BaseForm
     /**
      * @param Vacancies|null $model
      * @param array|null $options
-     *
+     * @return void
+     * @throws Exception
      */
     public function initialize(Vacancies $model = null, array $options = null): void
     {

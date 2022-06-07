@@ -387,11 +387,11 @@ class Resumes extends DateTrackingModel
     }
 
     /**
-     * @return string
+     * @return string | null
      */
-    public function getLocation(): string
+    public function getLocation(): ?string
     {
-        return $this->location;
+        return (string)$this->location;
     }
 
     /**

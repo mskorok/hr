@@ -8,7 +8,6 @@ use App\Constants\Limits;
 use App\Constants\Services;
 use App\Forms\ResumesForm;
 use App\Model\Companies;
-use App\Model\FavoriteResume;
 use App\Model\Images;
 use App\Model\Invited;
 use App\Model\JobTypes;
@@ -25,6 +24,7 @@ use Phalcon\Mvc\Model;
 use Phalcon\Mvc\Model\Criteria;
 use Phalcon\Mvc\Model\Query\Builder;
 use Phalcon\Mvc\Model\Resultset;
+use Phalcon\Mvc\View\Simple;
 use Phalcon\Paginator\Adapter\Model as Paginator;
 use Phalcon\Mvc\Model\Query\Builder as QueryBuilder;
 use Phalcon\Paginator\Factory;
@@ -484,9 +484,9 @@ class ResumesController extends ControllerBase
      * @throws \RuntimeException
      * @throws \ReflectionException
      * @throws Exception
-     * @return Response | null
+     * @return mixed
      */
-    public function addResume(): ?Response
+    public function addResume()
     {
         $resume = new Resumes();
 
@@ -524,29 +524,46 @@ class ResumesController extends ControllerBase
             }
         }
 
+
+
         $form = new ResumesForm($resume, $options);
 
         $form->setFormId('resume_form');
 
         $form->renderForm();
-        $image = $resume->getUsers()->getImages();
+
+        $image = null;
+
+        if ($resume->getUserId()) {
+            $_user = Users::findFirst((int) $resume->getUserId());
+            if ($_user instanceof Users) {
+                $image = Images::findFirst((int) $_user->getAvatar());
+            }
+        }
+
+
+
+
+
         $imageTag =  '';
+
         if ($image instanceof Images) {
             $imageTag = '<image src="' . $uploadsDir . $image->getPath() .
                 $image->getFileName() . '" style="width: 100%;"/>';
         }
 
-        $html = $this->returnView(
-            'resume',
-            [
-                'form' => $form,
-                'image' => $imageTag,
-                'messages' => $messages,
-                'id' => $resume->getId()
-            ],
-            true
-        );
+        $view = new Simple();
+        $template = $config->get('application')->viewsDir . '/resumes/resume.phtml';
 
+        $html = $view->render(
+            $template,
+            [
+                'form'     => $form,
+                'image'    => $imageTag,
+                'messages' => $messages,
+                'id'       => $resume->getId()
+            ]
+        );
         return $this->createArrayResponse($html, 'html');
     }
 

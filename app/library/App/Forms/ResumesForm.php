@@ -102,6 +102,7 @@ class ResumesForm extends BaseForm
         );
 
         $type_of_job->setLabel('Type of Job');
+        $type_of_job->setAttribute('class', 'form-control');
         $this->add($type_of_job);
 
 
@@ -118,6 +119,7 @@ class ResumesForm extends BaseForm
             ]
         );
         $work_place->setLabel('Work Place');
+        $work_place->setAttribute('class', 'form-control');
         $this->add($work_place);
 
 
