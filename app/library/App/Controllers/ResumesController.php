@@ -1073,6 +1073,7 @@ class ResumesController extends ControllerBase
     /**
      * @param $page
      * @return mixed
+     * @throws Exception
      */
     public function listInvited($page)
     {

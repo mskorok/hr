@@ -10,6 +10,7 @@ use App\Constants\Services;
 use App\Forms\VacanciesForm;
 use App\Model\Applied;
 use App\Model\Companies;
+use App\Model\CompanyManager;
 use App\Model\Images;
 use App\Model\JobTypes;
 use App\Model\Messages;
@@ -692,7 +693,6 @@ class VacanciesController extends ControllerBase
 
         $items = $this->getComplexArray($items);
 
-
         $data = [
             'vacancies'     => $items,
             'totalItems'    => $page->total_items,
@@ -993,7 +993,7 @@ class VacanciesController extends ControllerBase
      * @param $page
      * @return mixed
      */
-    public function listApplied($page)
+    public function listMeApplied($page)
     {
         /** @var Service $userService */
         $userService = $this->userService;
@@ -1045,6 +1045,90 @@ class VacanciesController extends ControllerBase
             'pagesRange'    => $pagesInRange,
             'bottomInRange' => $this->bottomInRange,
             'topInRange'    => $this->topInRange
+        ];
+
+        return $this->createArrayResponse($data, 'data');
+    }
+
+
+    /**
+     * @param $page
+     * @return mixed
+     */
+    public function listApplied($page)
+    {
+        /** @var Service $userService */
+        $userService = $this->userService;
+        $id = $userService->getIdentity();
+        $builder = new Builder();
+        $builder->addFrom(Vacancies::class);
+        $builder->leftJoin(
+            Companies::class,
+            '[' . Companies::class . '].[id] = [' . Vacancies::class . '].[company_id]'
+        );
+        $builder->leftJoin(
+            CompanyManager::class,
+            '[' . CompanyManager::class . '].[company_id] = [' . Companies::class . '].[id]'
+        );
+
+        $builder->leftJoin(
+            Applied::class,
+            '[' . Applied::class . '].[vacancy_id] = [' . Vacancies::class . '].[id]'
+        );
+
+        $builder->where('[' . CompanyManager::class . '].[user_id] = :user:', ['user' => $id]);
+
+        $builder->andWhere('[' . Applied::class . '].[vacancy_id] IS NOT NULL ');
+
+
+
+
+        $options = [
+            'builder' => $builder,
+            'limit'   => Limits::SEARCH_LIMIT,
+            'page'    => (int) $page,
+            'adapter' => 'queryBuilder',
+        ];
+
+        $paginator = Factory::load($options);
+
+        $page =  $paginator->getPaginate();
+
+        $items = $page->items;
+
+        /** @var Vacancies $vacancy */
+        foreach ($items as $vacancy) {
+            $this->afterFind($vacancy);
+
+        }
+
+        $pagesInRange = $this->getPaginationRange($page);
+
+        $items = $this->getComplexArray($items);
+
+        /** @var Vacancies $item */
+        foreach ($items as &$item) {
+            /** @var Users $applicant */
+            foreach ($item['Applicants'] as $applicant) {
+                $item['applied'][$applicant->getId()] = ['applicant' => $applicant, 'resumes' => $applicant->getResumes()];
+            }
+        }
+
+        unset($item);
+
+        $data = [
+            'vacancies'     => $items,
+            'totalItems'    => $page->total_items,
+            'totalPages'    => $page->total_pages,
+            'limit'         => $page->limit,
+            'current'       => $page->current,
+            'before'        => $page->before,
+            'next'          => $page->next,
+            'last'          => $page->last,
+            'first'         => $this->firstPage,
+            'pagesRange'    => $pagesInRange,
+            'bottomInRange' => $this->bottomInRange,
+            'topInRange'    => $this->topInRange,
         ];
 
         return $this->createArrayResponse($data, 'data');
