@@ -116,6 +116,12 @@ class Articles extends DateTrackingModel
     /**
      *
      * @var integer
+     */
+    protected $mapped;
+
+    /**
+     *
+     * @var integer
      * @Column(type="integer", length=1, nullable=false)
      */
     protected $translated;
@@ -268,6 +274,19 @@ class Articles extends DateTrackingModel
     }
 
     /**
+     * Method to set the value of field mapped
+     *
+     * @param integer $mapped
+     * @return $this
+     */
+    public function setMapped(int $mapped): self
+    {
+        $this->mapped = $mapped;
+
+        return $this;
+    }
+
+    /**
      * Method to set the value of field translated
      *
      * @param integer $translated
@@ -397,6 +416,16 @@ class Articles extends DateTrackingModel
     }
 
     /**
+     * Returns the value of field mapped
+     *
+     * @return integer|null
+     */
+    public function getMapped(): ?int
+    {
+        return (int)$this->mapped;
+    }
+
+    /**
      * Returns the value of field translated
      *
      * @return integer|null
@@ -493,6 +522,7 @@ class Articles extends DateTrackingModel
                 'html' => 'html',
                 'sources' => 'sources',
                 'parsed' => 'parsed',
+                'mapped' => 'mapped',
                 'translated' => 'translated',
                 'category_id' => 'category_id',
                 'language_id' => 'language_id',
