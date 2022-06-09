@@ -100,6 +100,14 @@ class Articles extends DateTrackingModel
 
     /**
      *
+     * @var string
+     *
+     * @Column(type="string", nullable=true)
+     */
+    protected $sources;
+
+    /**
+     *
      * @var integer
      * @Column(type="integer", length=1, nullable=false)
      */
@@ -234,6 +242,19 @@ class Articles extends DateTrackingModel
     }
 
     /**
+     * Method to set the value of field sources
+     *
+     * @param string $sources
+     * @return $this
+     */
+    public function setSources(string $sources): self
+    {
+        $this->sources = $sources;
+
+        return $this;
+    }
+
+    /**
      * Method to set the value of field parsed
      *
      * @param integer $parsed
@@ -356,6 +377,16 @@ class Articles extends DateTrackingModel
     }
 
     /**
+     * Returns the value of field sources
+     *
+     * @return string |null
+     */
+    public function getSources(): ?string
+    {
+        return $this->sources;
+    }
+
+    /**
      * Returns the value of field parsed
      *
      * @return integer|null
@@ -460,6 +491,7 @@ class Articles extends DateTrackingModel
                 'link' => 'link',
                 'avatar' => 'avatar',
                 'html' => 'html',
+                'sources' => 'sources',
                 'parsed' => 'parsed',
                 'translated' => 'translated',
                 'category_id' => 'category_id',
