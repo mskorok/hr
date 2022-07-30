@@ -30,10 +30,11 @@ class ArticlesTransformer extends ModelTransformer
             'Comments',
             'Images',
             'Image',
-            'Subcategory',
-            'Tags',
             'Links',
-            'Language'
+            'Language',
+            'Subcategory',
+            'SourceCategory',
+            'Tags',
         ];
     }
 
@@ -62,6 +63,15 @@ class ArticlesTransformer extends ModelTransformer
     public function includeSubcategory(Articles $model): Item
     {
         return $this->item($model->getSubcategory(), new SubcategoryTransformer());
+    }
+
+    /**
+     * @param Articles $model
+     * @return Item
+     */
+    public function includeSourceCategory(Articles $model): Item
+    {
+        return $this->item($model->getSourceCategory(), new SourceCategoryTransformer());
     }
 
     /**

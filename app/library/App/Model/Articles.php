@@ -7,6 +7,7 @@ use App\Constants\Services;
 use League\Fractal\Resource\Collection;
 use Phalcon\Mvc\Model\ResultInterface;
 use Phalcon\Mvc\Model\ResultsetInterface;
+use App\Model\SourceCategory;
 
 /**
  * Articles
@@ -22,6 +23,7 @@ use Phalcon\Mvc\Model\ResultsetInterface;
  * @method Collection getComments
  * @method Collection getTags
  * @method Languages getLanguage
+ * @method SourceCategory getSourceCategory
  */
 class Articles extends DateTrackingModel
 {
@@ -100,11 +102,11 @@ class Articles extends DateTrackingModel
 
     /**
      *
-     * @var string
+     * @var integer
      *
-     * @Column(type="string", nullable=true)
+     * @Column(type="integer", nullable=true)
      */
-    protected $sources;
+    protected $source_category_id;
 
     /**
      *
@@ -250,12 +252,12 @@ class Articles extends DateTrackingModel
     /**
      * Method to set the value of field sources
      *
-     * @param string $sources
+     * @param integer $sourceCategoryId
      * @return $this
      */
-    public function setSources(string $sources): self
+    public function setSourceCategoryId(int $sourceCategoryId): self
     {
-        $this->sources = $sources;
+        $this->source_category_id = $sourceCategoryId;
 
         return $this;
     }
@@ -398,11 +400,11 @@ class Articles extends DateTrackingModel
     /**
      * Returns the value of field sources
      *
-     * @return string |null
+     * @return integer |null
      */
-    public function getSources(): ?string
+    public function getSourceCategoryId(): ?int
     {
-        return $this->sources;
+        return $this->source_category_id;
     }
 
     /**
@@ -448,6 +450,7 @@ class Articles extends DateTrackingModel
         $this->belongsTo('avatar', Images::class, 'id', ['alias' => 'Image']);
         $this->belongsTo('language_id', Languages::class, 'id', ['alias' => 'Language']);
         $this->belongsTo('category_id', Subcategory::class, 'id', ['alias' => 'Subcategory']);
+        $this->belongsTo('source_category_id', SourceCategory::class, 'id', ['alias' => 'SourceCategory']);
         $this->hasManyToMany(
             'id',
             ArticleImages::class,
@@ -520,7 +523,7 @@ class Articles extends DateTrackingModel
                 'link' => 'link',
                 'avatar' => 'avatar',
                 'html' => 'html',
-                'sources' => 'sources',
+                'source_category_id' => 'source_category_id',
                 'parsed' => 'parsed',
                 'mapped' => 'mapped',
                 'translated' => 'translated',
