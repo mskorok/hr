@@ -15,6 +15,7 @@ use Phalcon\Mvc\Model;
  * @date 2022-07-31, 01:34:43
  *
  * @method Collection getSourceCategory
+ * @method Languages getLanguage
  */
 class ArticleSource extends Model
 {
@@ -30,6 +31,12 @@ class ArticleSource extends Model
      * @var string
      */
     protected $article_source;
+
+    /**
+     *
+     * @var integer
+     */
+    protected $language_id;
 
     /**
      *
@@ -77,6 +84,19 @@ class ArticleSource extends Model
     public function setArticleSource(string $source): self
     {
         $this->article_source = $source;
+
+        return $this;
+    }
+
+    /**
+     * Method to set the value of field language_id
+     *
+     * @param integer $language_id
+     * @return $this
+     */
+    public function setLanguageId(int $language_id): self
+    {
+        $this->language_id = $language_id;
 
         return $this;
     }
@@ -154,6 +174,16 @@ class ArticleSource extends Model
     }
 
     /**
+     * Returns the value of field language_id
+     *
+     * @return integer|null
+     */
+    public function getLanguageId(): ?int
+    {
+        return $this->language_id;
+    }
+
+    /**
      * Returns the value of field category_xpath
      *
      * @return string|null
@@ -201,6 +231,7 @@ class ArticleSource extends Model
         $this->setSchema($this->getDI()->get(Services::CONFIG)->database->dbname);
         $this->setSource("article_source");
         $this->hasMany('id', SourceCategory::class, 'source_id', ['alias' => 'SourceCategory']);
+        $this->belongsTo('language_id', Languages::class, 'id', ['alias' => 'Language']);
     }
 
     /**
@@ -246,6 +277,7 @@ class ArticleSource extends Model
         return [
             'id' => 'id',
             'article_source' => 'article_source',
+            'language_id' => 'language_id',
             'category_xpath' => 'category_xpath',
             'article_xpath' => 'article_xpath',
             'html' => 'html',

@@ -5,6 +5,7 @@ namespace App\Transformers;
 
 use App\Model\ArticleSource;
 use League\Fractal\Resource\Collection;
+use League\Fractal\Resource\Item;
 use PhalconRest\Transformers\ModelTransformer;
 
 /**
@@ -26,6 +27,7 @@ class ArticleSourceTransformer extends ModelTransformer
 
         $this->availableIncludes = [
             'SourceCategory',
+            'Language'
         ];
     }
 
@@ -36,5 +38,14 @@ class ArticleSourceTransformer extends ModelTransformer
     public function includeSourceCategory(ArticleSource $model): Collection
     {
         return $this->collection($model->getSourceCategory(), new SourceCategoryTransformer());
+    }
+
+    /**
+     * @param ArticleSource $model
+     * @return Item
+     */
+    public function includeLanguage(ArticleSource $model): Item
+    {
+        return $this->item($model->getLanguage(), new LanguagesTransformer());
     }
 }
