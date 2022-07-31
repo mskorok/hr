@@ -63,6 +63,13 @@ class ArticleSource extends Model
     protected $source_url;
 
     /**
+     *
+     * @var integer
+     * @Column(type="integer", length=1, nullable=false)
+     */
+    protected $parsed;
+
+    /**
      * Method to set the value of field id
      *
      * @param integer $id
@@ -154,6 +161,19 @@ class ArticleSource extends Model
     }
 
     /**
+     * Method to set the value of field parsed
+     *
+     * @param integer $parsed
+     * @return $this
+     */
+    public function setParsed(int $parsed): self
+    {
+        $this->parsed = $parsed;
+
+        return $this;
+    }
+
+    /**
      * Returns the value of field id
      *
      * @return integer|null
@@ -224,6 +244,16 @@ class ArticleSource extends Model
     }
 
     /**
+     * Returns the value of field parsed
+     *
+     * @return integer|null
+     */
+    public function getParsed(): ?int
+    {
+        return (int) $this->parsed;
+    }
+
+    /**
      * Initialize method for model.
      */
     public function initialize(): void
@@ -281,7 +311,8 @@ class ArticleSource extends Model
             'category_xpath' => 'category_xpath',
             'article_xpath' => 'article_xpath',
             'html' => 'html',
-            'source_url' => 'source_url'
+            'source_url' => 'source_url',
+            'parsed' => 'parsed',
         ];
     }
 

@@ -45,12 +45,19 @@ class SourceCategory extends Model
     protected $html;
 
     /**
+     *
+     * @var integer
+     * @Column(type="integer", length=1, nullable=false)
+     */
+    protected $parsed;
+
+    /**
      * Method to set the value of field id
      *
      * @param integer $id
      * @return $this
      */
-    public function setId($id)
+    public function setId(int $id): self
     {
         $this->id = $id;
 
@@ -97,6 +104,19 @@ class SourceCategory extends Model
     }
 
     /**
+     * Method to set the value of field parsed
+     *
+     * @param integer $parsed
+     * @return $this
+     */
+    public function setParsed(int $parsed): self
+    {
+        $this->parsed = $parsed;
+
+        return $this;
+    }
+
+    /**
      * Returns the value of field id
      *
      * @return integer|null
@@ -134,6 +154,16 @@ class SourceCategory extends Model
     public function getHtml(): string
     {
         return $this->html;
+    }
+
+    /**
+     * Returns the value of field parsed
+     *
+     * @return integer|null
+     */
+    public function getParsed(): ?int
+    {
+        return (int) $this->parsed;
     }
 
     /**
@@ -191,7 +221,8 @@ class SourceCategory extends Model
             'id' => 'id',
             'source_id' => 'source_id',
             'url' => 'url',
-            'html' => 'html'
+            'html' => 'html',
+            'parsed' => 'parsed',
         ];
     }
 
