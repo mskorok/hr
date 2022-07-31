@@ -27,6 +27,7 @@ class ArticlesTransformer extends ModelTransformer
 
         $this->availableIncludes = [
             'ArticleImages',
+            'ArticleSource',
             'Comments',
             'Images',
             'Image',
@@ -45,6 +46,15 @@ class ArticlesTransformer extends ModelTransformer
     public function includeArticleImages(Articles $model): Collection
     {
         return $this->collection($model->getArticleImages(), new ArticleImagesTransformer());
+    }
+
+    /**
+     * @param Articles $model
+     * @return Item
+     */
+    public function includeArticleSource(Articles $model): Item
+    {
+        return $this->item($model->getArticleSource(), new ArticleSourceTransformer());
     }
 
     /**

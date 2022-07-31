@@ -26,8 +26,9 @@ class ArticleSourceTransformer extends ModelTransformer
         $this->modelClass = ArticleSource::class;
 
         $this->availableIncludes = [
+            'Articles',
+            'Language',
             'SourceCategory',
-            'Language'
         ];
     }
 
@@ -35,9 +36,9 @@ class ArticleSourceTransformer extends ModelTransformer
      * @param ArticleSource $model
      * @return Collection
      */
-    public function includeSourceCategory(ArticleSource $model): Collection
+    public function includeArticles(ArticleSource $model): Collection
     {
-        return $this->collection($model->getSourceCategory(), new SourceCategoryTransformer());
+        return $this->collection($model->getArticles(), new ArticlesTransformer());
     }
 
     /**
@@ -47,5 +48,14 @@ class ArticleSourceTransformer extends ModelTransformer
     public function includeLanguage(ArticleSource $model): Item
     {
         return $this->item($model->getLanguage(), new LanguagesTransformer());
+    }
+
+    /**
+     * @param ArticleSource $model
+     * @return Collection
+     */
+    public function includeSourceCategory(ArticleSource $model): Collection
+    {
+        return $this->collection($model->getSourceCategory(), new SourceCategoryTransformer());
     }
 }
