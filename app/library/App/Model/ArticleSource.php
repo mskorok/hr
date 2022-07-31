@@ -48,7 +48,37 @@ class ArticleSource extends Model
      *
      * @var string
      */
+    protected $category_title_xpath;
+
+    /**
+     *
+     * @var string
+     */
     protected $article_xpath;
+
+    /**
+     *
+     * @var string
+     */
+    protected $article_title_xpath;
+
+    /**
+     *
+     * @var string
+     */
+    protected $article_description_xpath;
+
+    /**
+     *
+     * @var string
+     */
+    protected $article_text_xpath;
+
+    /**
+     *
+     * @var string
+     */
+    protected $article_image_xpath;
 
     /**
      *
@@ -122,6 +152,19 @@ class ArticleSource extends Model
     }
 
     /**
+     * Method to set the value of field category_title_xpath
+     *
+     * @param string $category_title_xpath
+     * @return $this
+     */
+    public function setCategoryTitleXpath(string $category_title_xpath): self
+    {
+        $this->category_title_xpath = $category_title_xpath;
+
+        return $this;
+    }
+
+    /**
      * Method to set the value of field article_xpath
      *
      * @param string $article_xpath
@@ -130,6 +173,58 @@ class ArticleSource extends Model
     public function setArticleXpath(string $article_xpath): self
     {
         $this->article_xpath = $article_xpath;
+
+        return $this;
+    }
+
+    /**
+     * Method to set the value of field article_title_xpath
+     *
+     * @param string $article_title_xpath
+     * @return $this
+     */
+    public function setArticleTitleXpath(string $article_title_xpath): self
+    {
+        $this->article_title_xpath = $article_title_xpath;
+
+        return $this;
+    }
+
+    /**
+     * Method to set the value of field article_description_xpath
+     *
+     * @param string $article_description_xpath
+     * @return $this
+     */
+    public function setArticleDescriptionXpath(string $article_description_xpath): self
+    {
+        $this->article_description_xpath = $article_description_xpath;
+
+        return $this;
+    }
+
+    /**
+     * Method to set the value of field article_text_xpath
+     *
+     * @param string $article_text_xpath
+     * @return $this
+     */
+    public function setArticleTextXpath(string $article_text_xpath): self
+    {
+        $this->article_text_xpath = $article_text_xpath;
+
+        return $this;
+    }
+
+    /**
+     * Method to set the value of field article_image_xpath
+     *
+     * @param string $article_image_xpath
+     * @return $this
+     */
+    public function setArticleImageXpath(string $article_image_xpath): self
+    {
+        $this->article_image_xpath = $article_image_xpath;
 
         return $this;
     }
@@ -214,6 +309,16 @@ class ArticleSource extends Model
     }
 
     /**
+     * Returns the value of field category_title_xpath
+     *
+     * @return string|null
+     */
+    public function getCategoryTitleXpath(): ?string
+    {
+        return $this->category_title_xpath;
+    }
+
+    /**
      * Returns the value of field article_xpath
      *
      * @return string|null
@@ -221,6 +326,46 @@ class ArticleSource extends Model
     public function getArticleXpath(): ?string
     {
         return $this->article_xpath;
+    }
+
+    /**
+     * Returns the value of field article_title_xpath
+     *
+     * @return string|null
+     */
+    public function getArticleTitleXpath(): ?string
+    {
+        return $this->article_title_xpath;
+    }
+
+    /**
+     * Returns the value of field article_description_xpath
+     *
+     * @return string|null
+     */
+    public function getArticleDescriptionXpath(): ?string
+    {
+        return $this->article_description_xpath;
+    }
+
+    /**
+     * Returns the value of field article_text_xpath
+     *
+     * @return string|null
+     */
+    public function getArticleTextXpath(): ?string
+    {
+        return $this->article_text_xpath;
+    }
+
+    /**
+     * Returns the value of field article_image_xpath
+     *
+     * @return string|null
+     */
+    public function getArticleImageXpath(): ?string
+    {
+        return $this->article_image_xpath;
     }
 
     /**
@@ -309,7 +454,12 @@ class ArticleSource extends Model
             'article_source' => 'article_source',
             'language_id' => 'language_id',
             'category_xpath' => 'category_xpath',
+            'category_title_xpath' => 'category_title_xpath',
             'article_xpath' => 'article_xpath',
+            'article_title_xpath' => 'article_title_xpath',
+            'article_description_xpath' => 'article_description_xpath',
+            'article_text_xpath' => 'article_text_xpath',
+            'article_image_xpath' => 'article_image_xpath',
             'html' => 'html',
             'source_url' => 'source_url',
             'parsed' => 'parsed',

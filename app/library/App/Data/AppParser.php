@@ -28,7 +28,7 @@ class AppParser extends PhqlQueryParser
      * @param array $data
      *
      */
-    public function addRelatedModelToBuilder(Builder $builder, Query $query, array $data)
+    public function addRelatedModelToBuilder(Builder $builder, Query $query, array $data): void
     {
         $baseClass = $builder->getFrom();
         $baseClass = \is_array($baseClass) ? array_keys($baseClass)[0] : $baseClass;
@@ -36,10 +36,8 @@ class AppParser extends PhqlQueryParser
         $conditions = $query->getConditions();
         $modelConditions =[];
         foreach ($conditions as $condition) {
-            if ($condition instanceof Condition) {
-                if ($this->hasField($condition->getField(), $data)) {
-                    $modelConditions[] = $condition;
-                }
+            if (($condition instanceof Condition) && $this->hasField($condition->getField(), $data)) {
+                $modelConditions[] = $condition;
             }
         }
         $excludes = $query->getExcludes();
